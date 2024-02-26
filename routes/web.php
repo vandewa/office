@@ -1,5 +1,8 @@
 <?php
 
+use App\Livewire\Coba;
+use App\Livewire\Sppd;
+use App\Livewire\SppdIndex;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
 
@@ -16,8 +19,12 @@ use Illuminate\Support\Facades\File;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('livewire.welcome');
 });
+
+Route::get('/', Coba::class)->name('coba');
+Route::get('sppd', Sppd::class)->name('sppd');
+Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
 
 
 Route::get('docs', function () {

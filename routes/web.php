@@ -3,6 +3,7 @@
 use App\Livewire\Coba;
 use App\Livewire\Sppd;
 use App\Livewire\SppdIndex;
+use App\Livewire\Surat\SuratMasuk;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
 

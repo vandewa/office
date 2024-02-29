@@ -8,115 +8,8 @@
             <div class="card-body">
                 <form action="">
                     <div class="row" style="margin: 20px">
-                        <div class="col-4">
-                            <div>
-                                <label class="col-form-label col-lg-12">Tingkat Menurut Perjalanan<span
-                                        class="text-danger">*</span></label>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <select class="form-control is-valid" required="" name="tingkat_id"
-                                            aria-describedby="tingkat_id-error" aria-invalid="false">
-                                            <option value="C">C</option>
-                                            <option value="A">A</option>
-                                            <option value="B">B</option>
-                                            <option value="D">D</option>
-                                            <option value="E">E</option>
-                                        </select><span id="tingkat_id-error" class="invalid-feedback"
-                                            style="display: block;"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="col-form-label col-lg-12">Lama Perjalanan<span
-                                        class="text-danger">*</span></label>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <div class="input-group input-group-sm">
-                                            <input class="form-control" required="" name="hari" type="number">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <span>Hari</span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="col-form-label col-lg-12">Alat Angkut Yg Dipergunakan<span
-                                        class="text-danger">*</span></label>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <select class="form-control" required="" name="alat_angkut_st">
-                                            <option value="ALAT_ANGKUT_ST_01">Kendaraan Dinas</option>
-                                            <option value="ALAT_ANGKUT_ST_02">Kendaraan Umum</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label class="col-form-label col-lg-12">Tempat Berangkat<span
-                                            class="text-danger">*</span></label>
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <input class="form-control" required="" id="input-field"
-                                                onkeyup="capitalizeFirstLetter()" name="tempat_berangkat" type="text"
-                                                value="Wonosobo">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <label class="col-form-label col-lg-12">Tempat Tujuan<span
-                                            class="text-danger">*</span></label>
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <input class="form-control" id="input-field2"
-                                                onkeyup="capitalizeFirstLetter2()" name="tempat_tujuan" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="col-form-label col-lg-12">Ditetapkan Pada Tanggal<span
-                                        class="text-danger">*</span></label>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <input class="form-control daterange-single" required=""
-                                            name="ditetapkan_tgl" type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="col-form-label col-lg-12">Pengikut</label>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <input class="form-control " placeholder="Pengikut" name="pengikut"
-                                            type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="col-form-label col-lg-12">Keterangan lain-lain</label>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <input class="form-control " placeholder="Keterangan lain-lain"
-                                            name="keterangan" type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="col-form-label col-lg-12">Ditetapkan Pada Tanggal<span
-                                        class="text-danger">*</span></label>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <input class="form-control daterange-single" required=""
-                                            name="ditetapkan_tgl" type="text">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
+                        <div class="col-6">
+                            <!-- Nama Pegawai -->
                             <div>
                                 <label class="col-form-label col-lg-12">Pilih Nama Pegawai<span
                                         class="text-danger"><small>*(urutkan berdasarkan
@@ -263,6 +156,99 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Tingkat Menurut Perjalanan -->
+                            <div>
+                                <label class="col-form-label col-lg-12">Tingkat Menurut Perjalanan<span
+                                        class="text-danger">*</span></label>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <select class="form-control is-valid" required="" name="tingkat_id"
+                                            aria-describedby="tingkat_id-error" aria-invalid="false">
+                                            <option value="C">C</option>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="D">D</option>
+                                            <option value="E">E</option>
+                                        </select><span id="tingkat_id-error" class="invalid-feedback"
+                                            style="display: block;"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Maksud Perjalanan Dinas -->
+                            <div>
+                                <label class="col-form-label col-lg-12">Maksud Perjalanan Dinas<span
+                                        class="text-danger">*</span></label><!-- Button trigger modal -->
+                                <button type="button" class="mb-2 ml-2 btn btn-info btn-sm" data-toggle="modal"
+                                    data-target="#exampleModalCenter">
+                                    Contoh Maksud Perjalanan Dinas
+                                </button>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <textarea class="form-control" rows="3" id="maksud" required="" name="maksud" cols="50"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Alat Angkut -->
+                            <div>
+                                <div>
+                                    <label class="col-form-label col-lg-12">Alat Angkut Yg Dipergunakan<span
+                                            class="text-danger">*</span></label>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <select class="form-control" required="" name="alat_angkut_st">
+                                                <option value="ALAT_ANGKUT_ST_01">Kendaraan Dinas</option>
+                                                <option value="ALAT_ANGKUT_ST_02">Kendaraan Umum</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- Tempat Berangkat -->
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="col-form-label col-lg-12">Tempat Berangkat<span
+                                            class="text-danger">*</span></label>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <input class="form-control" required="" id="input-field"
+                                                onkeyup="capitalizeFirstLetter()" name="tempat_berangkat"
+                                                type="text" value="Wonosobo">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label class="col-form-label col-lg-12">Tempat Tujuan<span
+                                            class="text-danger">*</span></label>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <input class="form-control" id="input-field2"
+                                                onkeyup="capitalizeFirstLetter2()" name="tempat_tujuan"
+                                                type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Lama Perjalanan -->
+                            <div>
+                                <label class="col-form-label col-lg-12">Lama Perjalanan<span
+                                        class="text-danger">*</span></label>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="input-group input-group-sm">
+                                            <input class="form-control" required="" name="hari"
+                                                type="number">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <span>Hari</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Tanggal Berangkat Tanggal Kembali -->
                             <div class="row">
                                 <div class="col-6">
                                     <label class="col-form-label  col-lg-12">Tanggal Berangkat<span
@@ -285,25 +271,45 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Pengikut -->
                             <div>
-                                <label class="col-form-label col-lg-12">Maksud Perjalanan Dinas<span
-                                        class="text-danger">*</span></label><!-- Button trigger modal -->
-                                <button type="button" class="mb-2 ml-2 btn btn-info btn-sm" data-toggle="modal"
-                                    data-target="#exampleModalCenter">
-                                    Preview Maksud Perjalanan Dinas
-                                </button>
+                                <label class="col-form-label col-lg-12">Pengikut</label>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <textarea class="form-control" rows="3" id="maksud" required="" name="maksud" cols="50"></textarea>
+                                        <input class="form-control " placeholder="Pengikut" name="pengikut"
+                                            type="text">
                                     </div>
                                 </div>
                             </div>
+                            <!-- Keterangan Lain-Lain -->
+                            <div>
+                                <label class="col-form-label col-lg-12">Keterangan lain-lain</label>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <input class="form-control " placeholder="Keterangan lain-lain"
+                                            name="keterangan" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Ditetapkan pada -->
+                            <div>
+                                <label class="col-form-label col-lg-12">Ditetapkan Pada Tanggal<span
+                                        class="text-danger">*</span></label>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <input class="form-control daterange-single" required=""
+                                            name="ditetapkan_tgl" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
                             <div>
                                 <label class="col-form-label col-lg-12">Untuk<span class="text-danger">*</span><small
                                         class="text-danger">(tidak perlu angka)</small></label>
                                 <button type="button" class="mb-2 ml-2 btn btn-info btn-sm" data-toggle="modal"
                                     data-target="#exampleModalCenter2">
-                                    Preview Untuk
+                                    Contoh Untuk
                                 </button>
                                 <div class="col-lg-12">
                                     <div class="form-group">
@@ -313,28 +319,25 @@
                                     3. Perintah ini dilaksanakan dengan penuh tanggung jawab.
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-4">
+                            <br>
                             <div>
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
-                                    data-target="#exampleModalCenter3">
-                                    Preview Dasar
-                                </button>
-                            </div>
-                            <div>
-                                <label class="col-form-label">Dasar<span class="text-danger">*</span><small
+                                <label class="col-form-label col-lg-12">Dasar<span class="text-danger">*</span><small
                                         class="text-danger">(tidak perlu angka)</small></label>
-                            </div>
-                            <div>
-                                <button type="button" class="btn btn-primary repeater-add-btn">
-                                    Tambah Dasar
+                                <button type="button" class="mb-2 ml-2 btn btn-info btn-sm" data-toggle="modal"
+                                    data-target="#exampleModalCenter3">
+                                    Contoh Dasar
                                 </button>
-                            </div><br>
-                            <div>
-                                <textarea class="form-control" rows="6" cols="50"
-                                    placeholder="Contoh: Surat Keputusan Menteri Keuangan RI Nomor: S-185/MK.03/1996 tanggal 2 April 1996 tentang Uang Harian Perjalanan Dinas Dalam Negeri Pegawai Negeri Sipil;"
-                                    required="" data-name="dasar" rows="2" name="test[0][dasar]" cols="50" value=""
-                                    id="test_0_dasar"></textarea>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <textarea class="form-control" rows="6" cols="50"
+                                            placeholder="Contoh: Surat Keputusan Menteri Keuangan RI Nomor: S-185/MK.03/1996 tanggal 2 April 1996 tentang Uang Harian Perjalanan Dinas Dalam Negeri Pegawai Negeri Sipil;"
+                                            required="" data-name="dasar" rows="2" name="test[0][dasar]" cols="50" value=""
+                                            id="test_0_dasar"></textarea>
+                                    </div>
+                                    <button type="button" class="btn btn-primary repeater-add-btn">
+                                        Tambah Dasar
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

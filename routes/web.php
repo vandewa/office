@@ -23,9 +23,10 @@ Route::get('/', function () {
     return view('livewire.welcome');
 });
 
-Route::get('/', Coba::class)->name('coba');
 Route::get('sppd', Sppd::class)->name('sppd');
 Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
+Route::get('suratMasuk', SuratMasuk::class)->name('suratMasuk');
+// Route::post('/send-whatsapp', [SuratMasuk::class, 'sendWhatsApp'])->name('send.whatsapp');
 
 
 Route::get('docs', function () {

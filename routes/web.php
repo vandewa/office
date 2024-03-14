@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use App\Livewire\Coba;
+use App\Livewire\Login;
 use App\Livewire\Sppd;
 use App\Livewire\SppdIndex;
 use App\Livewire\Surat\SuratMasuk;
@@ -21,8 +23,9 @@ use Illuminate\Support\Facades\File;
 
 Route::get('/', function () {
     return view('livewire.welcome');
-});
+})->name('index');
 
+Route::post('/logins', [LoginController::class, 'login'])->name('logins');
 Route::get('sppd', Sppd::class)->name('sppd');
 Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
 Route::get('suratMasuk', SuratMasuk::class)->name('suratMasuk');

@@ -51,7 +51,7 @@
 <body>
 
     <!-- Main navbar -->
-    <div class="navbar navbar-expand-md navbar-dark">
+    <div class="navbar navbar-expand-md navbar-light">
         <div class="navbar-brand">
             <a href="index.html" class="d-inline-block">
                 <img src="limitless/global_assets/images/logo_light.png" alt="">
@@ -411,7 +411,10 @@
     <div class="page-content">
 
         <!-- Main sidebar -->
-        <div class="sidebar sidebar-dark sidebar-main sidebar-expand-md">
+        <div class="sidebar sidebar-light sidebar-main sidebar-expand-md"
+            style="background-color: #e3e4f1;
+background-image: linear-gradient(180deg,#ffffff 10%,#5d65da 100%);
+background-size: cover;">
 
             <!-- Sidebar mobile toggler -->
             <div class="sidebar-mobile-toggler text-center">

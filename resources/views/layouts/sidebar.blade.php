@@ -18,18 +18,18 @@
               <a href="{{ route('sppd-index') }}" class="nav-link">
                   <i class="icon-home4"></i>
                   <span>
-                      SPPD
+                      Perjalanan Dinas
                   </span>
               </a>
           </li>
           <li class="nav-item">
-            <a href="{{ route('suratMasuk') }}" class="nav-link">
-                <i class="icon-home4"></i>
-                <span>
-                    Surat Masuk
-                </span>
-            </a>
-        </li>
+              <a href="{{ route('suratMasuk') }}" class="nav-link">
+                  <i class="icon-home4"></i>
+                  <span>
+                      Surat Masuk
+                  </span>
+              </a>
+          </li>
           <!-- /main -->
 
       </ul>

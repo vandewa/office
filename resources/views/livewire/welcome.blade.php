@@ -11,7 +11,7 @@
         <meta name="keyword" content="Rekam Medis">
         <link rel="icon" href="{{ asset('snacked/ltr/assets/images/favicon/favicon-32x32.png') }}"
             type="image/png" />
-        <title>Login E-RM</title>
+        <title>Login</title>
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="https://fonts.googleapis.com/css?family=Teko&display=swap" rel="stylesheet">
@@ -304,7 +304,7 @@
                 50% {
                     transform: translateX(20px);
                     /* Adjust the distance you want the text to move */
-            }
+            /* }
 
             100% {
                 transform: translateX(0);
@@ -332,15 +332,15 @@
                     </div>
                 </div>
 
-                <form action="{{ route('login') }}" method="post">
+                <form action="{{ route('logins') }}" method="post">
                     @csrf
 
                     <x-validation-errors class="mb-4" />
 
-                    <span class="kanan"> Email</span>
-                    <input type="email" placeholder="Enter your email address" name="email" autofocus required>
+                    <span class="kanan"> NIP</span>
+                    <input type="text" name="nip" placeholder="Nomor Induk Pegawai" autofocus required>
                     <span class="kanan"> Password</span>
-                    <input type="password" placeholder="Enter your password" name="password" autofocus required>
+                    <input type="password" name="password" placeholder="Enter your password" autofocus required>
                     {{-- <span class="hijau" style="text-align: right;">Forgot Password</span> --}}
                     {{-- <a href="#">Forget Password</a> --}}
                     <button type="submit" style="margin-top:30px;">Login</button>
@@ -368,6 +368,21 @@
                 </div>
             </div>
         </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script type="text/javascript">
+            function sweetAlert() {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Password / NIP Salah!",
+                });
+            }
+
+            @if (session('error'))
+                sweetAlert();
+            @endif
+        </script>
     </body>
 
     </html>

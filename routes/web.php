@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LoginController;
 use App\Livewire\Coba;
+use App\Livewire\Dashboard;
 use App\Livewire\Login;
 use App\Livewire\Sppd;
 use App\Livewire\SppdIndex;
@@ -26,9 +27,13 @@ Route::get('/', function () {
 })->name('index');
 
 Route::post('/logins', [LoginController::class, 'login'])->name('logins');
+Route::get('dashboard', Dashboard::class)->name('dashboard');
 Route::get('sppd', Sppd::class)->name('sppd');
 Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
 Route::get('suratMasuk', SuratMasuk::class)->name('suratMasuk');
+
+
+
 // Route::post('/send-whatsapp', [SuratMasuk::class, 'sendWhatsApp'])->name('send.whatsapp');
 
 
@@ -36,12 +41,9 @@ Route::get('docs', function () {
     return File::get(public_path() . '/documentation.html');
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+Route::group(['middleware' => ['auth']], function () {
+    // Route::get('dashboard', Dashboard::class)->name('dashboard');
+    // Route::get('sppd', Sppd::class)->name('sppd');
+    // Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
+    // Route::get('suratMasuk', SuratMasuk::class)->name('suratMasuk');
 });

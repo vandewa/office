@@ -5,11 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Simpeg\Tb01;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
     public function login(Request $request)
     {
+
+        // $credentials = $request->validate([
+        //     'nip' => 'required',
+        //     'password' => 'required',
+        // ]);
+
+        // // return $credentials;
+
+        // if (Auth::attempt($credentials)) {
+        //     // Jika berhasil login
+        //     $request->session()->regenerate();
+
+        //     return redirect()->intended('/dashboard');
+        // }
+
+
         $data = Tb01::with(['skpd'])->select('nip', 'email', 'gdp', 'gdb', 'email_dinas', 'nama', 'mkthnpkt', 'mkblnpkt', 'tb_01.idskpd', "jabatan.skpd", 'tb_01.idagama', 'nonpwp', 'nokaris', 'tb_01.alm', 'notaspen', 'nobapertarum', 'noaskes', 'hp', 'tmlhr', 'noktp', DB::Raw("
             case when jabfung is null and jabfungum is null then jabatan.jab
                when jabfung is null then jabfungum
@@ -29,7 +46,9 @@ class LoginController extends Controller
             ->first();
 
         if ($data) {
-            return $data;
+            // return $data;
+            // $request->session()->regenerate();
+            return redirect(route('dashboard'));
         } else {
             return redirect(route('index'))->with('error', 'pesan');
         }

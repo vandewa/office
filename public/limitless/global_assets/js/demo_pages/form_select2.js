@@ -46,7 +46,7 @@ var Select2Selects = function() {
         // Fixed width. Multiple selects
         $('.select-fixed-multiple').select2({
             minimumResultsForSearch: Infinity,
-            width: 400
+            maximalWidth: 300
         });
 
 

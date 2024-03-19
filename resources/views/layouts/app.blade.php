@@ -44,6 +44,11 @@
 
     <script src="{{ asset('limitless/layout_1/LTR/default/full/assets/js/app.js') }} "></script>
     <script src="{{ asset('limitless/global_assets/js/demo_pages/dashboard.js') }}"></script>
+    <script src="{{ asset('limitless/global_assets/js/plugins/extensions/jquery_ui/interactions.min.js') }}"></script>
+	<script src="{{ asset('limitless/global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+
+	<script src="assets/js/app.js"></script>
+	<script src="{{ asset('limitless/global_assets/js/demo_pages/form_select2.js') }}"></script>
     <!-- /theme JS files -->
 
 </head>

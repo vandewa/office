@@ -14,18 +14,17 @@
                                 <label class="col-form-label col-lg-12">Pilih Nama Pegawai<span
                                         class="text-danger"><small>*(urutkan berdasarkan
                                             kepangkatan)</small></span></label>
-                                            <div class="col-lg-12">
-                                                <div class="form-group">
-                                                    <div>
-                                                        <select class="form-control is-valid" aria-describedby="tingkat_id-error" aria-invalid="false" wire:model="selectedName">
-                                                            <option value="">Pilih Nama</option>
-                                                            @foreach($nama as $name => $namaOption)
-                                                                <option value="{{ $name }}">{{ $namaOption }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group" >
+                                        <select multiple=""
+                                            class="form-control select-fixed-multiple select2-hidden-accessible"
+                                             wire:model="selectedName">
+                                            @foreach ($nama as $name => $namaOption)
+                                                <option value="{{ $name }}">{{ $namaOption }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <!-- Tingkat Menurut Perjalanan -->
                             <div>
@@ -84,8 +83,8 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <input class="form-control" required="" id="input-field"
-                                                onkeyup="capitalizeFirstLetter()" name="tempat_berangkat"
-                                                type="text" value="Wonosobo">
+                                                onkeyup="capitalizeFirstLetter()" name="tempat_berangkat" type="text"
+                                                value="Wonosobo">
                                         </div>
                                     </div>
                                 </div>
@@ -95,8 +94,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <input class="form-control" id="input-field2"
-                                                onkeyup="capitalizeFirstLetter2()" name="tempat_tujuan"
-                                                type="text">
+                                                onkeyup="capitalizeFirstLetter2()" name="tempat_tujuan" type="text">
                                         </div>
                                     </div>
                                 </div>
@@ -212,78 +210,75 @@
                             </div>
                         </div>
                     </div>
-                                                    <!-- Modal -->
-                                                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-                                                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLongTitle">Preview Maksud
-                                                                    Perjalanan Dinas</h5>
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
-                                                                    <span aria-hidden="true">×</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <img src="https://diskominfo.wonosobokab.go.id/maksud.jpg"
-                                                                    alt="" width="100%">
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Close</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Preview Maksud
+                                        Perjalanan Dinas</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <img src="https://diskominfo.wonosobokab.go.id/maksud.jpg" alt=""
+                                        width="100%">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog"
-                                                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLongTitle">Preview Untuk</h5>
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
-                                                                    <span aria-hidden="true">×</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <img src="https://diskominfo.wonosobokab.go.id/untuk.jpg"
-                                                                    alt="" width="100%">
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Close</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Preview Untuk</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <img src="https://diskominfo.wonosobokab.go.id/untuk.jpg" alt=""
+                                        width="100%">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="exampleModalCenter3" tabindex="-1" role="dialog"
-                                                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLongTitle">Preview Dasar</h5>
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
-                                                                    <span aria-hidden="true">×</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <img src="https://diskominfo.wonosobokab.go.id/dasar.jpg"
-                                                                    alt="" width="100%">
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Close</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModalCenter3" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Preview Dasar</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <img src="https://diskominfo.wonosobokab.go.id/dasar.jpg" alt=""
+                                        width="100%">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="text-right">
                         <a href="https://diskominfo.wonosobokab.go.id/spt-sppd" class="btn bg-grey-400">Kembali <i
                                 class="ml-2 icon-square-left"></i></a>

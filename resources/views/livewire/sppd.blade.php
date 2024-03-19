@@ -6,7 +6,7 @@
                 <div class="dropdown-divider"></div>
             </div>
             <div class="card-body">
-                <form action="">
+                <form action=""  wire:submit='save'>
                     <div class="row" style="margin: 20px">
                         <div class="col-6">
                             <!-- Nama Pegawai -->
@@ -18,7 +18,7 @@
                                     <div class="form-group" >
                                         <select multiple=""
                                             class="form-control select-fixed-multiple select2-hidden-accessible"
-                                             wire:model="selectedName">
+                                             name="selectedName">
                                             @foreach ($nama as $name => $namaOption)
                                                 <option value="{{ $name }}">{{ $namaOption }}</option>
                                             @endforeach
@@ -32,7 +32,7 @@
                                         class="text-danger">*</span></label>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <select class="form-control is-valid" required="" name="tingkat_id"
+                                        <select class="form-control is-valid" required="" name="tingkat_id" wire:model='form.tingkat_id'
                                             aria-describedby="tingkat_id-error" aria-invalid="false">
                                             <option value="C">C</option>
                                             <option value="A">A</option>
@@ -54,7 +54,7 @@
                                 </button>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <textarea class="form-control" rows="3" id="maksud" required="" name="maksud" cols="50"></textarea>
+                                        <textarea class="form-control" rows="3" id="maksud" required="" name="maksud" wire:model='form.maksud' cols="50"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
                                             class="text-danger">*</span></label>
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <select class="form-control" required="" name="alat_angkut_st">
+                                            <select class="form-control" required="" name="alat_angkut_st" wire:model='form.alat_angkut_st'>
                                                 <option value="ALAT_ANGKUT_ST_01">Kendaraan Dinas</option>
                                                 <option value="ALAT_ANGKUT_ST_02">Kendaraan Umum</option>
                                             </select>
@@ -83,7 +83,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <input class="form-control" required="" id="input-field"
-                                                onkeyup="capitalizeFirstLetter()" name="tempat_berangkat" type="text"
+                                                onkeyup="capitalizeFirstLetter()" name="tempat_berangkat" wire:model='form.tempat_berangkat' type="text"
                                                 value="Wonosobo">
                                         </div>
                                     </div>
@@ -94,7 +94,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <input class="form-control" id="input-field2"
-                                                onkeyup="capitalizeFirstLetter2()" name="tempat_tujuan" type="text">
+                                                onkeyup="capitalizeFirstLetter2()" name="tempat_tujuan" wire:model='form.tempat_tujuan' type="text">
                                         </div>
                                     </div>
                                 </div>
@@ -106,7 +106,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group input-group-sm">
-                                            <input class="form-control" required="" name="hari"
+                                            <input class="form-control" required="" name="hari" wire:model='form.hari'
                                                 type="number">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
@@ -125,7 +125,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <input class="form-control daterange-single" required=""
-                                                id="tgl_berangkat" name="tgl_berangkat" type="date">
+                                                id="tgl_berangkat" name="tgl_berangkat" wire:model='form.tgl_berangkat' type="date">
                                         </div>
                                     </div>
                                 </div>
@@ -135,7 +135,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <input class="form-control daterange-single" required=""
-                                                id="tgl_kembali" name="tgl_kembali" type="date">
+                                                id="tgl_kembali" name="tgl_kembali" wire:model='form.tgl_kembali' type="date">
                                         </div>
                                     </div>
                                 </div>
@@ -145,7 +145,7 @@
                                 <label class="col-form-label col-lg-12">Pengikut</label>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <input class="form-control " placeholder="Pengikut" name="pengikut"
+                                        <input class="form-control " placeholder="Pengikut" name="pengikut" wire:model='form.pengikut'
                                             type="text">
                                     </div>
                                 </div>
@@ -156,7 +156,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <input class="form-control " placeholder="Keterangan lain-lain"
-                                            name="keterangan" type="text">
+                                            name="keterangan" wire:model='form.keterangan' type="text">
                                     </div>
                                 </div>
                             </div>
@@ -167,7 +167,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <input class="form-control daterange-single" required=""
-                                            name="ditetapkan_tgl" type="text">
+                                            name="ditetapkan_tgl" wire:model='form.ditetapkan_tgl' type="date">
                                     </div>
                                 </div>
                             </div>
@@ -182,7 +182,7 @@
                                 </button>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <textarea class="form-control" rows="3" id="untuk" required="" name="untuk" cols="50"></textarea>
+                                        <textarea class="form-control" rows="3" id="untuk" required="" name="untuk" wire:model='form.untuk' cols="50"></textarea>
                                     </div>
                                     2. Melaporkan hasilnya kepada pejabat yang bersangkutan; <br>
                                     3. Perintah ini dilaksanakan dengan penuh tanggung jawab.
@@ -279,6 +279,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Button Submit -->
                     <div class="text-right">
                         <a href="https://diskominfo.wonosobokab.go.id/spt-sppd" class="btn bg-grey-400">Kembali <i
                                 class="ml-2 icon-square-left"></i></a>

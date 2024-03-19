@@ -4,6 +4,7 @@ use App\Http\Controllers\LoginController;
 use App\Livewire\Coba;
 use App\Livewire\Dashboard;
 use App\Livewire\Login;
+use App\Livewire\Pegawai\DataPegawai;
 use App\Livewire\Sppd;
 use App\Livewire\SppdIndex;
 use App\Livewire\Surat\SuratMasuk;
@@ -31,6 +32,7 @@ Route::get('dashboard', Dashboard::class)->name('dashboard');
 Route::get('sppd', Sppd::class)->name('sppd');
 Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
 Route::get('suratMasuk', SuratMasuk::class)->name('suratMasuk');
+Route::get('dataPegawai', DataPegawai::class)->name('dataPegawai');
 
 
 

@@ -8,7 +8,7 @@
           </li>
           <li class="nav-item">
               <a href="{{ route('dashboard') }}" class="nav-link">
-                  <i class="icon-home4"></i>
+                  <i class="icon-home"></i>
                   <span>
                       Dashboard
                   </span>
@@ -16,7 +16,7 @@
           </li>
           <li class="nav-item">
               <a href="{{ route('sppd-index') }}" class="nav-link">
-                  <i class="icon-home4"></i>
+                  <i class="icon-briefcase3"></i>
                   <span>
                       Perjalanan Dinas
                   </span>
@@ -24,13 +24,23 @@
           </li>
           <li class="nav-item">
               <a href="{{ route('suratMasuk') }}" class="nav-link">
-                  <i class="icon-home4"></i>
+                  <i class="
+                  icon-mail-read"></i>
                   <span>
                       Surat Masuk
                   </span>
               </a>
           </li>
           <!-- /main -->
+          <li class="nav-item">
+            <a href="{{ route('dataPegawai') }}" class="nav-link">
+                <i class="icon-users"></i>
+                <span>
+                    Data Pegawai
+                </span>
+            </a>
+        </li>
+        <!-- /main -->
 
       </ul>
   </div>

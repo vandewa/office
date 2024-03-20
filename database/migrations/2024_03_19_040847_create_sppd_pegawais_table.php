@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('sppd_pegawais', function (Blueprint $table) {
             $table->id();
-            $table->string('sppd_id');
+            $table->unsignedBigInteger('sppd_id');
+            $table->foreign('sppd_id')->references('id')->on('sppds');
             $table->string('nip');
             $table->string('id_skpd');
             $table->timestamps();

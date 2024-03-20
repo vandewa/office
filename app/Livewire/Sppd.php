@@ -45,6 +45,7 @@ class Sppd extends Component
 
                         public function store()
                         {
+                            // $data = ModelsSppd::create($this->form);
                             ModelsSppd::create($this->form);
                         }
 

@@ -9,4 +9,5 @@ class Sppd extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
 }

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('dasar_sppds', function (Blueprint $table) {
             $table->id();
-            $table->string('sppd_id');
+            $table->unsignedBigInteger('sppd_id');
+            $table->foreign('sppd_id')->references('id')->on('sppds');
             $table->string('dasar');
             $table->timestamps();
         });

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sppd_id');
             $table->foreign('sppd_id')->references('id')->on('sppds');
-            $table->string('dasar');
+            $table->string('dasar')->nullable();
             $table->timestamps();
         });
     }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sppd_id');
             $table->foreign('sppd_id')->references('id')->on('sppds');
             $table->string('nip');
-            $table->string('id_skpd');
+            $table->string('idskpd');
             $table->timestamps();
         });
     }

@@ -3,13 +3,18 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Models\DasarSppd;
 use App\Models\Simpeg\Tb01;
+use App\Models\SppdPegawai;
 use App\Models\Sppd as ModelsSppd;
 use Illuminate\Support\Facades\Auth;
 
 class Sppd extends Component
 {
     public $nama;
+    public $formDasar = [
+        'dasar' => null
+    ];
     public $form = [
         'maksud' => null,
         'untuk' => null,
@@ -28,27 +33,40 @@ class Sppd extends Component
     public function mount()
     {
         $nip = Auth::user()->nip;
-            if (Auth::check()) {
-                $kdunit = Tb01::where('nip', $nip)->value('kdunit');
-                $this->nama = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
-                                ->where('a_skpd.kdunit', $kdunit)
-                                ->where('idjenkedudupeg', 1)
-                                ->distinct('tb_01.nama')
-                                ->pluck('tb_01.nama');
-                            }
-                        }
+        if (Auth::check()) {
+            $kdunit = Tb01::where('nip', $nip)->value('kdunit');
+            $this->nama = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
+                ->where('a_skpd.kdunit', $kdunit)
+                ->where('idjenkedudupeg', 1)
+                ->distinct('tb_01.nama')
+                ->pluck('tb_01.nama');
+        }
+    }
 
-                        public function save()
-                        {
-                            $this->store();
-                        }
+    // public function store()
+    // {
+    //     // $data = ModelsSppd::create($this->form);
+    //     ModelsSppd::create($this->form);
+    // }
 
-                        public function store()
-                        {
-                            // $data = ModelsSppd::create($this->form);
-                            ModelsSppd::create($this->form);
-                        }
+    public function store()
+    {
 
+        //simpan input form ke tabel sppd
+        $sppd = ModelsSppd::create($this->form);
+
+        // Simpan input dasar ke tabel dasar_sppd
+        DasarSppd::create([
+            'sppd_id' => $sppd->id,
+            'dasar' => $this->formDasar['dasar']
+        ]);
+
+    }
+
+    public function save()
+    {
+        $this->store();
+    }
 
     public function render()
     {

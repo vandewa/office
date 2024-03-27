@@ -200,7 +200,7 @@
                                     <div class="form-group">
                                         <textarea class="form-control" rows="6" cols="50"
                                             placeholder="Contoh: Surat Keputusan Menteri Keuangan RI Nomor: S-185/MK.03/1996 tanggal 2 April 1996 tentang Uang Harian Perjalanan Dinas Dalam Negeri Pegawai Negeri Sipil;"
-                                            required="" data-name="dasar" rows="2" name="test[0][dasar]" cols="50" value=""
+                                            required="" data-name="dasar" rows="2"  cols="50" value="" name="dasar" wire:model='formDasar.dasar'
                                             id="test_0_dasar"></textarea>
                                     </div>
                                     <button type="button" class="btn btn-primary repeater-add-btn">

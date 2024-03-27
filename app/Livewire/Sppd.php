@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\DasarSppd;
 use App\Models\Simpeg\Tb01;
 use App\Models\SppdPegawai;
+use Illuminate\Http\Request;
 use App\Models\Sppd as ModelsSppd;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,6 +15,9 @@ class Sppd extends Component
     public $nama;
     public $formDasar = [
         'dasar' => null
+    ];
+    public $formNama = [
+        'nip' => null
     ];
     public $form = [
         'maksud' => null,
@@ -39,15 +43,9 @@ class Sppd extends Component
                 ->where('a_skpd.kdunit', $kdunit)
                 ->where('idjenkedudupeg', 1)
                 ->distinct('tb_01.nama')
-                ->pluck('tb_01.nama');
+                ->pluck('tb_01.nama', 'tb_01.nip');
         }
     }
-
-    // public function store()
-    // {
-    //     // $data = ModelsSppd::create($this->form);
-    //     ModelsSppd::create($this->form);
-    // }
 
     public function store()
     {
@@ -61,6 +59,11 @@ class Sppd extends Component
             'dasar' => $this->formDasar['dasar']
         ]);
 
+        // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai
+        SppdPegawai::create([
+            'sppd_id' => $sppd->id,
+            'nip' => $this->formNama['nip']
+        ]);
     }
 
     public function save()

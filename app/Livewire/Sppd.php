@@ -57,13 +57,20 @@ class Sppd extends Component
         DasarSppd::create([
             'sppd_id' => $sppd->id,
             'dasar' => $this->formDasar['dasar']
+
         ]);
 
         // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai
-        SppdPegawai::create([
-            'sppd_id' => $sppd->id,
-            'nip' => $this->formNama['nip']
-        ]);
+        $nip = $this->formNama['nip']; // Ambil nip dari formNama
+        $pegawai = Tb01::where('nip', $nip)->first(); // Cari data pegawai berdasarkan nip
+
+        if ($pegawai) {
+            SppdPegawai::create([
+                'sppd_id' => $sppd->id,
+                'nip' => $nip,
+                'idskpd' => $pegawai->idskpd
+            ]);
+        }
     }
 
     public function save()

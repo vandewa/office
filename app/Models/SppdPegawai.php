@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SppdPegawai extends Model
 {
     use HasFactory;
-    protected $fillable = ['sppd_id', 'nip', 'id_skpd'];
+    protected $fillable = ['sppd_id', 'nip', 'idskpd'];
 
     public function sppd()
     {

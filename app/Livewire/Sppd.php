@@ -6,12 +6,13 @@ use Livewire\Component;
 use App\Models\DasarSppd;
 use App\Models\Simpeg\Tb01;
 use App\Models\SppdPegawai;
-use Illuminate\Http\Request;
 use App\Models\Sppd as ModelsSppd;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithPagination;
 
 class Sppd extends Component
 {
+    use WithPagination;
     public $nama;
     public $formDasar = [
         'dasar' => null

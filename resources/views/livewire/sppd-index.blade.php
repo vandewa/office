@@ -53,19 +53,28 @@
                                 <tr>
                                     <td>{{ $loop->iteration + 0 }}</td>
                                     <td>{{ $rowsppd->tgl_berangkat }}</td>
-                                    <td>{{$rowsppd->nama}} </td>
-                                    <td>{{$rowsppd->maksud}} </td>
-                                    <td>{{$rowsppd->tempat_tujuan}} </td>
-                                    <td>{{$rowsppd->status}} </td>
-                                    <td>
-                                        <a href="">hapus</a>
-                                        <a href="">edit</a>
-                                        <a href="">detail</a>
-                                        <a href="">print</a>
+                                    <td>{{ $rowsppd->nama }} </td>
+                                    <td>{{ $rowsppd->maksud }} </td>
+                                    <td>{{ $rowsppd->tempat_tujuan }} </td>
+                                    <td>{{ $rowsppd->status }} </td>
+                                    <td class="text-center">
+                                        <div class="list-icons">
+                                            <div class="list-icons-item dropdown show">
+                                                <a href="#" class="list-icons-item dropdown-toggle caret-0"
+                                                    data-toggle="dropdown" aria-expanded="true"><i
+                                                        class="icon-three-bars"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-right hidden"
+                                                    x-placement="bottom-end"
+                                                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-164px, 16px, 0px);">
+                                                    <a class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+                                                    <a class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+                                                    <a class="dropdown-item"><i class="icon-file-locked"></i>-</a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
-
                         </tbody>
                     </table>
                 </div>

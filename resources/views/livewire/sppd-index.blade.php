@@ -31,66 +31,46 @@
     </x-slot>
 
     <div class="content">
-        <!-- Striped rows -->
         <div class="card">
-            <div class="card-header header-elements-inline">
-                <h5 class="card-title">Striped rows</h5>
-                <div class="header-elements">
-                    <div class="list-icons">
-                        <a class="list-icons-item" data-action="collapse"></a>
-                        <a class="list-icons-item" data-action="reload"></a>
-                        <a class="list-icons-item" data-action="remove"></a>
-                    </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped dataTable" id="DataTables_Table_0" role="grid"
+                        aria-describedby="DataTables_Table_0_info">
+                        <thead>
+                            <tr role="row">
+                                <th class="text-left" style="width: 17px;" aria-label="No">No</th>
+                                <th style="width: 150px;" aria-label="Tanggal">Tanggal</th>
+                                <th style="width: 222px;" aria-label="Nama">Nama</th>
+                                <th style="width: 310px;" aria-label="Subject">Subject</th>
+                                <th style="width: 191px;" aria-label="Tujuan">Tujuan</th>
+                                <th style="width: 222px;" aria-label="Laporan">Status Laporan</th>
+                                <th style="width: 176px;" aria-label="Aksi">Aksi</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach ($sppd as $rowsppd)
+                                <tr>
+                                    <td>{{ $loop->iteration + 0 }}</td>
+                                    <td>{{ $rowsppd->tgl_berangkat }}</td>
+                                    <td>{{$rowsppd->nama}} </td>
+                                    <td>{{$rowsppd->maksud}} </td>
+                                    <td>{{$rowsppd->tempat_tujuan}} </td>
+                                    <td>{{$rowsppd->status}} </td>
+                                    <td>
+                                        <a href="">hapus</a>
+                                        <a href="">edit</a>
+                                        <a href="">detail</a>
+                                        <a href="">print</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-            <div class="card-body">
-                Example of a table with <code>striped</code> rows. Use <code>.table-striped</code> added to the base
-                <code>.table</code> class to add zebra-striping to any table odd row within the
-                <code>&lt;tbody&gt;</code>. This styling doesn't work in IE8 and lower as <code>:nth-child</code> CSS
-                selector isn't supported in these browser versions. Striped table can be combined with other table
-                styles.
-            </div>
-
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Eugene</td>
-                            <td>Kopyov</td>
-                            <td>@Kopyov</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Victoria</td>
-                            <td>Baker</td>
-                            <td>@Vicky</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>James</td>
-                            <td>Alexander</td>
-                            <td>@Alex</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Franklin</td>
-                            <td>Morrison</td>
-                            <td>@Frank</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
-        <!-- /striped rows -->
     </div>
+</div>
 </div>

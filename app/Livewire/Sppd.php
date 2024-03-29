@@ -71,6 +71,8 @@ class Sppd extends Component
                 'idskpd' => $pegawai->idskpd
             ]);
         }
+
+        return redirect()->to('/sppd-index');
     }
 
     public function save()

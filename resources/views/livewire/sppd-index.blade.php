@@ -49,15 +49,26 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($sppd as $rowsppd)
-                                <tr>
+                            @foreach ($sppds as $sppd)
+                                <tr wire:key='{{$sppd->id}}'>
                                     <td>{{ $loop->iteration + 0 }}</td>
-                                    <td>{{ $rowsppd->tgl_berangkat }}</td>
-                                    <td>{{ $rowsppd->nama }} </td>
-                                    <td>{{ $rowsppd->maksud }} </td>
-                                    <td>{{ $rowsppd->tempat_tujuan }} </td>
-                                    <td>{{ $rowsppd->status }} </td>
-                                    <td class="text-center">
+                                    <td>{{ $sppd->tgl_berangkat }}</td>
+                                    <td>{{ $sppd->nama }} </td>
+                                    <td>{{ $sppd->maksud }} </td>
+                                    <td>{{ $sppd->tempat_tujuan }} </td>
+                                    <td>{{ $sppd->status }} </td>
+                                    <td>
+                                        <button
+                                        type="button"
+                                        wire:click="delete(' {{$sppd->id}}')"
+                                        class="btn btn-warning btn-flat btn-sm"
+                                        data-toggle="tooltip"
+                                        data-placement="left"
+                                        title="Edit"><i
+                                            class="fas fa-pencil-alt"></i>
+                                    </button>
+                                    </td>
+                                    {{-- <td class="text-center">
                                         <div class="list-icons">
                                             <div class="list-icons-item dropdown show">
                                                 <a href="#" class="list-icons-item dropdown-toggle caret-0"
@@ -66,13 +77,13 @@
                                                 <div class="dropdown-menu dropdown-menu-right hidden"
                                                     x-placement="bottom-end"
                                                     style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-164px, 16px, 0px);">
-                                                    <a class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
-                                                    <a class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+                                                    <a class="dropdown-item" wire:click="getEdit('{{$sppd->id}}')" ><i class="icon-pencil"></i>Edit</a>
+                                                    <a class="dropdown-item" wire:click="delete(' {{$sppd->id}}')" ><i class="icon-trash"></i>Delete</a>
                                                     <a class="dropdown-item"><i class="icon-file-locked"></i>-</a>
                                                 </div>
                                             </div>
                                         </div>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>

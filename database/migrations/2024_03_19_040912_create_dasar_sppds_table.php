@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('dasar_sppds', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sppd_id');
-            $table->foreign('sppd_id')->references('id')->on('sppds');
+            $table->foreign('sppd_id')->references('id')->on('sppds')->onDelete('cascade'); // Atur aksi kaskade;
             $table->string('dasar')->nullable();
             $table->timestamps();
         });

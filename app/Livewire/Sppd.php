@@ -8,11 +8,9 @@ use App\Models\Simpeg\Tb01;
 use App\Models\SppdPegawai;
 use App\Models\Sppd as ModelsSppd;
 use Illuminate\Support\Facades\Auth;
-use Livewire\WithPagination;
 
 class Sppd extends Component
 {
-    use WithPagination;
     public $nama;
     public $formDasar = [
         'dasar' => null
@@ -50,7 +48,6 @@ class Sppd extends Component
 
     public function store()
     {
-
         //simpan input form ke tabel sppd
         $sppd = ModelsSppd::create($this->form);
 
@@ -58,7 +55,6 @@ class Sppd extends Component
         DasarSppd::create([
             'sppd_id' => $sppd->id,
             'dasar' => $this->formDasar['dasar']
-
         ]);
 
         // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai
@@ -72,13 +68,7 @@ class Sppd extends Component
                 'idskpd' => $pegawai->idskpd
             ]);
         }
-
         return redirect()->to('/sppd-index');
-    }
-
-    public function save()
-    {
-        $this->store();
     }
 
     public function render()

@@ -93,7 +93,7 @@ class SppdIndex extends Component
 
     public function render()
     {
-        return view('livewire.sppd-index', [
+        return view('livewire.sppd.sppd-index', [
             'sppds' => $this->sppds
         ]);
     }

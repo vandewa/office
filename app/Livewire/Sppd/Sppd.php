@@ -73,6 +73,6 @@ class Sppd extends Component
 
     public function render()
     {
-        return view('livewire.sppd');
+        return view('livewire.sppd.sppd');
     }
 }

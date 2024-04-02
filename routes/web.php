@@ -6,6 +6,7 @@ use App\Livewire\Dashboard;
 use App\Livewire\Login;
 use App\Livewire\Pegawai\DataPegawai;
 use App\Livewire\Sppd\Sppd;
+use App\Livewire\Sppd\SppdEdit;
 use App\Livewire\Sppd\SppdIndex;
 use App\Livewire\Surat\SuratMasuk;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,7 @@ Route::post('/logins', [LoginController::class, 'login'])->name('logins');
 Route::get('dashboard', Dashboard::class)->name('dashboard');
 Route::get('sppd', Sppd::class)->name('sppd');
 Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
+Route::get('/sppd/{id}/edit', SppdEdit::class)->name('sppd-edit');
 Route::get('suratMasuk', SuratMasuk::class)->name('suratMasuk');
 Route::get('dataPegawai', DataPegawai::class)->name('dataPegawai');
 

@@ -67,6 +67,15 @@
                                         title="Edit"><i
                                             class="fas fa-pencil-alt"></i>
                                     </button>
+                                    <button
+                                    type="button"
+                                    wire:click="getEdit(' {{$sppd->id}}')"
+                                    class="btn btn-warning btn-flat btn-sm"
+                                    data-toggle="tooltip"
+                                    data-placement="left"
+                                    title="Edit"><i
+                                        class="fas fa-pencil-alt"></i>
+                                </button>
                                     </td>
                                     {{-- <td class="text-center">
                                         <div class="list-icons">

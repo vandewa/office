@@ -16,12 +16,10 @@
                                             kepangkatan)</small></span></label>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <select multiple
+                                        <select
                                             class="form-control" id="nip"
-                                            name="nip[]" wire:model='formNama.nip'>
-                                            @foreach ($nama as $nip => $namaOption)
-                                                <option value="{{ $nip }}">{{ $namaOption }}</option>
-                                            @endforeach
+                                            name="nip" wire:model='formNama.nip'>
+
                                         </select>
                                     </div>
                                 </div>
@@ -98,7 +96,7 @@
                                         <div class="form-group">
                                             <input class="form-control" id="input-field2"
                                                 onkeyup="capitalizeFirstLetter2()" name="tempat_tujuan"
-                                                wire:model='form.tempat_tujuan' type="text">
+                                                wire:model='form.tempat_tujuan' type="text" value="{{$sppd->tempat_tujuan}}">
                                         </div>
                                     </div>
                                 </div>

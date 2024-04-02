@@ -40,13 +40,9 @@ class SppdIndex extends Component
         $this->sppds = Sppd::all();
     }
 
-    public function getEdit($a)
+    public function getEdit($id)
     {
-        $this->form = Sppd::find($a)->only(['untuk', 'tingkat_id', 'alat_angkut_st',
-        'tempat_berangkat', 'tempat_tujuan', 'tgl_berangkat', 'tgl_kembali', 'hari',
-        'ditetapkan_tgl', 'pengikut', 'keterangan']);
-        $this->idHapus = $a;
-        $this->edit = true;
+        return redirect()->route('sppd-edit', ['id' => $id]);
     }
 
 

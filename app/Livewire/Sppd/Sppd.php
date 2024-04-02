@@ -58,7 +58,8 @@ class Sppd extends Component
         ]);
 
         // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai
-        $nip = $this->formNama['nip']; // Ambil nip dari formNama
+        $nipList = $this->formNama['nip'] ?? []; // Ambil nip dari formNama
+        foreach ($nipList as $nip) {
         $pegawai = Tb01::where('nip', $nip)->first(); // Cari data pegawai berdasarkan nip
 
         if ($pegawai) {
@@ -68,6 +69,7 @@ class Sppd extends Component
                 'idskpd' => $pegawai->idskpd
             ]);
         }
+    }
         return redirect()->to('/sppd-index');
     }
 

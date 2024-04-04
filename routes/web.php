@@ -32,7 +32,8 @@ Route::post('/logins', [LoginController::class, 'login'])->name('logins');
 Route::get('dashboard', Dashboard::class)->name('dashboard');
 Route::get('sppd', Sppd::class)->name('sppd');
 Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
-Route::get('/sppd/{id}/edit', SppdEdit::class)->name('sppd-edit');
+Route::get('/sppd/{id}/edit', Sppd::class)->name('sppd-edit');
+Route::put('/sppd/{id}', Sppd::class)->name('sppd.update');
 Route::get('suratMasuk', SuratMasuk::class)->name('suratMasuk');
 Route::get('dataPegawai', DataPegawai::class)->name('dataPegawai');
 

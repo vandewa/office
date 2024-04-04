@@ -40,24 +40,11 @@ class SppdIndex extends Component
         $this->sppds = Sppd::all();
     }
 
+    //mengarahkan ke halamna edit
     public function getEdit($id)
     {
+        $this->sppds = Sppd::findOrFail($id);
         return redirect()->route('sppd-edit', ['id' => $id]);
-    }
-
-
-    public function save()
-    {
-        if ($this->edit) {
-            $this->storeUpdate();
-        } else {
-            $this->store();
-        }
-    }
-
-    public function store()
-    {
-        Sppd::create($this->form);
     }
 
     public function delete($id)
@@ -78,13 +65,7 @@ class SppdIndex extends Component
     {
         Sppd::find($this->idHapus)->update($this->form);
         $this->reset();
-        $this->edit = false;
-    }
-
-    public function batal()
-    {
-        $this->edit = false;
-        $this->reset();
+        $this->edit = true;
     }
 
     public function render()

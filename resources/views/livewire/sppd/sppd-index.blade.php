@@ -50,7 +50,7 @@
 
                         <tbody>
                             @foreach ($sppds as $sppd)
-                                <tr wire:key='{{$sppd->id}}'>
+                                <tr wire:key='{{ $sppd->id }}'>
                                     <td>{{ $loop->iteration + 0 }}</td>
                                     <td>{{ $sppd->tgl_berangkat }}</td>
                                     <td>{{ $sppd->nama }} </td>
@@ -58,41 +58,15 @@
                                     <td>{{ $sppd->tempat_tujuan }} </td>
                                     <td>{{ $sppd->status }} </td>
                                     <td>
-                                        <button
-                                        type="button"
-                                        wire:click="delete(' {{$sppd->id}}')"
-                                        class="btn btn-warning btn-flat btn-sm"
-                                        data-toggle="tooltip"
-                                        data-placement="left"
-                                        title="Edit"><i
-                                            class="fas fa-pencil-alt"></i>
-                                    </button>
-                                    <button
-                                    type="button"
-                                    wire:click="getEdit(' {{$sppd->id}}')"
-                                    class="btn btn-warning btn-flat btn-sm"
-                                    data-toggle="tooltip"
-                                    data-placement="left"
-                                    title="Edit"><i
-                                        class="fas fa-pencil-alt"></i>
-                                </button>
+                                        <button type="button" wire:click="delete(' {{ $sppd->id }}')"
+                                            class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
+                                            title="Edit"><i class="icon-trash"></i>
+                                        </button>
+                                        <button type="button" wire:click="getEdit(' {{ $sppd->id }}')"
+                                            class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
+                                            title="Edit"><i class="icon-pencil"></i>
+                                        </button>
                                     </td>
-                                    {{-- <td class="text-center">
-                                        <div class="list-icons">
-                                            <div class="list-icons-item dropdown show">
-                                                <a href="#" class="list-icons-item dropdown-toggle caret-0"
-                                                    data-toggle="dropdown" aria-expanded="true"><i
-                                                        class="icon-three-bars"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-right hidden"
-                                                    x-placement="bottom-end"
-                                                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-164px, 16px, 0px);">
-                                                    <a class="dropdown-item" wire:click="getEdit('{{$sppd->id}}')" ><i class="icon-pencil"></i>Edit</a>
-                                                    <a class="dropdown-item" wire:click="delete(' {{$sppd->id}}')" ><i class="icon-trash"></i>Delete</a>
-                                                    <a class="dropdown-item"><i class="icon-file-locked"></i>-</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>

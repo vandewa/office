@@ -6,7 +6,7 @@
                 <div class="dropdown-divider"></div>
             </div>
             <div class="card-body">
-                <form action="" wire:submit.prevent='store'>
+                <form action="" wire:submit='save'>
                     <div class="row" style="margin: 20px">
                         <div class="col-6">
                             <!-- Nama Pegawai -->
@@ -16,9 +16,8 @@
                                             kepangkatan)</small></span></label>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <select multiple
-                                            class="form-control" id="nip"
-                                            name="nip[]" wire:model='formNama.nip'>
+                                        <select multiple class="form-control" id="nip" name="nip[]"
+                                            wire:model='formNama.nip'>
                                             @foreach ($nama as $nip => $namaOption)
                                                 <option value="{{ $nip }}">{{ $namaOption }}</option>
                                             @endforeach
@@ -98,7 +97,7 @@
                                         <div class="form-group">
                                             <input class="form-control" id="input-field2"
                                                 onkeyup="capitalizeFirstLetter2()" name="tempat_tujuan"
-                                                wire:model='form.tempat_tujuan' type="text">
+                                                wire:model='form.tempat_tujuan' type="text" >
                                         </div>
                                     </div>
                                 </div>
@@ -210,9 +209,26 @@
                                             required="" data-name="dasar" rows="2" cols="50" value="" name="dasar"
                                             wire:model='formDasar.dasar' id="test_0_dasar"></textarea>
                                     </div>
-                                    <button type="button" class="btn btn-primary repeater-add-btn">
+                                    <button type="button" class="btn btn-primary pull-right repeater-add-btn">
                                         Tambah Dasar
                                     </button>
+                                    {{-- <div class="items" data-index="0">
+                                        <!-- Repeater Content -->
+                                        <div class="mt-3 mb-3 item-content">
+                                            <div class="form-group">
+                                                <div class="col-lg-12">
+                                                    <textarea class="form-control is-valid" placeholder="Contoh: Surat Keputusan Menteri Keuangan RI Nomor: S-185/MK.03/1996 tanggal 2 April 1996 tentang Uang Harian Perjalanan Dinas Dalam Negeri Pegawai Negeri Sipil;" required="" data-name="dasar" rows="2" name="test[0][dasar]" cols="50" value="" id="test_0_dasar" aria-invalid="false"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Repeater Remove Btn -->
+                                        <div class="mt-3 pull-right repeater-remove-btn">
+                                            <button class="btn btn-danger remove-btn" disabled="disabled" onclick="$(this).parents('.items').remove()">
+                                                Hapus Dasar
+                                            </button>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    <div></div></div> --}}
                                 </div>
                             </div>
                         </div>
@@ -288,9 +304,9 @@
                     </div>
                     <!-- Button Submit -->
                     <div class="text-right">
-                        <a href="https://diskominfo.wonosobokab.go.id/spt-sppd" class="btn bg-grey-400">Kembali <i
-                                class="ml-2 icon-square-left"></i></a>
-                        <button type="submit" class="bg-teal-400 btn">Submit form <i
+                        <button class="btn bg-grey-400" wire:click='batal'>Batal <i
+                                class="ml-2 icon-square-left"></i></button>
+                        <button type="submit" class="bg-teal-400 btn">Simpan<i
                                 class="ml-2 icon-paperplane"></i></button>
                     </div>
                 </form>

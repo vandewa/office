@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 class Sppd extends Component
 {
-    public $nama;
+    public $nama, $sppd;
+    public $edit = false;
     public $formDasar = [
         'dasar' => null
     ];
@@ -35,6 +36,7 @@ class Sppd extends Component
 
     public function mount()
     {
+        //menampilkan nama di form select nama pegawai
         $nip = Auth::user()->nip;
         if (Auth::check()) {
             $kdunit = Tb01::where('nip', $nip)->value('kdunit');
@@ -44,6 +46,11 @@ class Sppd extends Component
                 ->distinct('tb_01.nama')
                 ->pluck('tb_01.nama', 'tb_01.nip');
         }
+    }
+
+    public function save()
+    {
+        $this->store();
     }
 
     public function store()
@@ -60,16 +67,15 @@ class Sppd extends Component
         // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai
         $nipList = $this->formNama['nip'] ?? []; // Ambil nip dari formNama
         foreach ($nipList as $nip) {
-        $pegawai = Tb01::where('nip', $nip)->first(); // Cari data pegawai berdasarkan nip
-
-        if ($pegawai) {
-            SppdPegawai::create([
-                'sppd_id' => $sppd->id,
-                'nip' => $nip,
-                'idskpd' => $pegawai->idskpd
-            ]);
+            $pegawai = Tb01::where('nip', $nip)->first(); // Cari data pegawai berdasarkan nip
+            if ($pegawai) {
+                SppdPegawai::create([
+                    'sppd_id' => $sppd->id,
+                    'nip' => $nip,
+                    'idskpd' => $pegawai->idskpd
+                ]);
+            }
         }
-    }
         return redirect()->to('/sppd-index');
     }
 

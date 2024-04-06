@@ -23,7 +23,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a href="{{ route('suratMasuk') }}" class="nav-link">
+              <a href="{{ route('suratmasuk') }}" class="nav-link">
                   <i class="
                   icon-mail-read"></i>
                   <span>
@@ -33,7 +33,7 @@
           </li>
           <!-- /main -->
           <li class="nav-item">
-            <a href="{{ route('dataPegawai') }}" class="nav-link">
+            <a href="{{ route('datapegawai') }}" class="nav-link">
                 <i class="icon-users"></i>
                 <span>
                     Data Pegawai

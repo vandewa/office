@@ -11,8 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Sppd extends Component
 {
-    public $nama, $sppd;
-    public $edit = false;
+    public $nama, $sppd, $sppdId = null, $edit = false;
     public $formDasar = [
         'dasar' => null
     ];
@@ -34,23 +33,40 @@ class Sppd extends Component
         'keterangan' => null,
     ];
 
-    public function mount()
+    public function mount($id = null)
     {
-        //menampilkan nama di form select nama pegawai
-        $nip = Auth::user()->nip;
-        if (Auth::check()) {
-            $kdunit = Tb01::where('nip', $nip)->value('kdunit');
-            $this->nama = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
-                ->where('a_skpd.kdunit', $kdunit)
-                ->where('idjenkedudupeg', 1)
-                ->distinct('tb_01.nama')
-                ->pluck('tb_01.nama', 'tb_01.nip');
+        $this->sppdId = $id;
+        if ($id) {
+            $this->getEdit($id);
+        } else {
+            $this->edit = false;
         }
+         //menampilkan nama di form select nama pegawai
+         $nip = Auth::user()->nip;
+         if (Auth::check()) {
+             $kdunit = Tb01::where('nip', $nip)->value('kdunit');
+             $this->nama = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
+                 ->where('a_skpd.kdunit', $kdunit)
+                 ->where('idjenkedudupeg', 1)
+                 ->distinct('tb_01.nama')
+                 ->pluck('tb_01.nama', 'tb_01.nip');
+         }
+     }
+
+    public function getEdit($id)
+    {
+        $this->edit = true;
+        $this->sppd = ModelsSppd::findOrFail($id); // Gunakan ModelsSppd, bukan Sppd
+        $this->form = array_intersect_key($this->sppd->toArray(), $this->form);
     }
 
     public function save()
     {
-        $this->store();
+        if ($this->edit === false) {
+            $this->store();
+        } else {
+            $this->storeUpdate();
+        }
     }
 
     public function store()
@@ -76,6 +92,38 @@ class Sppd extends Component
                 ]);
             }
         }
+        return redirect()->to('/sppd-index');
+    }
+
+    public function storeUpdate()
+    {
+        // Temukan data SPPD yang akan diperbarui
+        $sppd = ModelsSppd::findOrFail($this->sppdId); // Menggunakan $this->sppdId daripada $this->sppd->id
+
+        // Perbarui data SPPD dengan nilai baru dari formulir yang diedit
+        $sppd->update($this->form);
+
+        // Simpan input dasar ke tabel dasar_sppd
+        DasarSppd::where('sppd_id', $sppd->id)->update([
+            'dasar' => $this->formDasar['dasar']
+        ]);
+
+        // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai
+        $nipList = $this->formNama['nip'] ?? []; // Ambil nip dari formNama
+        foreach ($nipList as $nip) {
+            $pegawai = Tb01::where('nip', $nip)->first(); // Cari data pegawai berdasarkan nip
+            if ($pegawai) {
+                SppdPegawai::where('sppd_id', $sppd->id)->update([
+                    'nip' => $nip,
+                    'idskpd' => $pegawai->idskpd
+                ]);
+            }
+        }
+
+        // Reset nilai variabel setelah disimpan
+        $this->reset();
+
+        // Redirect ke halaman sppd-index setelah data disimpan
         return redirect()->to('/sppd-index');
     }
 

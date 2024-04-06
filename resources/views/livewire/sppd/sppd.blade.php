@@ -2,6 +2,10 @@
     <div class="content" style="padding: 20px">
         <div class="card">
             <div class="card-header">
+                <h2>{{ $edit ? 'Edit Form SPT' : 'Buat Form SPT Baru' }}</h2>
+                <div class="dropdown-divider"></div>
+            </div>
+            <div class="card-header">
                 <h2>Form SPT</h2>
                 <div class="dropdown-divider"></div>
             </div>
@@ -97,7 +101,7 @@
                                         <div class="form-group">
                                             <input class="form-control" id="input-field2"
                                                 onkeyup="capitalizeFirstLetter2()" name="tempat_tujuan"
-                                                wire:model='form.tempat_tujuan' type="text" >
+                                                wire:model='form.tempat_tujuan' type="text">
                                         </div>
                                     </div>
                                 </div>
@@ -306,7 +310,8 @@
                     <div class="text-right">
                         <button class="btn bg-grey-400" wire:click='batal'>Batal <i
                                 class="ml-2 icon-square-left"></i></button>
-                        <button type="submit" class="bg-teal-400 btn">Simpan<i
+                        <button type="submit"
+                            class="bg-teal-400 btn">{{ $edit ? 'Simpan Perubahan' : 'Buat SPT Baru' }}<i
                                 class="ml-2 icon-paperplane"></i></button>
                     </div>
                 </form>

@@ -62,10 +62,9 @@
                                             class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
                                             title="Edit"><i class="icon-trash"></i>
                                         </button>
-                                        <button type="button" wire:click="getEdit(' {{ $sppd->id }}')"
-                                            class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
-                                            title="Edit"><i class="icon-pencil"></i>
-                                        </button>
+                                        <a href="{{ route('sppd', ['id' => $sppd->id]) }}" class="btn btn-flat btn-sm">
+                                            <i class="icon-pencil"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

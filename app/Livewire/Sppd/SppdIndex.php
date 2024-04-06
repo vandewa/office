@@ -17,7 +17,7 @@ class SppdIndex extends Component
     //         return view('livewire.sppd-index');
     //     }
 
-    public $idHapus, $sppds, $edit = false;
+    public $idHapus, $sppds;
 
     public $form = [
         'maksud' => null,
@@ -40,12 +40,12 @@ class SppdIndex extends Component
         $this->sppds = Sppd::all();
     }
 
-    //mengarahkan ke halamna edit
-    public function getEdit($id)
-    {
-        $this->sppds = Sppd::findOrFail($id);
-        return redirect()->route('sppd-edit', ['id' => $id]);
-    }
+    // //mengarahkan ke halamna edit
+    // public function getEdit($id)
+    // {
+    //     $this->sppds = Sppd::findOrFail($id);
+    //     return redirect()->route('sppd-edit', ['id' => $id]);
+    // }
 
     public function delete($id)
     {
@@ -65,7 +65,6 @@ class SppdIndex extends Component
     {
         Sppd::find($this->idHapus)->update($this->form);
         $this->reset();
-        $this->edit = true;
     }
 
     public function render()

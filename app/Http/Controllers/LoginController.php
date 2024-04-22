@@ -30,6 +30,7 @@ class LoginController extends Controller
             ->first();
 
         if ($data) {
+            // return $data;
             Auth::login($data);
             return redirect(route('dashboard'));
         } else {

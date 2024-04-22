@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="page-header-content header-elements-md-inline">
             <div class="page-title d-flex">
-                <h4><i class="icon-arrow-left52 mr-2"></i> <span class="font-weight-semibold">Home</span> -
+                <h4><i class="mr-2 icon-arrow-left52"></i> <span class="font-weight-semibold">Home</span> -
                     Data Pegawai</h4>
                 <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
             </div>
@@ -11,7 +11,7 @@
         <div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline">
             <div class="d-flex">
                 <div class="breadcrumb">
-                    <a href="index.html" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
+                    <a href="index.html" class="breadcrumb-item"><i class="mr-2 icon-home2"></i> Home</a>
                     <span class="breadcrumb-item active">Data Pegawai</span>
                 </div>
 
@@ -31,16 +31,22 @@
                             <th>No</th>
                             <th>Nama</th>
                             <th>NIP</th>
-                            <th>Bidang</th>
+                            <th>Jabatan</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($tb01 as $rowTb01)
                             <tr>
                                 <td>{{ $loop->iteration + 0 }}</td>
-                                <td>{{ $rowTb01->nama }}</td>
-                                <td>{{ $rowTb01->nip }}</td>
-                                <td>{{ $rowTb01->skpd->skpd }}</td>
+                                <td> 
+                                    @if($rowTb01->gdb)
+                                    {{ $rowTb01->gdp.' '.$rowTb01->nama. ', '. $rowTb01->gdb }}
+                                    @else
+                                    {{ $rowTb01->gdp.' '.$rowTb01->nama }}
+                                    @endif
+                                </td>
+                                <td>{{ $rowTb01->nip??'' }}</td>
+                                <td>{{ $rowTb01->jabatan??'' }}</td>
                         @endforeach
                         </tr>
                     </tbody>

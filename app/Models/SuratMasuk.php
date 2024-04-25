@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SuratMasuk extends Model
 {
     use HasFactory;
-    protected $fillable = ['phone', 'message'];
+    // protected $fillable = ['phone', 'message'];
+    protected $guarded = [];
 
 }

@@ -10,6 +10,7 @@ class SuratMasuk extends Component
 {
     use WithFileUploads;
 
+    public $nama, $suratmasuk, $suratmasukId = null, $edit = false;
     public $form = [
         'jenis_agenda_tp' => null,
         'kode_lama' => null,
@@ -28,6 +29,33 @@ class SuratMasuk extends Component
         'dok_surat' => null,
     ];
 
+
+    public function mount($id = null)
+    {
+        $this->suratmasukId = $id;
+        if ($id) {
+            $this->getEdit($id);
+        } else {
+            $this->edit = false;
+        }
+    }
+
+    public function getEdit($id)
+    {
+        $this->edit = true;
+        $this->suratmasuk = ModelsSuratMasuk::findOrFail($id);
+        $this->form = array_intersect_key($this->suratmasuk->toArray(), $this->form);
+    }
+
+    public function save()
+    {
+        if ($this->edit === true) {
+            $this->storeUpdate();
+        } else {
+            $this->store();
+        }
+    }
+
     public function store()
     {
         // Pastikan ada file yang diunggah sebelum menyimpan
@@ -36,30 +64,64 @@ class SuratMasuk extends Component
             $path = $this->form['dok_surat']->store('dokumen', 'public');
 
             // Menyimpan path file ke dalam database
-        ModelsSuratMasuk::create([
-            'jenis_agenda_tp' => $this->form['jenis_agenda_tp'],
-            'kode_lama' => $this->form['kode_lama'],
-            'kode_baru' => $this->form['kode_baru'],
-            'nomor_surat' => $this->form['nomor_surat'],
-            'opd_id' => $this->form['opd_id'],
-            'tgl_surat' => $this->form['tgl_surat'],
-            'tgl_terima' => $this->form['tgl_terima'],
-            'acara' => $this->form['acara'],
-            'tanggalBerangkat' => $this->form['tanggalBerangkat'],
-            'tanggalPulang' => $this->form['tanggalPulang'],
-            'jamMulai' => $this->form['jamMulai'],
-            'tempat' => $this->form['tempat'],
-            'perihal' => $this->form['perihal'],
-            'dok_surat' => $path
-        ]);
+            ModelsSuratMasuk::create([
+                'jenis_agenda_tp' => $this->form['jenis_agenda_tp'],
+                'kode_lama' => $this->form['kode_lama'],
+                'kode_baru' => $this->form['kode_baru'],
+                'nomor_surat' => $this->form['nomor_surat'],
+                'opd_id' => $this->form['opd_id'],
+                'tgl_surat' => $this->form['tgl_surat'],
+                'tgl_terima' => $this->form['tgl_terima'],
+                'acara' => $this->form['acara'],
+                'tanggalBerangkat' => $this->form['tanggalBerangkat'],
+                'tanggalPulang' => $this->form['tanggalPulang'],
+                'jamMulai' => $this->form['jamMulai'],
+                'tempat' => $this->form['tempat'],
+                'perihal' => $this->form['perihal'],
+                'dok_surat' => $path
+            ]);
         }
+
+        return redirect()-> to('/suratmasuk-index');
     }
 
 
-    public function save()
-    {
-        $this->store();
-    }
+    public function storeUpdate()
+{
+    $suratmasuk = ModelsSuratMasuk::findOrFail($this->suratmasukId);
+
+    // Jika ada file yang diunggah, perbarui kolom dok_surat
+    // if ($this->form['dok_surat']) {
+    //     // Memperbarui kolom dok_surat dengan path file yang baru
+    //     $path = $this->form['dok_surat']->store('dokumen', 'public');
+    // }
+
+    // Update kolom lainnya
+    $suratmasuk->update([
+        'jenis_agenda_tp' => $this->form['jenis_agenda_tp'],
+        'kode_lama' => $this->form['kode_lama'],
+        'kode_baru' => $this->form['kode_baru'],
+        'nomor_surat' => $this->form['nomor_surat'],
+        'opd_id' => $this->form['opd_id'],
+        'tgl_surat' => $this->form['tgl_surat'],
+        'tgl_terima' => $this->form['tgl_terima'],
+        'acara' => $this->form['acara'],
+        'tanggalBerangkat' => $this->form['tanggalBerangkat'],
+        'tanggalPulang' => $this->form['tanggalPulang'],
+        'jamMulai' => $this->form['jamMulai'],
+        'tempat' => $this->form['tempat'],
+        'perihal' => $this->form['perihal'],
+        // Perbarui kolom dok_surat hanya jika ada file yang diunggah
+        // 'dok_surat' => isset($path) ? $path : $suratmasuk->dok_surat
+    ]);
+
+    // Reset variabel setelah disimpan
+    $this->reset();
+
+    // Redirect ke halaman suratmasuk-index setelah data disimpan
+    return redirect()->to('/suratmasuk-index');
+}
+
 
     public function render()
     {

@@ -1,6 +1,10 @@
 <div>
     <div class="content">
         <div class="card">
+            <div class="card-header">
+                <h2>{{ $edit ? 'Edit Form Surat Masuk' : 'Buat Form Surat Masuk Baru' }}</h2>
+                <div class="dropdown-divider"></div>
+            </div>
             <div class="card-body">
                 <form action="" wire:submit='save'>
                     @csrf
@@ -31,11 +35,11 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <div id="previewContainer"></div>
+                            {{-- <div id="previewContainer"></div> --}}
                         </div>
                         {{-- kode lama --}}
                         <div class="col-6">
-                            <div id="formTetap" style="display: none;">
+                            {{-- <div id="formTetap" style="display: none;"> --}}
                                 <!-- Kode lama -->
                                 <div class="form-group row">
                                     <label class="col-lg-3 col-form-label">Kode (Lama)</label>
@@ -82,8 +86,8 @@
                                         <input type="date" class="form-control" name="tgl_terima" wire:model='form.tgl_terima'>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="formJENIS_SURAT_TP_01" style="display: none;">
+                            {{-- </div> --}}
+                            {{-- <div id="formJENIS_SURAT_TP_01" style="display: none;"> --}}
                                 {{-- subject --}}
                                 <div class="form-group row">
                                     <label class="col-lg-3 col-form-label">Subject</label>
@@ -119,8 +123,8 @@
                                         <input type="text" class="form-control" name="tempat" wire:model='form.tempat'>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="formJENIS_SURAT_TP_02" style="display: none;">
+                            {{-- </div> --}}
+                            {{-- <div id="formJENIS_SURAT_TP_02" style="display: none;"> --}}
                                 {{-- perihal --}}
                                 <div class="form-group row">
                                     <label class="col-lg-3 col-form-label">perihal</label>
@@ -128,9 +132,9 @@
                                         <input type="text" class="form-control" name="perihal" wire:model='form.perihal'>
                                     </div>
                                 </div>
-                            </div>
+                            {{-- </div> --}}
                             <div class="text-right">
-                                <button type="submit" class="btn btn-primary">Submit form <i
+                                <button type="submit" class="btn btn-primary">{{ $edit ? 'Simpan Perubahan' : 'Buat SUrat Masuk Baru' }}<i
                                         class="icon-paperplane ml-2"></i></button>
                             </div>
                 </form>
@@ -140,7 +144,7 @@
 </div>
 
 {{-- pilih jenis surat --}}
-<script>
+{{-- <script>
     // Mendapatkan elemen select dan semua elemen form input
     const selectSurat = document.getElementById("selectSurat");
     const formTetap = document.getElementById("formTetap");
@@ -169,7 +173,7 @@
 
     // Panggil fungsi toggleForms saat halaman dimuat untuk menampilkan form sesuai dengan nilai awal select
     window.onload = toggleForms;
-</script>
+</script> --}}
 
 {{-- preview dokumen --}}
 <script>

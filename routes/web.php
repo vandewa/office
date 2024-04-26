@@ -1,16 +1,19 @@
 <?php
 
-use App\Http\Controllers\LoginController;
 use App\Livewire\Coba;
-use App\Livewire\Dashboard;
 use App\Livewire\Login;
-use App\Livewire\Pegawai\DataPegawai;
+use App\Livewire\Dashboard;
 use App\Livewire\Sppd\Sppd;
 use App\Livewire\Sppd\SppdEdit;
 use App\Livewire\Sppd\SppdIndex;
 use App\Livewire\Surat\SuratMasuk;
-use Illuminate\Support\Facades\Route;
+use App\Livewire\Surat\SuratKeluar;
 use Illuminate\Support\Facades\File;
+use App\Livewire\Pegawai\DataPegawai;
+use Illuminate\Support\Facades\Route;
+use App\Livewire\Surat\SuratMasukIndex;
+use App\Livewire\Surat\SuratKeluarIndex;
+use App\Http\Controllers\LoginController;
 
 
 /*
@@ -32,7 +35,10 @@ Route::post('/logins', [LoginController::class, 'login'])->name('logins');
 Route::get('dashboard', Dashboard::class)->name('dashboard');
 Route::get('sppd/{id?}', Sppd::class)->name('sppd');
 Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
-Route::get('suratmasuk', SuratMasuk::class)->name('suratmasuk');
+Route::get('suratmasuk/{id?}', SuratMasuk::class)->name('suratmasuk');
+Route::get('suratmasuk-index', SuratMasukIndex::class)->name('suratmasuk-index');
+Route::get('suratkeluar/{id?}', SuratKeluar::class)->name('suratkeluar');
+Route::get('suratkeluar-index', SuratKeluarIndex::class)->name('suratkeluar-index');
 Route::get('datapegawai', DataPegawai::class)->name('datapegawai');
 
 

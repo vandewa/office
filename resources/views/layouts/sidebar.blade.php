@@ -23,7 +23,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a href="{{ route('suratmasuk') }}" class="nav-link">
+              <a href="{{ route('suratmasuk-index') }}" class="nav-link">
                   <i class="
                   icon-mail-read"></i>
                   <span>
@@ -31,6 +31,15 @@
                   </span>
               </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ route('suratkeluar-index') }}" class="nav-link">
+                <i class="
+                icon-mail5"></i>
+                <span>
+                    Surat Keluar
+                </span>
+            </a>
+        </li>
           <!-- /main -->
           <li class="nav-item">
             <a href="{{ route('datapegawai') }}" class="nav-link">

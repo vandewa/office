@@ -20,7 +20,7 @@ class SppdIndex extends Component
     //     }
 
     use WithPagination;
-    public $idHapus, $sppds;
+    public $idHapus, $sppds, $cari;
 
     public $form = [
         'maksud' => null,
@@ -70,16 +70,20 @@ class SppdIndex extends Component
         $this->reset();
     }
 
+
     // public function render()
     // {
-    //     return view('livewire.sppd.sppd-index', [
-    //         'sppds' => $this->sppds
-    //     ]);
+    //     $data = ModelsSppdIndex::paginate(10);
+    //     return view('livewire.sppd.sppd-index', ['data' => $data]);
     // }
+
     public function render()
     {
-        $data = ModelsSppdIndex::paginate(10);
+        $data = ModelsSppdIndex::query()
+            ->where('tempat_tujuan', 'like', '%' . $this->cari . '%')
+            ->orWhere('maksud', 'like', '%' . $this->cari . '%')
+            ->paginate(10);
+
         return view('livewire.sppd.sppd-index', ['data' => $data]);
     }
-
 }

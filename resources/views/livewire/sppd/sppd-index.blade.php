@@ -33,19 +33,29 @@
     <div class="content">
         <div class="card">
             <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Cari" wire:model.live='cari'>
+                            <span class="input-group-text"><i class="icon-search4"></i></span>
+                        </div>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-striped dataTable" id="DataTables_Table_0" role="grid"
                         aria-describedby="DataTables_Table_0_info">
-                        <thead>
-                            <tr role="row">
-                                <th class="text-left" style="width: 17px;" aria-label="No">No</th>
-                                <th style="width: 150px;" aria-label="Tanggal">Tanggal</th>
-                                <th style="width: 222px;" aria-label="Nama">Nama</th>
-                                <th style="width: 310px;" aria-label="Subject">Subject</th>
-                                <th style="width: 191px;" aria-label="Tujuan">Tujuan</th>
-                                <th style="width: 222px;" aria-label="Laporan">Status Laporan</th>
-                                <th style="width: 176px;" aria-label="Aksi">Aksi</th>
-                            </tr>
+                        <tr role="row">
+                            <th class="text-left" style="width: 17px;" aria-label="No">No</th>
+                            <th style="width: 150px;" aria-label="Tanggal">Tanggal</th>
+                            <th style="width: 222px;" aria-label="Nama">Nama</th>
+                            <th style="width: 310px;" aria-label="Subject">Subject</th>
+                            <th style="width: 191px;" aria-label="Tujuan">Tujuan</th>
+                            <th style="width: 222px;" aria-label="Laporan">Status Laporan</th>
+                            <th style="width: 176px;" aria-label="Aksi">Aksi</th>
+                        </tr>
                         </thead>
 
                         <tbody>

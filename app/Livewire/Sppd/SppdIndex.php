@@ -5,6 +5,8 @@ namespace App\Livewire\Sppd;
 use App\Jobs\KirimWA;
 use Livewire\Component;
 use App\Models\Sppd;
+use App\Models\SppdIndex as ModelsSppdIndex;
+use Livewire\WithPagination;
 
 class SppdIndex extends Component
 {
@@ -17,6 +19,7 @@ class SppdIndex extends Component
     //         return view('livewire.sppd-index');
     //     }
 
+    use WithPagination;
     public $idHapus, $sppds;
 
     public $form = [
@@ -67,10 +70,16 @@ class SppdIndex extends Component
         $this->reset();
     }
 
+    // public function render()
+    // {
+    //     return view('livewire.sppd.sppd-index', [
+    //         'sppds' => $this->sppds
+    //     ]);
+    // }
     public function render()
     {
-        return view('livewire.sppd.sppd-index', [
-            'sppds' => $this->sppds
-        ]);
+        $data = ModelsSppdIndex::paginate(10);
+        return view('livewire.sppd.sppd-index', ['data' => $data]);
     }
+
 }

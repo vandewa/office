@@ -49,9 +49,10 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($sppds as $sppd)
+                            @foreach ($data as $sppd)
                                 <tr wire:key='{{ $sppd->id }}'>
-                                    <td>{{ $loop->iteration + 0 }}</td>
+                                    <td>{{ $loop->index + $data->firstItem() }}
+                                    </td>
                                     <td>{{ $sppd->tgl_berangkat }}</td>
                                     <td>{{ $sppd->nama }} </td>
                                     <td>{{ $sppd->maksud }} </td>
@@ -70,6 +71,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {{ $data->links() }}
                 </div>
             </div>
         </div>

@@ -48,9 +48,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($suratmasuks as $suratmasuk)
+                            @foreach ($data as $suratmasuk)
                                 <tr wire:key='{{ $suratmasuk->id }}'>
-                                    <td>{{ $loop->iteration + 0 }}</td>
+                                    <td>{{ $loop->index + $data->firstItem() }}
+                                    </td>
                                     <td>{{ $suratmasuk->nomor_surat }}</td>
                                     <td>{{ $suratmasuk->tgl_surat }}</td>
                                     <td>Disposisi</td>
@@ -70,6 +71,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {{ $data->links() }}
                 </div>
             </div>
         </div>

@@ -3,10 +3,13 @@
 namespace App\Livewire\Surat;
 
 use App\Models\SuratMasuk;
+use App\Models\SuratMasukIndex as ModelsSuratMasukIndex;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class SuratMasukIndex extends Component
 {
+    use WithPagination;
     public $idHapus, $suratmasuks;
 
     public $form = [
@@ -51,11 +54,17 @@ class SuratMasukIndex extends Component
         $this->reset();
     }
 
+    // public function render()
+    // {
+    //     return view('livewire.surat.surat-masuk-index', [
+    //         'suratmasuks' => $this->suratmasuks
+    //     ]);
+    // }
+
     public function render()
     {
-        return view('livewire.surat.surat-masuk-index', [
-            'suratmasuks' => $this->suratmasuks
-        ]);
-
+        $data = ModelsSuratMasukIndex::paginate(10);
+        return view('livewire.surat.surat-masuk-index', ['data' => $data]);
     }
+
 }

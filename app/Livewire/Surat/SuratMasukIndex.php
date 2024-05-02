@@ -10,7 +10,7 @@ use Livewire\WithPagination;
 class SuratMasukIndex extends Component
 {
     use WithPagination;
-    public $idHapus, $suratmasuks;
+    public $idHapus, $suratmasuks, $cari;
 
     public $form = [
         'jenis_agenda_tp' => null,
@@ -63,7 +63,11 @@ class SuratMasukIndex extends Component
 
     public function render()
     {
-        $data = ModelsSuratMasukIndex::paginate(10);
+        $data = ModelsSuratMasukIndex::query()
+        ->where('nomor_surat', 'like', '%' . $this->cari . '%')
+        ->orWhere('acara', 'like', '%' . $this->cari . '%')
+        ->paginate(10);
+
         return view('livewire.surat.surat-masuk-index', ['data' => $data]);
     }
 

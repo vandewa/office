@@ -12,6 +12,6 @@ class SuratMasukSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\SuratMasuk::factory()->count(200)->create();
+        \App\Models\SuratMasuk::factory()->count(15)->create();
     }
 }

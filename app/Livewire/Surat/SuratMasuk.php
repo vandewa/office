@@ -81,8 +81,8 @@ class SuratMasuk extends Component
                 'dok_surat' => $path
             ]);
         }
-
-        return redirect()-> to('/suratmasuk-index');
+    // Redirect ke halaman suratmasuk-index setelah data disimpan
+    return redirect()->to('/suratmasuk-index');
     }
 
 
@@ -121,7 +121,6 @@ class SuratMasuk extends Component
     // Redirect ke halaman suratmasuk-index setelah data disimpan
     return redirect()->to('/suratmasuk-index');
 }
-
 
     public function render()
     {

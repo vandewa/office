@@ -164,6 +164,11 @@
 
 <script>
     $(document).ready(function() {
+        // Sembunyikan semua form saat halaman dimuat
+        $('.form0').hide();
+        $('.form1').hide();
+        $('.form2').hide();
+
         $('select[name=jenis_agenda_tp]').change(function() {
             let isi = $(this).val();
 
@@ -172,7 +177,7 @@
                 $('.form1').hide('slow');
                 $('.form2').hide('slow');
             }
-            
+
             if (isi == 'JENIS_SURAT_TP_01') {
                 $('.form0').show();
                 $('.form1').show('slow');
@@ -187,9 +192,15 @@
                 $('.form2').hide('slow');
             }
 
+            // Tampilkan form0 jika isi tidak sama dengan JENIS_SURAT_TP_01 atau JENIS_SURAT_TP_02
+            if (isi != 'JENIS_SURAT_TP_01' && isi != 'JENIS_SURAT_TP_02') {
+                $('.form0').hide('slow');
+            }
         });
     });
 </script>
+
+
 
 <script>
     $(document).ready(function() {

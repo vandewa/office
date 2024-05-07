@@ -12,6 +12,6 @@ class SppdSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Sppd::factory()->count(200)->create();
+        \App\Models\Sppd::factory()->count(15)->create();
     }
 }

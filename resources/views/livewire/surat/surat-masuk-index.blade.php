@@ -63,11 +63,11 @@
                                 <tr wire:key='{{ $suratmasuk->id }}'>
                                     <td>{{ $loop->index + $data->firstItem() }}
                                     </td>
-                                    <td>{{ $suratmasuk->nomor_surat }}</td>
                                     <td>{{ $suratmasuk->tgl_surat }}</td>
-                                    <td>Disposisi</td>
+                                    <td>{{ $suratmasuk->jenis_agenda_tp}}</td>
+                                    <td></td>
                                     <td>{{ $suratmasuk->acara }}</td>
-                                    <td>Keterangan</td>
+                                    <td></td>
                                     <td>
                                         <button type="button" wire:click="delete(' {{ $suratmasuk->id }}')"
                                             class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"

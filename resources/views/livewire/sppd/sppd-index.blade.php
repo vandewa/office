@@ -65,7 +65,7 @@
                                     <td>{{ $sppd->tgl_berangkat }}</td>
                                     <td>
                                         @foreach ($sppd->sppdPegawais as $sppdPegawai)
-                                            {{ $sppdPegawai->nip }} <br>
+                                            {{ $sppdPegawai->tb01->nama }} <br>
                                         @endforeach
                                     </td>
                                     <td>{{ $sppd->maksud }}</td>

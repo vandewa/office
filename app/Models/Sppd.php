@@ -10,6 +10,7 @@ class Sppd extends Model
     use HasFactory;
     protected $guarded = [];
     protected $table = 'sppds';
+
     public function sppdPegawais()
     {
         return $this->hasMany(SppdPegawai::class, 'sppd_id');

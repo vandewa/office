@@ -2,6 +2,7 @@
 
 namespace App\Models\Simpeg;
 
+use App\Models\SppdPegawai;
 use App\Models\Simpeg\ASkpd;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -1054,5 +1055,9 @@ class Tb01 extends Authenticatable
             ->select('idskpd', 'idparent', 'skpd', 'path_short', 'jab');
     }
 
+    public function sppdPegawais()
+    {
+        return $this->hasMany(SppdPegawai::class, 'nip');
+    }
 
 }

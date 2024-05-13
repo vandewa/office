@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class DasarSppd extends Model
 {
     use HasFactory;
+    protected $table = 'dasar_sppds';
+
     protected $fillable = ['sppd_id', 'dasar'];
 
     public function sppd()

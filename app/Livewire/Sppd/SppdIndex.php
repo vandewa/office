@@ -6,6 +6,7 @@ use App\Jobs\KirimWA;
 use Livewire\Component;
 use App\Models\Sppd;
 use App\Models\SppdIndex as ModelsSppdIndex;
+use App\Models\SppdPegawai;
 use Livewire\WithPagination;
 
 class SppdIndex extends Component
@@ -37,18 +38,14 @@ class SppdIndex extends Component
         'keterangan' => null,
     ];
 
+    public $formNama = [
+        'nip' => null
+    ];
+
     public function mount()
     {
-        // Mengambil data sppd_pegawai dari database
         $this->sppds = Sppd::all();
     }
-
-    // //mengarahkan ke halamna edit
-    // public function getEdit($id)
-    // {
-    //     $this->sppds = Sppd::findOrFail($id);
-    //     return redirect()->route('sppd-edit', ['id' => $id]);
-    // }
 
     public function delete($id)
     {
@@ -70,20 +67,18 @@ class SppdIndex extends Component
         $this->reset();
     }
 
-
-    // public function render()
-    // {
-    //     $data = ModelsSppdIndex::paginate(10);
-    //     return view('livewire.sppd.sppd-index', ['data' => $data]);
-    // }
-
     public function render()
     {
-        $data = ModelsSppdIndex::query()
+        $data = Sppd::query()
             ->where('tempat_tujuan', 'like', '%' . $this->cari . '%')
             ->orWhere('maksud', 'like', '%' . $this->cari . '%')
             ->paginate(10);
 
-        return view('livewire.sppd.sppd-index', ['data' => $data]);
+            $sppdPegawai = SppdPegawai::all();
+
+        return view('livewire.sppd.sppd-index', [
+            'data' => $data,
+            'sppdPegawai' => $sppdPegawai
+        ]);
     }
 }

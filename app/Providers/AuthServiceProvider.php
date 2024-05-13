@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -19,8 +20,24 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Register any authentication / authorization services.
      */
-    public function boot(): void
+    public function boot()
     {
-        //
+        $this->registerPolicies();
+
+        Gate::define('kepala_dinas', function ($user) {
+            return $user->idskpd == $user->kdunit;
+        });
+
+        Gate::define('sekretariat', function ($user) {
+            return $user->idskpd == $user->kdunit.'.01';
+        });
+
+        Gate::define('kepala_bidang', function ($user) {
+            return preg_match('/^\d{2}$/', $user->idskpd) && $user->idskpd !== $user->kdunit;
+        });
+
+        Gate::define('staff', function ($user) {
+            return preg_match('/^\d{2}\.\d{2}$/', $user->idskpd);
+        });
     }
 }

@@ -29,6 +29,34 @@
                                     </div>
                                 </div>
                             </div>
+
+                            {{-- <div>
+                                <label for="nip" class="col-form-label col-lg-12">Pilih Nama Pegawai<span class="text-danger"><small>*(urutkan berdasarkan kepangkatan)</small></span></label>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <select multiple="multiple" class="form-control select-fixed-multiple" data-fouc id="nip" name="nip[]" wire:model='formNama.nip'>
+                                            @foreach ($nama as $nip => $namaOption)
+                                                <option value="{{ $nip }}">{{ $namaOption }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div> --}}
+
+                            {{-- <div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="d-block">Fixed width select</label>
+                                        <select multiple="multiple" class="form-control select-fixed-multiple" data-fouc id="nip" name="nip[]"
+                                        wire:model='formNama.nip'>
+                                            @foreach ($nama as $nip => $namaOption)
+                                                <option value="{{ $nip }}">{{ $namaOption }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div> --}}
+
                             <!-- Tingkat Menurut Perjalanan -->
                             <div>
                                 <label class="col-form-label col-lg-12">Tingkat Menurut Perjalanan<span

@@ -2,15 +2,16 @@
 
 namespace App\Livewire\Surat;
 
-use App\Models\SuratMasuk as ModelsSuratMasuk;
 use Livewire\Component;
+use App\Models\Simpeg\ASkpd;
 use Livewire\WithFileUploads;
+use App\Models\SuratMasuk as ModelsSuratMasuk;
 
 class SuratMasuk extends Component
 {
     use WithFileUploads;
 
-    public $nama, $suratmasuk, $suratmasukId = null, $edit = false;
+    public $nama, $suratmasuk, $opdOptions = [], $suratmasukId = null, $edit = false;
     public $form = [
         'jenis_agenda_tp' => null,
         'kode_lama' => null,
@@ -27,11 +28,18 @@ class SuratMasuk extends Component
         'perihal' => null,
         // 'no_surat' => null,
         'dok_surat' => null,
+        'disposisi' => null,
+        'komentar' => null
     ];
 
 
     public function mount($id = null)
     {
+                // Ambil data OPD dari database dan susun ke dalam array untuk opsi dropdown
+                $opdList = ASkpd::all();
+                foreach ($opdList as $opd) {
+                    $this->opdOptions[$opd->idskpd] = $opd->skpd;
+                }
         $this->suratmasukId = $id;
         if ($id) {
             $this->getEdit($id);
@@ -78,6 +86,8 @@ class SuratMasuk extends Component
                 'jamMulai' => $this->form['jamMulai'],
                 'tempat' => $this->form['tempat'],
                 'perihal' => $this->form['perihal'],
+                'disposisi' => $this->form['disposisi'],
+                'komentar' => $this->form['komentar'],
                 'dok_surat' => $path
             ]);
         }
@@ -111,8 +121,10 @@ class SuratMasuk extends Component
         'jamMulai' => $this->form['jamMulai'],
         'tempat' => $this->form['tempat'],
         'perihal' => $this->form['perihal'],
+        'disposisi' => $this->form['disposisi'],
+        'komentar' => $this->form['komentar'],
         // Perbarui kolom dok_surat hanya jika ada file yang diunggah
-        // 'dok_surat' => isset($path) ? $path : $suratmasuk->dok_surat
+        'dok_surat' => isset($path) ? $path : $suratmasuk->dok_surat
     ]);
 
     // Reset variabel setelah disimpan

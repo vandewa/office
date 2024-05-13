@@ -9,6 +9,7 @@ class SppdIndex extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    protected $table = 'sppds';
+    // protected $table = 'sppds';
+    // protected $table = ['sppd_pegawais', 'sppds'];
 
 }

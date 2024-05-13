@@ -28,6 +28,8 @@ return new class extends Migration
             $table->string('tempat')->nullable();
             $table->string('perihal')->nullable();
             $table->string('dok_surat')->nullable();
+            $table->string('disposisi')->nullable();
+            $table->string('komentar')->nullable();
 
             // $table->string('phone');
             // $table->string('message');

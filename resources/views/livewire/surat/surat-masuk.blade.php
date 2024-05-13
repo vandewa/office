@@ -72,8 +72,9 @@
                                     <div class="col-lg-9">
                                         <select class="form-control" name="opd_id" wire:model='form.opd_id'>
                                             <option value="" selected>Pilih</option>
-                                            <option value="A">Surat Masuk (Agenda)</option>
-                                            <option value="B">Surat Masuk (Biasa)</option>
+                                            @foreach($opdOptions as $id => $opd)
+                                                <option value="{{ $id }}">{{ $opd }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -149,6 +150,27 @@
                                 </div>
                             </div>
 
+                            {{-- @can('kepala_dinas')
+                            <div class="form0">
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Disposisi</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="disposisi"
+                                            wire:model='form.disposisi'>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Komentas</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="komentar"
+                                            wire:model='form.komentar'>
+                                    </div>
+                                </div>
+                            </div>
+                            @endcan --}}
+
+
+
                             <div class="text-right">
                                 <button type="submit"
                                     class="btn btn-primary">{{ $edit ? 'Simpan Perubahan' : 'Buat SUrat Masuk Baru' }}<i
@@ -162,12 +184,12 @@
 
 
 
-<script>
+{{-- <script>
     $(document).ready(function() {
-        // Sembunyikan semua form saat halaman dimuat
-        $('.form0').hide();
-        $('.form1').hide();
-        $('.form2').hide();
+        // // Sembunyikan semua form saat halaman dimuat
+        // $('.form0').hide();
+        // $('.form1').hide();
+        // $('.form2').hide();
 
         $('select[name=jenis_agenda_tp]').change(function() {
             let isi = $(this).val();
@@ -192,13 +214,12 @@
                 $('.form2').hide('slow');
             }
 
-            // Tampilkan form0 jika isi tidak sama dengan JENIS_SURAT_TP_01 atau JENIS_SURAT_TP_02
             if (isi != 'JENIS_SURAT_TP_01' && isi != 'JENIS_SURAT_TP_02') {
-                $('.form0').hide('slow');
-            }
+    $('.form0').hide('slow');
+}
         });
     });
-</script>
+</script> --}}
 
 
 

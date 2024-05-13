@@ -95,6 +95,7 @@
                         <img src="limitless/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle"
                             alt="">
                         <span>{{ auth()->user()->nama }}</span>
+
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right">
@@ -144,7 +145,17 @@ background-size: cover;">
                             </div>
 
                             <div class="media-body">
-                                <div class="media-title font-weight-semibold">{{ auth()->user()->nama }}</div>
+                                <div class="media-title font-weight-semibold">
+                                    {{ auth()->user()->nama }} <br>
+                                </div>
+                                <div class="media-title font-weight-normal">
+                                    @php
+                                    $skpdData = json_decode(auth()->user()->skpd, true);
+                                    $skpd = isset($skpdData['skpd']) ? $skpdData['skpd'] : '';
+                                @endphp
+                                </div>
+                                <span>{{ $skpd }}</span>
+
                             </div>
 
                             <div class="ml-3 align-self-center">

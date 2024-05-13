@@ -61,17 +61,21 @@
                         <tbody>
                             @foreach ($data as $sppd)
                                 <tr wire:key='{{ $sppd->id }}'>
-                                    <td>{{ $loop->index + $data->firstItem() }}
-                                    </td>
+                                    <td>{{ $loop->index + $data->firstItem() }}</td>
                                     <td>{{ $sppd->tgl_berangkat }}</td>
-                                    <td>{{ $sppd->nama }} </td>
-                                    <td>{{ $sppd->maksud }} </td>
-                                    <td>{{ $sppd->tempat_tujuan }} </td>
-                                    <td>{{ $sppd->status }} </td>
                                     <td>
-                                        <button type="button" wire:click="delete(' {{ $sppd->id }}')"
+                                        @foreach ($sppd->sppdPegawais as $sppdPegawai)
+                                            {{ $sppdPegawai->nip }} <br>
+                                        @endforeach
+                                    </td>
+                                    <td>{{ $sppd->maksud }}</td>
+                                    <td>{{ $sppd->tempat_tujuan }}</td>
+                                    <td>{{ $sppd->status }}</td>
+                                    <td>
+                                        <button type="button" wire:click="delete('{{ $sppd->id }}')"
                                             class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
-                                            title="Edit"><i class="icon-trash"></i>
+                                            title="Edit">
+                                            <i class="icon-trash"></i>
                                         </button>
                                         <a href="{{ route('sppd', ['id' => $sppd->id]) }}" class="btn btn-flat btn-sm">
                                             <i class="icon-pencil"></i>
@@ -80,6 +84,8 @@
                                 </tr>
                             @endforeach
                         </tbody>
+
+
                     </table>
                     {{ $data->links() }}
                 </div>

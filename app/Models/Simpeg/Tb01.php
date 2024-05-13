@@ -1051,7 +1051,7 @@ class Tb01 extends Authenticatable
     public function skpd()
     {
         return $this->belongsTo(ASkpd::class, 'idskpd', 'idskpd')
-            ->select('idskpd', 'idparent', 'skpd', 'path_short');
+            ->select('idskpd', 'idparent', 'skpd', 'path_short', 'jab');
     }
 
 

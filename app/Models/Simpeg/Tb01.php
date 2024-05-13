@@ -2,6 +2,7 @@
 
 namespace App\Models\Simpeg;
 
+use App\Models\DataPegawai;
 use App\Models\SppdPegawai;
 use App\Models\Simpeg\ASkpd;
 use Illuminate\Database\Eloquent\Model;
@@ -1052,12 +1053,18 @@ class Tb01 extends Authenticatable
     public function skpd()
     {
         return $this->belongsTo(ASkpd::class, 'idskpd', 'idskpd')
-            ->select('idskpd', 'idparent', 'skpd', 'path_short', 'jab');
+            ->select('idskpd', 'idparent', 'skpd', 'path_short');
     }
 
     public function sppdPegawais()
     {
         return $this->hasMany(SppdPegawai::class, 'nip');
+    }
+
+    public function namaPegawai()
+    {
+        return $this->belongsTo(DataPegawai::class, 'nip')
+        ->select('jab', 'gdp', 'gdb', 'skpd');
     }
 
 }

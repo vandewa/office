@@ -74,7 +74,7 @@
                                     <td>
                                         <button type="button" wire:click="delete('{{ $sppd->id }}')"
                                             class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
-                                            title="Edit">
+                                            title="Delete">
                                             <i class="icon-trash"></i>
                                         </button>
                                         <a href="{{ route('sppd', ['id' => $sppd->id]) }}" class="btn btn-flat btn-sm">

@@ -32,17 +32,15 @@
                             <th>Nama</th>
                             <th>NIP</th>
                             <th>Bidang</th>
-                            <th>Jabatan</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($tb01 as $rowTb01)
                             <tr>
                                 <td>{{ $loop->iteration + 0 }}</td>
-                                <td>{{ $rowTb01->nama }}</td>
+                                <td>{{ $rowTb01->gdp }} {{ $rowTb01->nama }} {{ $rowTb01->gdb }}</td>
                                 <td>{{ $rowTb01->nip }}</td>
                                 <td>{{ $rowTb01->skpd->skpd }}</td>
-                                <th>{{ $rowTb01->skpd->jab}}</th>
                         @endforeach
                         </tr>
                     </tbody>

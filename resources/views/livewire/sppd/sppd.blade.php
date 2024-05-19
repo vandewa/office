@@ -263,6 +263,20 @@
                                     <div></div></div> --}}
                                 </div>
                             </div>
+                            {{-- <div>
+                                <label class="col-form-label col-lg-12">Status Laporan</label>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <select class="form-control is-valid" required="" name="status_laporan"
+                                        wire:model='formStatus.status_laporan'
+                                        aria-invalid="false">
+                                        <option value="BS">Belum Selesai</option>
+                                        <option value="S">Selesai</option>
+                                    </select><span id="tingkat_id-error" class="invalid-feedback"
+                                        style="display: block;"></span>
+                                    </div>
+                                </div>
+                            </div> --}}
                         </div>
                     </div>
                     <!-- Modal -->

@@ -65,12 +65,17 @@
                                     <td>{{ $sppd->tgl_berangkat }}</td>
                                     <td>
                                         @foreach ($sppd->sppdPegawais as $sppdPegawai)
-                                       <span class="badge bg-purple">{{ $sppdPegawai->tb01->gdp }} {{ $sppdPegawai->tb01->nama }} {{ $sppdPegawai->tb01->gdb }}</span> <br>
+                                            <span class="badge bg-purple">{{ $sppdPegawai->tb01->gdp }}
+                                                {{ $sppdPegawai->tb01->nama }} {{ $sppdPegawai->tb01->gdb }}</span> <br>
                                         @endforeach
                                     </td>
                                     <td>{{ $sppd->maksud }}</td>
                                     <td>{{ $sppd->tempat_tujuan }}</td>
-                                    <td>{{ $sppd->status }}</td>
+                                    <td>
+                                        @foreach ($sppd->statusLaporans as $statusLaporan)
+                                            <span class="badge bg-danger">{{ $statusLaporan->status_laporan }}</span>
+
+                                    </td>
                                     <td>
                                         <button type="button" wire:click="delete('{{ $sppd->id }}')"
                                             class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
@@ -80,7 +85,14 @@
                                         <a href="{{ route('sppd', ['id' => $sppd->id]) }}" class="btn btn-flat btn-sm">
                                             <i class="icon-pencil"></i>
                                         </a>
+                                        @if ($statusLaporan->status_laporan === 'Belum Selesai')
+                                        <a href="#" class="btn btn-flat btn-sm">
+                                            <i class="icon-add"></i>
+                                        </a>
+                                    @endif
+@endforeach
                                     </td>
+
                                 </tr>
                             @endforeach
                         </tbody>

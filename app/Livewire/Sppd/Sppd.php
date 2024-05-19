@@ -8,11 +8,13 @@ use App\Models\Simpeg\ASkpd;
 use App\Models\Simpeg\Tb01;
 use App\Models\SppdPegawai;
 use App\Models\Sppd as ModelsSppd;
+use App\Models\StatusLaporan;
+use App\Models\StatusSurat;
 use Illuminate\Support\Facades\Auth;
 
 class Sppd extends Component
 {
-    public $nama, $sppd, $sppdId = null, $edit = false;
+    public $nama, $sppd, $sppdId = null, $edit = false, $formStatus = true;
     public $formDasar = [
         'dasar' => null
     ];
@@ -33,6 +35,7 @@ class Sppd extends Component
         'pengikut' => null,
         'keterangan' => null,
     ];
+
 
     public function mount($id = null)
     {
@@ -96,6 +99,24 @@ class Sppd extends Component
                 ]);
             }
         }
+
+        // StatusLaporan::create([
+        //     'sppd_id' =>$sppd->id,
+        //     'status_laporan' => $this->formStatus['status_laporan']
+        // ]);
+        if ($this->formStatus === true) {
+            // Simpan data dengan nilai "Belum Selesai"
+            StatusLaporan::create([
+                'sppd_id' => $sppd->id,
+                'status_laporan' => 'Belum Selesai',
+            ]);
+        } else {
+            // Simpan data dengan nilai "Selesai"
+            StatusLaporan::create([
+                'sppd_id' => $sppd->id,
+                'status_laporan' => 'Selesai',
+            ]);
+        }
         return redirect()->to('/sppd-index');
     }
 
@@ -110,6 +131,10 @@ class Sppd extends Component
         // Simpan input dasar ke tabel dasar_sppd
         DasarSppd::where('sppd_id', $sppd->id)->update([
             'dasar' => $this->formDasar['dasar']
+        ]);
+
+        StatusSurat::where('sppd_id', $sppd->id)->update([
+            'status_laporan' => $this->formStatus['status_laporan']
         ]);
 
         // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai

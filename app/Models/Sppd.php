@@ -16,4 +16,9 @@ class Sppd extends Model
         return $this->hasMany(SppdPegawai::class, 'sppd_id');
     }
 
+    public function statusLaporans()
+    {
+        return $this->hasMany(statusLaporan::class, 'sppd_id');
+    }
+
 }

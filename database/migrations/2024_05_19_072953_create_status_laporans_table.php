@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('status_surats', function (Blueprint $table) {
+        Schema::create('status_laporans', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sppd_id');
+            $table->foreign('sppd_id')->references('id')->on('sppds')->onDelete('cascade'); // Atur aksi kaskade;
+            $table->enum('status_laporan', ['Selesai', 'Belum Selesai'])->nullable();
+            $table->string('laporan');
             $table->timestamps();
-            $table->string('verifikasi_kadin');
-            $table->string('verifikasi_kabid');
-            $table->string('verifikasi_sekretariat');
         });
     }
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('status_surats');
+        Schema::dropIfExists('status_laporans');
     }
 };

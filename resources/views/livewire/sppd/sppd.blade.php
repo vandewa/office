@@ -5,10 +5,7 @@
                 <h2>{{ $edit ? 'Edit Form SPT' : 'Buat Form SPT Baru' }}</h2>
                 <div class="dropdown-divider"></div>
             </div>
-            <div class="card-header">
-                <h2>Form SPT</h2>
-                <div class="dropdown-divider"></div>
-            </div>
+
             <div class="card-body">
                 <form action="" wire:submit='save'>
                     <div class="row" style="margin: 20px">
@@ -30,33 +27,6 @@
                                 </div>
                             </div>
 
-                            {{-- <div>
-                                <label for="nip" class="col-form-label col-lg-12">Pilih Nama Pegawai<span class="text-danger"><small>*(urutkan berdasarkan kepangkatan)</small></span></label>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <select multiple="multiple" class="form-control select-fixed-multiple" data-fouc id="nip" name="nip[]" wire:model='formNama.nip'>
-                                            @foreach ($nama as $nip => $namaOption)
-                                                <option value="{{ $nip }}">{{ $namaOption }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div> --}}
-
-                            {{-- <div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label class="d-block">Fixed width select</label>
-                                        <select multiple="multiple" class="form-control select-fixed-multiple" data-fouc id="nip" name="nip[]"
-                                        wire:model='formNama.nip'>
-                                            @foreach ($nama as $nip => $namaOption)
-                                                <option value="{{ $nip }}">{{ $namaOption }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div> --}}
-
                             <!-- Tingkat Menurut Perjalanan -->
                             <div>
                                 <label class="col-form-label col-lg-12">Tingkat Menurut Perjalanan<span
@@ -76,6 +46,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <!-- Maksud Perjalanan Dinas -->
                             <div>
                                 <label class="col-form-label col-lg-12">Maksud Perjalanan Dinas<span
@@ -109,6 +80,7 @@
                                 </div>
 
                             </div>
+
                             <!-- Tempat Berangkat -->
                             <div class="row">
                                 <div class="col-6">
@@ -134,6 +106,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <!-- Lama Perjalanan -->
                             <div>
                                 <label class="col-form-label col-lg-12">Lama Perjalanan<span
@@ -152,6 +125,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <!-- Tanggal Berangkat Tanggal Kembali -->
                             <div class="row">
                                 <div class="col-6">
@@ -177,6 +151,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <!-- Pengikut -->
                             <div>
                                 <label class="col-form-label col-lg-12">Pengikut</label>
@@ -187,6 +162,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <!-- Keterangan Lain-Lain -->
                             <div>
                                 <label class="col-form-label col-lg-12">Keterangan lain-lain</label>
@@ -197,6 +173,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <!-- Ditetapkan pada -->
                             <div>
                                 <label class="col-form-label col-lg-12">Ditetapkan Pada Tanggal<span
@@ -209,7 +186,10 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-6">
+
+                        <!--Untuk-->
                             <div>
                                 <label class="col-form-label col-lg-12">Untuk<span class="text-danger">*</span><small
                                         class="text-danger">(tidak perlu angka)</small></label>
@@ -227,6 +207,8 @@
                                 </div>
                             </div>
                             <br>
+
+                            <!--Dasar -->
                             <div>
                                 <label class="col-form-label col-lg-12">Dasar<span class="text-danger">*</span><small
                                         class="text-danger">(tidak perlu angka)</small></label>
@@ -263,20 +245,17 @@
                                     <div></div></div> --}}
                                 </div>
                             </div>
-                            {{-- <div>
-                                <label class="col-form-label col-lg-12">Status Laporan</label>
+                            <!--laporan -->
+                             <!-- Laporan Sppd -->
+                             <div>
+                                <label class="col-form-label col-lg-12">Laporan Sppd</label>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <select class="form-control is-valid" required="" name="status_laporan"
-                                        wire:model='formStatus.status_laporan'
-                                        aria-invalid="false">
-                                        <option value="BS">Belum Selesai</option>
-                                        <option value="S">Selesai</option>
-                                    </select><span id="tingkat_id-error" class="invalid-feedback"
-                                        style="display: block;"></span>
+                                        <input class="form-control " placeholder="Laporan Sppd"
+                                            name="laporan_sppd" wire:model='formLaporan.laporan_sppd' type="text">
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
                         </div>
                     </div>
                     <!-- Modal -->

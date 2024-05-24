@@ -4,6 +4,7 @@ namespace App\Livewire\Sppd;
 
 use Livewire\Component;
 use App\Models\DasarSppd;
+use App\Models\LaporanSppd;
 use App\Models\Simpeg\ASkpd;
 use App\Models\Simpeg\Tb01;
 use App\Models\SppdPegawai;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Sppd extends Component
 {
-    public $nama, $sppd, $sppdId = null, $edit = false, $formStatus = true;
+    public $nama, $sppd, $sppdId = null, $edit = false, $formStatus = false;
     public $formDasar = [
         'dasar' => null
     ];
@@ -34,6 +35,10 @@ class Sppd extends Component
         'ditetapkan_tgl' => null,
         'pengikut' => null,
         'keterangan' => null,
+    ];
+
+    public $formLaporan = [
+        'laporan_sppd' => null
     ];
 
 
@@ -86,6 +91,12 @@ class Sppd extends Component
             'sppd_id' => $sppd->id,
             'dasar' => $this->formDasar['dasar']
         ]);
+
+                // Simpan input dasar ke tabel dasar_sppd
+                LaporanSppd::create([
+                    'sppd_id' => $sppd->id,
+                    'laporan_sppd' => $this->formLaporan['laporan_sppd']
+                ]);
 
         // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai
         $nipList = $this->formNama['nip'] ?? []; // Ambil nip dari formNama

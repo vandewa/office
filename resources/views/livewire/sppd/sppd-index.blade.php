@@ -86,7 +86,7 @@
                                             <i class="icon-pencil"></i>
                                         </a>
                                         @if ($statusLaporan->status_laporan === 'Belum Selesai')
-                                        <a href="#" class="btn btn-flat btn-sm">
+                                        <a href="{{ route('sppd-laporan', ['id' => $sppd->id]) }}" class="btn btn-flat btn-sm">
                                             <i class="icon-add"></i>
                                         </a>
                                     @endif

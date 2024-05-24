@@ -189,7 +189,7 @@
 
                         <div class="col-6">
 
-                        <!--Untuk-->
+                            <!--Untuk-->
                             <div>
                                 <label class="col-form-label col-lg-12">Untuk<span class="text-danger">*</span><small
                                         class="text-danger">(tidak perlu angka)</small></label>
@@ -246,13 +246,14 @@
                                 </div>
                             </div>
                             <!--laporan -->
-                             <!-- Laporan Sppd -->
-                             <div>
+
+                            <!-- Laporan Sppd -->
+                            <div>
                                 <label class="col-form-label col-lg-12">Laporan Sppd</label>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <input class="form-control " placeholder="Laporan Sppd"
-                                            name="laporan_sppd" wire:model='formLaporan.laporan_sppd' type="text">
+                                        <input class="form-control " placeholder="Laporan Sppd" name="laporan_sppd"
+                                            wire:model='formLaporan.laporan_sppd' type="text">
                                     </div>
                                 </div>
                             </div>
@@ -339,3 +340,4 @@
             </div>
         </div>
     </div>
+</div>

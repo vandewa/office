@@ -34,6 +34,7 @@ Route::get('/', function () {
 Route::post('/logins', [LoginController::class, 'login'])->name('logins');
 Route::get('dashboard', Dashboard::class)->name('dashboard');
 Route::get('sppd/{id?}', Sppd::class)->name('sppd');
+Route::get('sppd/{id?}/laporan', Sppd::class)->name('sppd-laporan');
 Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
 Route::get('suratmasuk/{id?}', SuratMasuk::class)->name('suratmasuk');
 Route::get('suratmasuk-index', SuratMasukIndex::class)->name('suratmasuk-index');

@@ -15,7 +15,11 @@ use Illuminate\Support\Facades\Auth;
 
 class Sppd extends Component
 {
-    public $nama, $sppd, $sppdId = null, $edit = false, $formStatus = false;
+    public $nama, $sppd, $sppdId = null, $edit = false;
+
+    public $formStatus = [
+        'status_laporan' => null
+    ];
     public $formDasar = [
         'dasar' => null
     ];
@@ -72,6 +76,25 @@ class Sppd extends Component
         $this->form = array_intersect_key($this->sppd->toArray(), $this->form);
     }
 
+    // public function statusLaporan()
+    // {
+    //     $sppd = ModelsSppd::create($this->form);
+
+    //     if ($this->formStatus === true) {
+    //         // Simpan data dengan nilai "Belum Selesai"
+    //         StatusLaporan::create([
+    //             'sppd_id' => $sppd->id,
+    //             'status_laporan' => 'Belum Selesai',
+    //         ]);
+    //     } else {
+    //         // Simpan data dengan nilai "Selesai"
+    //         StatusLaporan::create([
+    //             'sppd_id' => $sppd->id,
+    //             'status_laporan' => 'Selesai',
+    //         ]);
+    //     }
+    // }
+
     public function save()
     {
         if ($this->edit === false) {
@@ -92,11 +115,7 @@ class Sppd extends Component
             'dasar' => $this->formDasar['dasar']
         ]);
 
-        // Simpan input dasar ke tabel dasar_sppd
-        LaporanSppd::create([
-            'sppd_id' => $sppd->id,
-            'laporan_sppd' => $this->formLaporan['laporan_sppd']
-        ]);
+
 
         // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai
         $nipList = $this->formNama['nip'] ?? []; // Ambil nip dari formNama
@@ -111,11 +130,13 @@ class Sppd extends Component
             }
         }
 
-        // StatusLaporan::create([
-        //     'sppd_id' =>$sppd->id,
-        //     'status_laporan' => $this->formStatus['status_laporan']
-        // ]);
-        if ($this->formStatus === true) {
+        // Simpan input dasar ke tabel dasar_sppd
+        LaporanSppd::create([
+            'sppd_id' => $sppd->id,
+            'laporan_sppd' => $this->formLaporan['laporan_sppd']
+        ]);
+
+        if ($this->formLaporan['laporan_sppd'] === null) {
             // Simpan data dengan nilai "Belum Selesai"
             StatusLaporan::create([
                 'sppd_id' => $sppd->id,
@@ -128,6 +149,10 @@ class Sppd extends Component
                 'status_laporan' => 'Selesai',
             ]);
         }
+        // StatusLaporan::create([
+        //     'sppd_id' =>$sppd->id,
+        //     'status_laporan' => $this->formStatus['status_laporan']
+        // ]);
         return redirect()->to('/sppd-index');
     }
 
@@ -147,6 +172,17 @@ class Sppd extends Component
         LaporanSppd::where('sppd_id', $sppd->id)->update([
             'laporan_sppd' => $this->formLaporan['laporan_sppd']
         ]);
+
+        $laporanSppd = $this->formLaporan['laporan_sppd'];
+
+        if ($laporanSppd !== null) {
+            // Jika laporan_sppd diisi, maka simpan data dengan nilai "Selesai"
+            StatusLaporan::updateOrCreate(
+                ['sppd_id' => $sppd->id],
+                ['status_laporan' => 'Selesai']
+            );
+        }
+
 
         // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai
         $nipList = $this->formNama['nip'] ?? []; // Ambil nip dari formNama

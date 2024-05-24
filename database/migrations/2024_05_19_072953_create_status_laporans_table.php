@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('sppd_id');
             $table->foreign('sppd_id')->references('id')->on('sppds')->onDelete('cascade'); // Atur aksi kaskade;
             $table->enum('status_laporan', ['Selesai', 'Belum Selesai'])->nullable();
-            $table->string('laporan');
             $table->timestamps();
         });
     }

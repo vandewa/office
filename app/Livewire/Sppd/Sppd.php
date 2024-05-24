@@ -92,11 +92,11 @@ class Sppd extends Component
             'dasar' => $this->formDasar['dasar']
         ]);
 
-                // Simpan input dasar ke tabel dasar_sppd
-                LaporanSppd::create([
-                    'sppd_id' => $sppd->id,
-                    'laporan_sppd' => $this->formLaporan['laporan_sppd']
-                ]);
+        // Simpan input dasar ke tabel dasar_sppd
+        LaporanSppd::create([
+            'sppd_id' => $sppd->id,
+            'laporan_sppd' => $this->formLaporan['laporan_sppd']
+        ]);
 
         // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai
         $nipList = $this->formNama['nip'] ?? []; // Ambil nip dari formNama
@@ -144,8 +144,8 @@ class Sppd extends Component
             'dasar' => $this->formDasar['dasar']
         ]);
 
-        StatusSurat::where('sppd_id', $sppd->id)->update([
-            'status_laporan' => $this->formStatus['status_laporan']
+        LaporanSppd::where('sppd_id', $sppd->id)->update([
+            'laporan_sppd' => $this->formLaporan['laporan_sppd']
         ]);
 
         // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai

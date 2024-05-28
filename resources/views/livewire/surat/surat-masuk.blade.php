@@ -36,8 +36,7 @@
                             </div>
                         </div>
                         <div class="col-6">
-                                <embed id="preview" src="" type="application/pdf" width="100%"
-                                    height="600">
+                            <embed id="preview" src="" type="application/pdf" width="100%" height="600">
                         </div>
                         {{-- kode lama --}}
                         <div class="col-6">
@@ -72,7 +71,7 @@
                                     <div class="col-lg-9">
                                         <select class="form-control" name="opd_id" wire:model='form.opd_id'>
                                             <option value="" selected>Pilih</option>
-                                            @foreach($opdOptions as $id => $opd)
+                                            @foreach ($opdOptions as $id => $opd)
                                                 <option value="{{ $id }}">{{ $opd }}</option>
                                             @endforeach
                                         </select>
@@ -169,8 +168,17 @@
                             </div>
                             @endcan --}}
 
-
-
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label">komentar</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" class="form-control" name="deskripsi"
+                                                wire:model='formTindakLanjut.deskripsi'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="text-right">
                                 <button type="submit"
                                     class="btn btn-primary">{{ $edit ? 'Simpan Perubahan' : 'Buat SUrat Masuk Baru' }}<i
@@ -223,7 +231,7 @@
 
 
 
-<script>
+{{-- <script>
     $(document).ready(function() {
         $('input[name=dok_surat]').change(function() {
             let dokumen = $(this).prop('files')[0];
@@ -244,6 +252,6 @@
             reader.readAsDataURL(dokumen);
         });
     });
-</script>
+</script> --}}
 
 </div>

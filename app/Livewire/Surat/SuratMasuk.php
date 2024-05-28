@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Simpeg\ASkpd;
 use Livewire\WithFileUploads;
 use App\Models\SuratMasuk as ModelsSuratMasuk;
+use App\Models\TindakLanjut;
 
 class SuratMasuk extends Component
 {
@@ -26,20 +27,24 @@ class SuratMasuk extends Component
         'jamMulai' => null,
         'tempat' => null,
         'perihal' => null,
-        // 'no_surat' => null,
         'dok_surat' => null,
-        'disposisi' => null,
-        'komentar' => null
     ];
 
+    public $formTindakLanjut  = [
+        'deskripsi' =>null
+    ];
+
+    public $formStatusSurat = [
+        'status_surat' => null
+    ];
 
     public function mount($id = null)
     {
-                // Ambil data OPD dari database dan susun ke dalam array untuk opsi dropdown
-                $opdList = ASkpd::all();
-                foreach ($opdList as $opd) {
-                    $this->opdOptions[$opd->idskpd] = $opd->skpd;
-                }
+        // Ambil data OPD dari database dan susun ke dalam array untuk opsi dropdown
+        $opdList = ASkpd::all();
+        foreach ($opdList as $opd) {
+            $this->opdOptions[$opd->idskpd] = $opd->skpd;
+        }
         $this->suratmasukId = $id;
         if ($id) {
             $this->getEdit($id);
@@ -66,7 +71,7 @@ class SuratMasuk extends Component
 
     public function store()
     {
-        // Pastikan ada file yang diunggah sebelum menyimpan
+        // // Pastikan ada file yang diunggah sebelum menyimpan
         if ($this->form['dok_surat']) {
             // Mengunggah file dan mendapatkan path file
             $path = $this->form['dok_surat']->store('dokumen', 'public');
@@ -86,53 +91,58 @@ class SuratMasuk extends Component
                 'jamMulai' => $this->form['jamMulai'],
                 'tempat' => $this->form['tempat'],
                 'perihal' => $this->form['perihal'],
-                'disposisi' => $this->form['disposisi'],
-                'komentar' => $this->form['komentar'],
                 'dok_surat' => $path
             ]);
-        }
-    // Redirect ke halaman suratmasuk-index setelah data disimpan
-    return redirect()->to('/suratmasuk-index');
+
+            $suratmasuk = ModelsSuratMasuk::create($this->form);
+
+            TindakLanjut::create([
+                'surat_masuk_id' => $suratmasuk->id,
+                'deskripsi' => $this->formTindakLanjut['deskripsi']
+            ]);
+
+            
+        // }
+        // Redirect ke halaman suratmasuk-index setelah data disimpan
+        return redirect()->to('/suratmasuk-index');
     }
+}
 
 
     public function storeUpdate()
-{
-    $suratmasuk = ModelsSuratMasuk::findOrFail($this->suratmasukId);
+    {
+        $suratmasuk = ModelsSuratMasuk::findOrFail($this->suratmasukId);
 
-    // Jika ada file yang diunggah, perbarui kolom dok_surat
-    // if ($this->form['dok_surat']) {
-    //     // Memperbarui kolom dok_surat dengan path file yang baru
-    //     $path = $this->form['dok_surat']->store('dokumen', 'public');
-    // }
+        // Jika ada file yang diunggah, perbarui kolom dok_surat
+        // if ($this->form['dok_surat']) {
+        //     // Memperbarui kolom dok_surat dengan path file yang baru
+        //     $path = $this->form['dok_surat']->store('dokumen', 'public');
+        // }
 
-    // Update kolom lainnya
-    $suratmasuk->update([
-        'jenis_agenda_tp' => $this->form['jenis_agenda_tp'],
-        'kode_lama' => $this->form['kode_lama'],
-        'kode_baru' => $this->form['kode_baru'],
-        'nomor_surat' => $this->form['nomor_surat'],
-        'opd_id' => $this->form['opd_id'],
-        'tgl_surat' => $this->form['tgl_surat'],
-        'tgl_terima' => $this->form['tgl_terima'],
-        'acara' => $this->form['acara'],
-        'tanggalBerangkat' => $this->form['tanggalBerangkat'],
-        'tanggalPulang' => $this->form['tanggalPulang'],
-        'jamMulai' => $this->form['jamMulai'],
-        'tempat' => $this->form['tempat'],
-        'perihal' => $this->form['perihal'],
-        'disposisi' => $this->form['disposisi'],
-        'komentar' => $this->form['komentar'],
-        // Perbarui kolom dok_surat hanya jika ada file yang diunggah
-        'dok_surat' => isset($path) ? $path : $suratmasuk->dok_surat
-    ]);
+        // Update kolom lainnya
+        $suratmasuk->update([
+            'jenis_agenda_tp' => $this->form['jenis_agenda_tp'],
+            'kode_lama' => $this->form['kode_lama'],
+            'kode_baru' => $this->form['kode_baru'],
+            'nomor_surat' => $this->form['nomor_surat'],
+            'opd_id' => $this->form['opd_id'],
+            'tgl_surat' => $this->form['tgl_surat'],
+            'tgl_terima' => $this->form['tgl_terima'],
+            'acara' => $this->form['acara'],
+            'tanggalBerangkat' => $this->form['tanggalBerangkat'],
+            'tanggalPulang' => $this->form['tanggalPulang'],
+            'jamMulai' => $this->form['jamMulai'],
+            'tempat' => $this->form['tempat'],
+            'perihal' => $this->form['perihal'],
+            'dok_surat' => isset($path) ? $path : $suratmasuk->dok_surat
+        ]);
 
-    // Reset variabel setelah disimpan
-    $this->reset();
+        // Reset variabel setelah disimpan
+        $this->reset();
 
-    // Redirect ke halaman suratmasuk-index setelah data disimpan
-    return redirect()->to('/suratmasuk-index');
-}
+        // Redirect ke halaman suratmasuk-index setelah data disimpan
+        return redirect()->to('/suratmasuk-index');
+    }
 
     public function render()
     {

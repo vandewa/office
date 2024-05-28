@@ -321,7 +321,7 @@
             <div class="form-container sign-in">
                 <div class="paddingnya">
                     <h1 class="hijau">
-                        Siskae</h1>
+                        SIPE</h1>
                     <span class="spannya">
                         Sistem Informasi Perkantoran Elektronik
                     </span>
@@ -355,7 +355,7 @@
                                 echo '- ' . date('Y');
                             }
                             ?>
-                            Siskae
+                            SIPE
 
                         </span>
                     </div>

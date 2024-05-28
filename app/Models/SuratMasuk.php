@@ -10,5 +10,16 @@ class SuratMasuk extends Model
     use HasFactory;
     // protected $fillable = ['phone', 'message'];
     protected $guarded = [];
+    protected $table = 'surat_masuks';
+
+    public function statusSurat()
+    {
+        return $this->hasMany(StatusSurat::class, 'surat_masuk_id');
+    }
+
+    public function tindakLanjut()
+    {
+        return $this->hasMany(TindakLanjut::class, 'surat_masuk_id');
+    }
 
 }

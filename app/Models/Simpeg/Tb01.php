@@ -3,8 +3,10 @@
 namespace App\Models\Simpeg;
 
 use App\Models\DataPegawai;
+use App\Models\Disposisi;
 use App\Models\SppdPegawai;
 use App\Models\Simpeg\ASkpd;
+use App\Models\TindakLanjut;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -1065,6 +1067,17 @@ class Tb01 extends Authenticatable
     {
         return $this->belongsTo(DataPegawai::class, 'nip')
         ->select('jab', 'gdp', 'gdb', 'skpd');
+    }
+
+    public function tindakLanjut()
+    {
+        return $this->belongsTo(TindakLanjut::class, 'nip')
+        ->select('jab', 'gdp', 'gdb', 'skpd');
+    }
+
+    public function pegawaiDisposisi()
+    {
+        return $this->belongsTo(Disposisi::class, 'nip');
     }
 
 }

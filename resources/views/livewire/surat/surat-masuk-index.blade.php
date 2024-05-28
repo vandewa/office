@@ -17,7 +17,7 @@
 
                 <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
             </div>
-            @can('sekretariat')
+
             <div class="header-elements d-none">
                 <div class="breadcrumb justify-content-center">
                     <div class="p-0 breadcrumb-elements-item dropdown">
@@ -28,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            @endcan
+
         </div>
     </x-slot>
 

@@ -10,7 +10,7 @@ class SppdPegawai extends Model
 {
     use HasFactory;
     protected $table = 'sppd_pegawais';
-    protected $fillable = ['sppd_id', 'nip'];
+    protected $fillable = ['sppd_id', 'nip', 'idskpd'];
 
     public function sppd()
     {

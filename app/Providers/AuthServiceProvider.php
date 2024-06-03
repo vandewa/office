@@ -40,5 +40,4 @@ class AuthServiceProvider extends ServiceProvider
             return preg_match('/^\d{2}\.\d{2}$/', $user->idskpd);
         });
     }
-
 }

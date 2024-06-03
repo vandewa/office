@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sppd_id');
             $table->foreign('sppd_id')->references('id')->on('sppds')->onDelete('cascade'); // Atur aksi kaskade;
             $table->string('nip')->nullable();
+            $table->string('idskpd')->nullable();
             $table->timestamps();
         });
     }

@@ -18,7 +18,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <select multiple class="form-control" id="nip" name="nip[]"
-                                            wire:model='formNama.nip'>
+                                            wire:model='formNama.nip' {{ $readonly ? 'disabled' : '' }}>
                                             @foreach ($nama as $nip => $namaOption)
                                                 <option value="{{ $nip }}">{{ $namaOption }}</option>
                                             @endforeach
@@ -35,7 +35,7 @@
                                     <div class="form-group">
                                         <select class="form-control is-valid" required="" name="tingkat_id"
                                             wire:model='form.tingkat_id' aria-describedby="tingkat_id-error"
-                                            aria-invalid="false">
+                                            aria-invalid="false" {{ $readonly ? 'disabled' : '' }}>
                                             <option value="C">C</option>
                                             <option value="A">A</option>
                                             <option value="B">B</option>
@@ -58,7 +58,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <textarea class="form-control" rows="3" id="maksud" required="" name="maksud" wire:model='form.maksud'
-                                            cols="50"></textarea>
+                                            cols="50" {{ $readonly ? 'disabled' : '' }}></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <select class="form-control" required="" name="alat_angkut_st"
-                                                wire:model='form.alat_angkut_st'>
+                                                wire:model='form.alat_angkut_st' {{ $readonly ? 'disabled' : '' }}>
                                                 <option value="ALAT_ANGKUT_ST_01">Kendaraan Dinas</option>
                                                 <option value="ALAT_ANGKUT_ST_02">Kendaraan Umum</option>
                                             </select>
@@ -90,7 +90,8 @@
                                         <div class="form-group">
                                             <input class="form-control" required="" id="input-field"
                                                 onkeyup="capitalizeFirstLetter()" name="tempat_berangkat"
-                                                wire:model='form.tempat_berangkat' type="text" value="Wonosobo">
+                                                wire:model='form.tempat_berangkat' type="text" value="Wonosobo"
+                                                {{ $readonly ? 'disabled' : '' }}>
                                         </div>
                                     </div>
                                 </div>
@@ -101,7 +102,8 @@
                                         <div class="form-group">
                                             <input class="form-control" id="input-field2"
                                                 onkeyup="capitalizeFirstLetter2()" name="tempat_tujuan"
-                                                wire:model='form.tempat_tujuan' type="text">
+                                                wire:model='form.tempat_tujuan' type="text"
+                                                {{ $readonly ? 'disabled' : '' }}>
                                         </div>
                                     </div>
                                 </div>
@@ -115,7 +117,7 @@
                                     <div class="form-group">
                                         <div class="input-group input-group-sm">
                                             <input class="form-control" required="" name="hari"
-                                                wire:model='form.hari' type="number">
+                                                wire:model='form.hari' type="number" {{ $readonly ? 'disabled' : '' }}>
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
                                                     <span>Hari</span>
@@ -135,7 +137,8 @@
                                         <div class="form-group">
                                             <input class="form-control daterange-single" required=""
                                                 id="tgl_berangkat" name="tgl_berangkat"
-                                                wire:model='form.tgl_berangkat' type="date">
+                                                wire:model='form.tgl_berangkat' type="date"
+                                                {{ $readonly ? 'disabled' : '' }}>
                                         </div>
                                     </div>
                                 </div>
@@ -146,7 +149,7 @@
                                         <div class="form-group">
                                             <input class="form-control daterange-single" required=""
                                                 id="tgl_kembali" name="tgl_kembali" wire:model='form.tgl_kembali'
-                                                type="date">
+                                                type="date" {{ $readonly ? 'disabled' : '' }}>
                                         </div>
                                     </div>
                                 </div>
@@ -158,7 +161,8 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <input class="form-control " placeholder="Pengikut" name="pengikut"
-                                            wire:model='form.pengikut' type="text">
+                                            wire:model='form.pengikut' type="text"
+                                            {{ $readonly ? 'disabled' : '' }}>
                                     </div>
                                 </div>
                             </div>
@@ -169,7 +173,8 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <input class="form-control " placeholder="Keterangan lain-lain"
-                                            name="keterangan" wire:model='form.keterangan' type="text">
+                                            name="keterangan" wire:model='form.keterangan' type="text"
+                                            {{ $readonly ? 'disabled' : '' }}>
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +186,8 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <input class="form-control daterange-single" required=""
-                                            name="ditetapkan_tgl" wire:model='form.ditetapkan_tgl' type="date">
+                                            name="ditetapkan_tgl" wire:model='form.ditetapkan_tgl' type="date"
+                                            {{ $readonly ? 'disabled' : '' }}>
                                     </div>
                                 </div>
                             </div>
@@ -200,7 +206,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <textarea class="form-control" rows="3" id="untuk" required="" name="untuk" wire:model='form.untuk'
-                                            cols="50"></textarea>
+                                            cols="50" {{ $readonly ? 'disabled' : '' }}></textarea>
                                     </div>
                                     2. Melaporkan hasilnya kepada pejabat yang bersangkutan; <br>
                                     3. Perintah ini dilaksanakan dengan penuh tanggung jawab.
@@ -217,32 +223,17 @@
                                     Contoh Dasar
                                 </button>
                                 <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <textarea class="form-control" rows="6" cols="50"
-                                            placeholder="Contoh: Surat Keputusan Menteri Keuangan RI Nomor: S-185/MK.03/1996 tanggal 2 April 1996 tentang Uang Harian Perjalanan Dinas Dalam Negeri Pegawai Negeri Sipil;"
-                                            required="" data-name="dasar" rows="2" cols="50" value="" name="dasar"
-                                            wire:model='formDasar.dasar' id="test_0_dasar"></textarea>
-                                    </div>
-                                    <button type="button" class="btn btn-primary pull-right repeater-add-btn">
-                                        Tambah Dasar
-                                    </button>
-                                    {{-- <div class="items" data-index="0">
-                                        <!-- Repeater Content -->
-                                        <div class="mt-3 mb-3 item-content">
-                                            <div class="form-group">
-                                                <div class="col-lg-12">
-                                                    <textarea class="form-control is-valid" placeholder="Contoh: Surat Keputusan Menteri Keuangan RI Nomor: S-185/MK.03/1996 tanggal 2 April 1996 tentang Uang Harian Perjalanan Dinas Dalam Negeri Pegawai Negeri Sipil;" required="" data-name="dasar" rows="2" name="test[0][dasar]" cols="50" value="" id="test_0_dasar" aria-invalid="false"></textarea>
-                                                </div>
-                                            </div>
+                                    @foreach ($formDasar as $index => $dasar)
+                                        <div class="form-group">
+                                            <textarea class="form-control" rows="6" cols="50" required="" data-name="dasar" rows="2"
+                                                cols="50" name="dasar[]" wire:model="formDasar.{{ $index }}" {{ $readonly ? 'disabled' : '' }}></textarea>
+                                            <button type="button" class="btn btn-danger"
+                                                wire:click="removeDasar({{ $index }})">Hapus Dasar</button>
                                         </div>
-                                        <!-- Repeater Remove Btn -->
-                                        <div class="mt-3 pull-right repeater-remove-btn">
-                                            <button class="btn btn-danger remove-btn" disabled="disabled" onclick="$(this).parents('.items').remove()">
-                                                Hapus Dasar
-                                            </button>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    <div></div></div> --}}
+                                    @endforeach
+
+                                    <button type="button" class="btn btn-primary pull-right"
+                                        wire:click="addDasar">Tambah Dasar</button>
                                 </div>
                             </div>
                             <!--laporan -->
@@ -253,7 +244,8 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <input class="form-control " placeholder="Laporan Sppd" name="laporan_sppd"
-                                            wire:model='formLaporan.laporan_sppd' type="text">
+                                            wire:model='formLaporan.laporan_sppd' type="text"
+                                            {{ $readonly ? 'enabled' : '' }}>
                                     </div>
                                 </div>
                             </div>

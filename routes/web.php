@@ -14,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Surat\SuratMasukIndex;
 use App\Livewire\Surat\SuratKeluarIndex;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\WordController;
+
+Route::get('/word', function () {
+    return view('word');
+});
+
+Route::post('word', [WordController::class, 'index'])->name('word.index');
+
 
 
 /*

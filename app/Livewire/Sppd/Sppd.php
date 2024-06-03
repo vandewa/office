@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 class Sppd extends Component
 {
     public $nama, $sppd, $sppdId = null, $edit = false;
+    public $readonly = false; // Tambahkan properti ini
 
     public $formStatus = [
         'status_laporan' => null
@@ -49,6 +50,7 @@ class Sppd extends Component
     public function mount($id = null)
     {
         $this->sppdId = $id;
+        $this->readonly = request()->routeIs('sppd-laporan'); // Tentukan readonly berdasarkan route
         if ($id) {
             $this->getEdit($id);
         } else {
@@ -67,6 +69,17 @@ class Sppd extends Component
                     return $fullName . ' - ' . $pegawai->skpd->skpd; // Menambahkan nama SKPD ke dalam nama pegawai
                 });
         }
+    }
+
+    public function addDasar()
+    {
+        $this->formDasar[] = '';
+    }
+
+    public function removeDasar($index)
+    {
+        unset($this->formDasar[$index]);
+        $this->formDasar = array_values($this->formDasar);
     }
 
     public function getEdit($id)
@@ -110,10 +123,12 @@ class Sppd extends Component
         $sppd = ModelsSppd::create($this->form);
 
         // Simpan input dasar ke tabel dasar_sppd
-        DasarSppd::create([
-            'sppd_id' => $sppd->id,
-            'dasar' => $this->formDasar['dasar']
-        ]);
+        foreach ($this->formDasar as $dasar) {
+            DasarSppd::create([
+                'sppd_id' => $sppd->id,
+                'dasar' => $dasar
+            ]);
+        }
 
 
 
@@ -153,6 +168,68 @@ class Sppd extends Component
         //     'sppd_id' =>$sppd->id,
         //     'status_laporan' => $this->formStatus['status_laporan']
         // ]);
+
+        // Creating the new document...
+        // Creating the new document...
+        // Creating the new document...
+        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template1.docx');
+
+        // Konversi array ke string menggunakan implode
+        $nipList = $this->formNama['nip'] ?? [];
+
+        $pegawaiArray = [];
+
+        foreach ($nipList as $index => $nip) {
+            $pegawai = Tb01::where('nip', $nip)->first();
+            if ($pegawai) {
+                $pegawaiInfo = ($index + 1) . '. Nama: ' . $pegawai->nama . "\n";
+                $pegawaiInfo .= '   NIP: ' . $nip . "\n";
+
+                // Cek apakah pegawai memiliki jabfung
+                $jabfung = Tb01::join('a_jabfung', 'tb_01.idjabfung', '=', 'a_jabfung.idjabfung')
+                    ->where('tb_01.nip', $nip)
+                    ->select('a_jabfung.jabfung')
+                    ->first();
+
+                // Jika pegawai tidak memiliki jabfung, coba cari jabfungum
+                if (!$jabfung) {
+                    $jabfungum = Tb01::join('a_jabfungum', 'tb_01.idjabfungum', '=', 'a_jabfungum.idjabfungum')
+                        ->where('tb_01.nip', $nip)
+                        ->select('a_jabfungum.jabfungum')
+                        ->first();
+
+                    // Jika jabfungum ditemukan, gunakan itu sebagai jabfung
+                    if ($jabfungum) {
+                        $pegawaiInfo .= '   Jabatan: ' . $jabfungum->jabfungum . "\n";
+                    }
+                } else {
+                    // Jika pegawai memiliki jabfung, gunakan itu sebagai jabfung
+                    $pegawaiInfo .= '   Jabatan: ' . $jabfung->jabfung . "\n";
+                }
+
+                $pegawaiArray[] = $pegawaiInfo;
+            }
+        }
+
+        // Gabungkan array menjadi string dengan pemisah baris
+        $pegawaiString = implode("\n", $pegawaiArray);
+
+        $phpWord->setValues([
+            'dasar' => strval($this->formDasar['dasar'] ?? ''),
+            'nama' => $pegawaiString,
+            'nip' => '',
+            'jabfung' => '',
+            'gol' => '',
+            'ruang' => '',
+            'untuk' => strval($this->form['untuk'] ?? ''),
+            'ditetapkan_tgl' => strval($this->form['ditetapkan_tgl'] ?? ''),
+        ]);
+
+        $phpWord->saveAs('document1.docx');
+
+
+
+
         return redirect()->to('/sppd-index');
     }
 
@@ -201,6 +278,11 @@ class Sppd extends Component
 
         // Redirect ke halaman sppd-index setelah data disimpan
         return redirect()->to('/sppd-index');
+    }
+
+    public function getIsReadonlyProperty()
+    {
+        return $this->readonly;
     }
 
     public function render()

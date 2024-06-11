@@ -11,6 +11,11 @@ class Sppd extends Model
     protected $guarded = [];
     protected $table = 'sppds';
 
+    public static function findOrFail($id)
+    {
+        return static::find($id) ?: abort(404);
+    }
+    
     public function sppdPegawais()
     {
         return $this->hasMany(SppdPegawai::class, 'sppd_id');

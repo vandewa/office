@@ -15,6 +15,7 @@ use App\Livewire\Surat\SuratMasukIndex;
 use App\Livewire\Surat\SuratKeluarIndex;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\WordController;
+use App\Livewire\Sppd\SppdDetail;
 
 Route::get('/word', function () {
     return view('word');
@@ -43,14 +44,21 @@ Route::post('/logins', [LoginController::class, 'login'])->name('logins');
 Route::get('dashboard', Dashboard::class)->name('dashboard');
 Route::get('sppd/{id?}', Sppd::class)->name('sppd');
 Route::get('sppd/{id?}/laporan', Sppd::class)->name('sppd-laporan');
+Route::get('sppd/{id?}/detail', SppdDetail::class)->name('sppd-detail');
 Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
-Route::get('suratmasuk/{id?}', SuratMasuk::class)->name('suratmasuk');
+Route::get('suratmasuk/{id?}', SuratMasuk::class)->name('suratmasuk')->middleware('can:sekretariat');
+Route::get('suratmasuk/{id?}/detail', SuratMasuk::class)->name('suratmasuk-detail')->middleware('can:kepala_dinas');
 Route::get('suratmasuk-index', SuratMasukIndex::class)->name('suratmasuk-index');
 Route::get('suratkeluar/{id?}', SuratKeluar::class)->name('suratkeluar');
 Route::get('suratkeluar-index', SuratKeluarIndex::class)->name('suratkeluar-index');
 Route::get('datapegawai', DataPegawai::class)->name('datapegawai');
 
+Route::get('/word', function () {
+    return view('word');
+})->name('word');
 
+Route::post('/word-index', [WordController::class, 'index'])->name('word.index');
+Route::post('/word-convert', [WordController::class, 'convertToPdf'])->name('word.convert');
 
 // Route::post('/send-whatsapp', [SuratMasuk::class, 'sendWhatsApp'])->name('send.whatsapp');
 

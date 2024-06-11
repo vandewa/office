@@ -1,3 +1,4 @@
+
 <div>
     <x-slot name="header">
         <div class="page-header-content header-elements-md-inline">
@@ -53,9 +54,6 @@
                                 <th style="width: 310px;" aria-label="Disposisi">Disposisi</th>
                                 <th style="width: 191px;" aria-label="Subject">Subject</th>
                                 <th style="width: 222px;" aria-label="Keterangan">Keterangan</th>
-                                @can('sekretariat', 'kepala_dinas', 'kepala bidang')
-                                    <th style="width: 222px;" aria-label="Keterangan">Status Surat</th>
-                                @endcan
                                 <th style="width: 176px;" aria-label="Aksi">Aksi</th>
                             </tr>
                         </thead>
@@ -66,23 +64,9 @@
                                     </td>
                                     <td>{{ $suratmasuk->tgl_surat }}</td>
                                     <td>{{ $suratmasuk->jenis_agenda_tp }}</td>
-                                    <td>
-                                        @foreach ($suratmasuk->tindakLanjuts as $tindakLanjut)
-                                            <span class="badge bg-purple"> {{ $tindakLanjut->diteruskan_kepada }}
-                                            </span>
-                                        @endforeach
-                                    </td>
-                                    <td>{{ $suratmasuk->acara }} {{ $suratmasuk->perihal }}</td>
-                                    <td>
-                                        @foreach ($suratmasuk->tindakLanjuts as $tindakLanjut)
-                                            {{ $tindakLanjut->deskripsi }}
-                                        @endforeach
-                                    </td>
-                                    <td>
-                                        @foreach ($suratmasuk->statusSurats as $statusSurat)
-                                            <span class="badge bg-danger">{{ $statusSurat->status_surat }}</span>
-                                        @endforeach
-                                    </td>
+                                    <td></td>
+                                    <td>{{ $suratmasuk->acara }}</td>
+                                    <td></td>
                                     <td>
                                         @can('sekretariat')
                                             <button type="button" wire:click="delete(' {{ $suratmasuk->id }}')"

@@ -16,6 +16,7 @@ class TindakLanjut extends Model
     {
         return $this->belongsTo(SuratMasuk::class, 'surat_masuk_id');
     }
+    
 
     public function suratKeluar()
     {

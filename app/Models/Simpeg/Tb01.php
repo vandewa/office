@@ -2,19 +2,29 @@
 
 namespace App\Models\Simpeg;
 
-use App\Models\DataPegawai;
 use App\Models\Disposisi;
+use App\Models\DataPegawai;
 use App\Models\SppdPegawai;
 use App\Models\Simpeg\ASkpd;
 use App\Models\TindakLanjut;
+use Laravel\Sanctum\HasApiTokens;
+use Laravel\Jetstream\HasProfilePhoto;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
 class Tb01 extends Authenticatable
 {
+    use HasApiTokens;
     use HasFactory;
+    use HasProfilePhoto;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
+    use HasRoles;
 
     protected $table = 'tb_01';
     protected $connection = "simpeg";

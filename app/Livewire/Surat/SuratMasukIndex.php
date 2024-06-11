@@ -2,15 +2,18 @@
 
 namespace App\Livewire\Surat;
 
+use App\Models\Simpeg\Tb01;
+use App\Models\StatusSurat;
 use App\Models\SuratMasuk;
 use App\Models\SuratMasukIndex as ModelsSuratMasukIndex;
+use App\Models\TindakLanjut;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class SuratMasukIndex extends Component
 {
     use WithPagination;
-    public $idHapus, $suratmasuks, $cari;
+    public $idHapus, $suratmasuks, $cari, $tindak_lanjuts, $status_surats;
 
     public $form = [
         'jenis_agenda_tp' => null,
@@ -30,9 +33,23 @@ class SuratMasukIndex extends Component
         'dok_surat' => null,
     ];
 
+    public $formTindakLanjut  = [
+        'deskripsi' => null,
+        'nama' => null,
+        'nip' => null,
+        'diteruskan_kepada' => []
+    ];
+
+    public $formStatus = [
+        'status_surat' => null
+    ];
+
+
     public function mount()
     {
         $this->suratmasuks = SuratMasuk::all();
+        $this->tindak_lanjuts = TindakLanjut::all();
+        $this->status_surats = StatusSurat::all();
     }
 
     public function delete($id)
@@ -64,11 +81,18 @@ class SuratMasukIndex extends Component
     public function render()
     {
         $data = ModelsSuratMasukIndex::query()
-        ->where('nomor_surat', 'like', '%' . $this->cari . '%')
-        ->orWhere('acara', 'like', '%' . $this->cari . '%')
-        ->paginate(10);
+            ->with('tindakLanjuts', 'statusSurats')
+            ->where('nomor_surat', 'like', '%' . $this->cari . '%')
+            ->orWhere('acara', 'like', '%' . $this->cari . '%')
+            ->paginate(10);
 
-        return view('livewire.surat.surat-masuk-index', ['data' => $data]);
+        $tindak_lanjuts = TindakLanjut::all();
+        $status_surats = StatusSurat::all();
+
+        return view('livewire.surat.surat-masuk-index', [
+            'data' => $data,
+            'tindakLanjut' => $tindak_lanjuts,
+            'statusSurat' => $status_surats,
+        ]);
     }
-
 }

@@ -324,6 +324,23 @@
                         SIPE</h1>
                     <span class="spannya">
                         Sistem Informasi Perkantoran Elektronik
+                        <h5>staff
+                            199703032020121012
+
+                            kepala dinas
+                            197108251999031006
+
+                            kepala bidang
+                            197111181992031003
+                            sugeng123
+
+                            sekretariat, kepala bidang, staff
+                            197706081996021001
+
+                            sekretariat
+                            196701011989032018
+
+                            </h5>
                     </span>
                 </div>
                 <div class="paddingnya1">

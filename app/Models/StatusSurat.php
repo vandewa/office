@@ -20,4 +20,5 @@ class StatusSurat extends Model
     {
         return $this->belongsTo(SuratKeluar::class, 'surat_keluar_id');
     }
+    
 }

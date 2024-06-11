@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('surat_masuk_id');
             $table->string('nip')->nullable();
-            $table->string('idskpd')->nullable();
+            $table->string('nama')->nullable();
             // $table->unsignedBigInteger('surat_keluar_id');
             $table->foreign('surat_masuk_id')->references('id')->on('surat_masuks')->onDelete('cascade'); // Atur aksi kaskade;
             // $table->foreign('surat_keluar_id')->references('id')->on('surat_keluars')->onDelete('cascade'); // Atur aksi kaskade;
             $table->string('deskripsi')->nullable();
+            $table->string('diteruskan_kepada')->nullable();
             $table->timestamps();
         });
     }

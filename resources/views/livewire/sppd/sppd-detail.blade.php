@@ -1,14 +1,17 @@
 <div>
-    <div class="content" style="padding: 20px">
+    <div class="content">
         <div class="card">
             <div class="card-header">
-                <h2>{{ $edit ? 'Edit Form SPT' : 'Buat Form SPT Baru' }}</h2>
+                {{-- <h2>{{ $edit ? 'Edit Form Surat Masuk' : 'Buat Form Surat Masuk Baru' }}</h2> --}}
                 <div class="dropdown-divider"></div>
             </div>
             <div class="card-body">
-                <form action="" wire:submit='save'>
-                    <div class="row" style="margin: 20px">
-                        <div class="col-6">
+                <div class="row">
+                    <div class="col-6">
+                        <embed id="preview" src=".pdf" type="application/pdf" width="100%" height="600">
+                    </div>
+                    <div class="col-6">
+                        <form action="">
                             <!-- Nama Pegawai -->
                             <div>
                                 <label for="nama" class="col-form-label col-lg-12">Pilih Nama Pegawai<span
@@ -18,9 +21,9 @@
                                     <div class="form-group">
                                         <select multiple class="form-control" id="nip" name="nip[]"
                                             wire:model='formNama.nip' {{ $readonly ? 'disabled' : '' }}>
-                                            @foreach ($nama as $nip => $namaOption)
+                                            {{-- @foreach ($nama as $nip => $namaOption)
                                                 <option value="{{ $nip }}">{{ $namaOption }}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
                                     </div>
                                 </div>
@@ -116,7 +119,8 @@
                                     <div class="form-group">
                                         <div class="input-group input-group-sm">
                                             <input class="form-control" required="" name="hari"
-                                                wire:model='form.hari' type="number" {{ $readonly ? 'disabled' : '' }}>
+                                                wire:model='form.hari' type="number"
+                                                {{ $readonly ? 'disabled' : '' }}>
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
                                                     <span>Hari</span>
@@ -190,13 +194,12 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col-6">
                             <!--Untuk-->
                             <div>
                                 <label class="col-form-label col-lg-12">Untuk<span class="text-danger">*</span><small
-                                        class="text-danger">(tidak perlu angka)</small></label>
+                                        class="text-danger">(tidak perlu
+                                        angka)</small></label>
                                 <button type="button" class="mb-2 ml-2 btn btn-info btn-sm" data-toggle="modal"
                                     data-target="#exampleModalCenter2">
                                     Contoh Untuk
@@ -210,25 +213,25 @@
                                     3. Perintah ini dilaksanakan dengan penuh tanggung jawab.
                                 </div>
                             </div>
-                            <br>
 
                             <!--Dasar -->
                             <div>
                                 <label class="col-form-label col-lg-12">Dasar<span class="text-danger">*</span><small
-                                        class="text-danger">(tidak perlu angka)</small></label>
+                                        class="text-danger">(tidak perlu
+                                        angka)</small></label>
                                 <button type="button" class="mb-2 ml-2 btn btn-info btn-sm" data-toggle="modal"
                                     data-target="#exampleModalCenter3">
                                     Contoh Dasar
                                 </button>
                                 <div class="col-lg-12">
-                                    @foreach ($formDasar as $index => $dasar)
+                                    {{-- @foreach ($formDasar as $index => $dasar)
                                         <div class="form-group">
                                             <textarea class="form-control" rows="6" cols="50" required="" data-name="dasar" rows="2"
                                                 cols="50" name="dasar[]" wire:model="formDasar.{{ $index }}" {{ $readonly ? 'disabled' : '' }}></textarea>
                                             <button type="button" class="btn btn-danger"
                                                 wire:click="removeDasar({{ $index }})">Hapus Dasar</button>
                                         </div>
-                                    @endforeach
+                                    @endforeach --}}
 
                                     <button type="button" class="btn btn-primary pull-right"
                                         wire:click="addDasar">Tambah Dasar</button>
@@ -248,86 +251,74 @@
                                     </div>
                                 </div>
                             @endif
-                        </div>
+                        </form>
                     </div>
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLongTitle">Preview Maksud
-                                        Perjalanan Dinas</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <img src="https://diskominfo.wonosobokab.go.id/maksud.jpg" alt=""
-                                        width="100%">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLongTitle">Preview Untuk</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <img src="https://diskominfo.wonosobokab.go.id/untuk.jpg" alt=""
-                                        width="100%">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModalCenter3" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLongTitle">Preview Dasar</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <img src="https://diskominfo.wonosobokab.go.id/dasar.jpg" alt=""
-                                        width="100%">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Button Submit -->
-                    <div class="text-right">
-                        <button class="btn bg-grey-400" wire:click='batal'>Batal <i
-                                class="ml-2 icon-square-left"></i></button>
-                        <button type="submit"
-                            class="bg-teal-400 btn">{{ $edit ? 'Simpan Perubahan' : 'Buat SPT Baru' }}<i
-                                class="ml-2 icon-paperplane"></i></button>
-                    </div>
-                </form>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Preview Maksud
+                        Perjalanan Dinas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://diskominfo.wonosobokab.go.id/maksud.jpg" alt="" width="100%">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Preview Untuk</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://diskominfo.wonosobokab.go.id/untuk.jpg" alt="" width="100%">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter3" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Preview Dasar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://diskominfo.wonosobokab.go.id/dasar.jpg" alt="" width="100%">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>

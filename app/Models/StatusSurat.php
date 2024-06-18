@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\SuratMasuk;
+use App\Models\SuratKeluar;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class StatusSurat extends Model
 {
@@ -20,5 +22,5 @@ class StatusSurat extends Model
     {
         return $this->belongsTo(SuratKeluar::class, 'surat_keluar_id');
     }
-    
+
 }

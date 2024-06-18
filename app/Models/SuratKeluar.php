@@ -11,12 +11,12 @@ class SuratKeluar extends Model
     protected $guarded = [];
     protected $table = 'surat_keluars';
 
-    public function statusSurat()
+    public function statusSurats()
     {
         return $this->hasMany(statusSurat::class, 'surat_keluar_id');
     }
 
-        public function tindakLanjut()
+        public function tindakLanjuts()
     {
         return $this->hasMany(tindakLanjut::class, 'surat_keluar_id');
     }

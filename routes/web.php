@@ -47,9 +47,10 @@ Route::get('sppd/{id?}/laporan', Sppd::class)->name('sppd-laporan');
 Route::get('sppd/{id?}/detail', SppdDetail::class)->name('sppd-detail');
 Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
 Route::get('suratmasuk/{id?}', SuratMasuk::class)->name('suratmasuk')->middleware('can:sekretariat');
-Route::get('suratmasuk/{id?}/detail', SuratMasuk::class)->name('suratmasuk-detail')->middleware('can:kepala_dinas');
+Route::get('suratmasuk/{id?}/disposisi', SuratMasuk::class)->name('suratmasuk-disposisi');
 Route::get('suratmasuk-index', SuratMasukIndex::class)->name('suratmasuk-index');
 Route::get('suratkeluar/{id?}', SuratKeluar::class)->name('suratkeluar');
+Route::get('suratkeluar/{id?}/verifikasi', SuratKeluar::class)->name('suratkeluar-verifikasi');
 Route::get('suratkeluar-index', SuratKeluarIndex::class)->name('suratkeluar-index');
 Route::get('datapegawai', DataPegawai::class)->name('datapegawai');
 

@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('surat_keluars', function (Blueprint $table) {
             $table->id();
+            $table->string('nomor_surat')->nullable();
+            $table->string('tanggal_surat')->nullable();
+            $table->string('perihal')->nullable();
+            $table->string('tujuan')->nullable();
+            $table->string('pembukaan_surat')->nullable();
+            $table->string('isi_surat')->nullable();
+            $table->string('penutup_surat')->nullable();
+            $table->string('lampiran')->nullable();
             $table->timestamps();
         });
     }

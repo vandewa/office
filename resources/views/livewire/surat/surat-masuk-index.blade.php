@@ -53,7 +53,7 @@
                                 <th style="width: 310px;" aria-label="Disposisi">Disposisi</th>
                                 <th style="width: 191px;" aria-label="Subject">Subject</th>
                                 <th style="width: 222px;" aria-label="Keterangan">Keterangan</th>
-                                @can('sekretariat', 'kepala_dinas', 'kepala bidang')
+                                @can('view-status-surat')
                                     <th style="width: 222px;" aria-label="Keterangan">Status Surat</th>
                                 @endcan
                                 <th style="width: 176px;" aria-label="Aksi">Aksi</th>
@@ -70,6 +70,7 @@
                                         @foreach ($suratmasuk->tindakLanjuts as $tindakLanjut)
                                             <span class="badge bg-purple"> {{ $tindakLanjut->diteruskan_kepada }}
                                             </span>
+                                            <span class="badge bg-blue">  {{ $tindakLanjut->disposisi }} </span>
                                         @endforeach
                                     </td>
                                     <td>{{ $suratmasuk->acara }} {{ $suratmasuk->perihal }}</td>
@@ -79,9 +80,11 @@
                                         @endforeach
                                     </td>
                                     <td>
+                                        @can('view-status-surat')
                                         @foreach ($suratmasuk->statusSurats as $statusSurat)
                                             <span class="badge bg-danger">{{ $statusSurat->status_surat }}</span>
                                         @endforeach
+                                        @endcan
                                     </td>
                                     <td>
                                         @can('sekretariat')
@@ -89,12 +92,12 @@
                                                 class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
                                                 title="Edit"><i class="icon-trash"></i>
                                             </button>
-                                            <a href="{{ route('suratmasuk', ['id' => $suratmasuk->id]) }}"
+                                            {{-- <a href="{{ route('suratmasuk', ['id' => $suratmasuk->id]) }}"
                                                 class="btn btn-flat btn-sm">
                                                 <i class="icon-pencil"></i>
-                                            </a>
+                                            </a> --}}
                                         @endcan
-                                        <a href="{{ route('suratmasuk-detail', ['id' => $suratmasuk->id]) }}"
+                                        <a href="{{ route('suratmasuk-disposisi', ['id' => $suratmasuk->id]) }}"
                                             class="btn btn-flat btn-sm">
                                             <i class="icon-eye"></i>
                                         </a>

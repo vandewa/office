@@ -7,19 +7,20 @@ use App\Models\TindakLanjut;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class SuratMasukIndex extends Model
+class SuratKeluarIndex extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    protected $table = 'surat_masuks';
+    protected $table = 'surat_keluars';
+
 
     public function tindakLanjuts()
     {
-        return $this->hasMany(TindakLanjut::class, 'surat_masuk_id');
+        return $this->hasMany(TindakLanjut::class, 'surat_keluar_id');
     }
 
     public function statusSurats()
     {
-        return $this->hasMany(StatusSurat::class, 'surat_masuk_id');
+        return $this->hasMany(StatusSurat::class, 'surat_keluar_id');
     }
 }

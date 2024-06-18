@@ -16,7 +16,6 @@ class TindakLanjut extends Model
     {
         return $this->belongsTo(SuratMasuk::class, 'surat_masuk_id');
     }
-    
 
     public function suratKeluar()
     {
@@ -31,6 +30,20 @@ class TindakLanjut extends Model
     public function tb01()
     {
         return $this->belongsTo(Tb01::class, 'nip');
+    }
+
+    public static function createOrUpdate($attributes)
+    {
+        $instance = self::firstOrNew([
+            'surat_masuk_id' => $attributes['surat_masuk_id'],
+            'diteruskan_kepada' => $attributes['diteruskan_kepada'],
+            'disposisi' => $attributes['disposisi']
+        ]);
+
+        $instance->fill($attributes);
+        $instance->save();
+
+        return $instance;
     }
 
 }

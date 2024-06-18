@@ -52,7 +52,6 @@ class Sppd extends Component
         $this->readonly = request()->routeIs('sppd-laporan'); // Tentukan readonly berdasarkan route
         if ($id) {
             $this->getEdit($id);
-            $this->loadData($id);
         } else {
             $this->edit = false;
         }

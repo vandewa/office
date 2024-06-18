@@ -37,7 +37,8 @@ class SuratMasukIndex extends Component
         'deskripsi' => null,
         'nama' => null,
         'nip' => null,
-        'diteruskan_kepada' => []
+        'diteruskan_kepada' => [],
+        'disposisi' => []
     ];
 
     public $formStatus = [

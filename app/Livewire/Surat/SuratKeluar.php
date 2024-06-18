@@ -2,54 +2,94 @@
 
 namespace App\Livewire\Surat;
 
-use App\Models\SuratKeluar as ModelsSuratKeluar;
 use Livewire\Component;
+use App\Models\Simpeg\Tb01;
+use App\Models\StatusSurat;
+use App\Models\Simpeg\ASkpd;
+use App\Models\TindakLanjut;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use App\Models\SuratKeluar as ModelsSuratKeluar;
 
 class SuratKeluar extends Component
 {
     use WithFileUploads;
 
-    public $nama, $suratmasuk, $suratmasukId = null, $edit = false;
+    public $suratkeluar, $skpd, $nama,  $opdOptions = [], $tindakLanjut, $edit = false, $suratkeluarId = null, $readonly = false;
     public $form = [
-        'jenis_agenda_tp' => null,
-        'kode_lama' => null,
-        'kode_baru' => null,
-        'nomor_surat' => null,
-        'opd_id' => null,
-        'tgl_surat' => null,
-        'tgl_terima' => null,
-        'acara' => null,
-        'tanggalBerangkat' => null,
-        'tanggalPulang' => null,
-        'jamMulai' => null,
-        'tempat' => null,
+        'nomor_surat'  => null,
+        'tanggal_surat' => null,
         'perihal' => null,
-        // 'no_surat' => null,
-        'dok_surat' => null,
+        'tujuan' => null,
+        'pembukaan_surat' => null,
+        'isi_surat' => null,
+        'penutup_surat' => null,
+        'lampiran' => null,
     ];
 
+    public $formTindakLanjut  = [
+        'deskripsi' => null,
+        'nama' => null,
+        'nip' => null,
+        'diteruskan_kepada' => [],
+        'disposisi' => []
+    ];
 
     public function mount($id = null)
     {
-        $this->suratmasukId = $id;
+        $this->suratkeluar = $id;
+        $this->readonly = request()->routeIs('suratmasuk');
+        $this->tindakLanjut = TindakLanjut::where('surat_keluar_id', $id)->first();
+        $opdList = ASkpd::all();
+        foreach ($opdList as $opd) {
+            $this->opdOptions[$opd->idskpd] = $opd->skpd;
+        }
+        $this->suratkeluarId = $id;
         if ($id) {
             $this->getEdit($id);
         } else {
             $this->edit = false;
+        }
+        if (Auth::check()) {
+            $nip = Auth::user()->nip;
+            $kdunit = Tb01::where('nip', $nip)->value('kdunit');
+            $idskpd = Tb01::where('nip', $nip)->value('idskpd');
+            $this->skpd = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
+                ->where('a_skpd.kdunit', $kdunit)
+                ->where('idjenkedudupeg', 1)
+                ->whereColumn('tb_01.idjabjbt', 'tb_01.idskpd')
+                ->distinct()
+                ->pluck('a_skpd.skpd', 'tb_01.nip')
+                ->map(function ($skpd, $nip) {
+                    $pegawai = Tb01::where('nip', $nip)->first();
+                    return $pegawai->skpd->skpd; // Menambahkan nama SKPD ke dalam nama pegawai
+                });
+        }
+        // Kondisi untuk Kepala Bidang
+        if (Gate::allows('kepala_bidang', Auth::user())) {
+            $this->nama = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
+                ->where('tb_01.idskpd', $idskpd)
+                ->where('idjenkedudupeg', 1)
+                ->distinct()
+                ->pluck(Tb01::raw("CONCAT(tb_01.gdp, ' ', tb_01.nama, ' ', tb_01.gdb) AS full_name"), 'tb_01.nip')
+                ->map(function ($fullName, $nip) {
+                    $pegawai = Tb01::where('nip', $nip)->first();
+                    return $fullName . ' - ' . $pegawai->skpd->skpd;
+                });
         }
     }
 
     public function getEdit($id)
     {
         $this->edit = true;
-        $this->suratmasuk = ModelsSuratKeluar::findOrFail($id);
-        $this->form = array_intersect_key($this->suratmasuk->toArray(), $this->form);
+        $this->suratkeluar = ModelsSuratKeluar::findOrFail($id);
+        $this->form = array_intersect_key($this->suratkeluar->toArray(), $this->form);
     }
 
     public function save()
     {
-        if ($this->edit === true) {
+        if ($this->edit) {
             $this->storeUpdate();
         } else {
             $this->store();
@@ -58,73 +98,29 @@ class SuratKeluar extends Component
 
     public function store()
     {
-        // Pastikan ada file yang diunggah sebelum menyimpan
-        if ($this->form['dok_surat']) {
-            // Mengunggah file dan mendapatkan path file
-            $path = $this->form['dok_surat']->store('dokumen', 'public');
+        $suratkeluar = ModelsSuratKeluar::create($this->form);
 
-            // Menyimpan path file ke dalam database
-            ModelsSuratKeluar::create([
-                'jenis_agenda_tp' => $this->form['jenis_agenda_tp'],
-                'kode_lama' => $this->form['kode_lama'],
-                'kode_baru' => $this->form['kode_baru'],
-                'nomor_surat' => $this->form['nomor_surat'],
-                'opd_id' => $this->form['opd_id'],
-                'tgl_surat' => $this->form['tgl_surat'],
-                'tgl_terima' => $this->form['tgl_terima'],
-                'acara' => $this->form['acara'],
-                'tanggalBerangkat' => $this->form['tanggalBerangkat'],
-                'tanggalPulang' => $this->form['tanggalPulang'],
-                'jamMulai' => $this->form['jamMulai'],
-                'tempat' => $this->form['tempat'],
-                'perihal' => $this->form['perihal'],
-                'dok_surat' => $path
-            ]);
-        }
-
-        return redirect()-> to('/suratmasuk-index');
+        StatusSurat::create([
+            'surat_keluar_id' => $suratkeluar->id,
+            'status_surat' => 'Perlu Verifikasi Kepala Dinas',
+        ]);
     }
 
 
     public function storeUpdate()
-{
-    $suratmasuk = ModelsSuratKeluar::findOrFail($this->suratmasukId);
+    {
+        $this->suratkeluar->update($this->form);
+        $this->edit = false;
+    }
 
-    // Jika ada file yang diunggah, perbarui kolom dok_surat
-    // if ($this->form['dok_surat']) {
-    //     // Memperbarui kolom dok_surat dengan path file yang baru
-    //     $path = $this->form['dok_surat']->store('dokumen', 'public');
-    // }
+    public function getIsReadonlyProperty()
+    {
+        return $this->readonly;
+    }
 
-    // Update kolom lainnya
-    $suratmasuk->update([
-        'jenis_agenda_tp' => $this->form['jenis_agenda_tp'],
-        'kode_lama' => $this->form['kode_lama'],
-        'kode_baru' => $this->form['kode_baru'],
-        'nomor_surat' => $this->form['nomor_surat'],
-        'opd_id' => $this->form['opd_id'],
-        'tgl_surat' => $this->form['tgl_surat'],
-        'tgl_terima' => $this->form['tgl_terima'],
-        'acara' => $this->form['acara'],
-        'tanggalBerangkat' => $this->form['tanggalBerangkat'],
-        'tanggalPulang' => $this->form['tanggalPulang'],
-        'jamMulai' => $this->form['jamMulai'],
-        'tempat' => $this->form['tempat'],
-        'perihal' => $this->form['perihal'],
-        // Perbarui kolom dok_surat hanya jika ada file yang diunggah
-        // 'dok_surat' => isset($path) ? $path : $suratmasuk->dok_surat
-    ]);
-
-    // Reset variabel setelah disimpan
-    $this->reset();
-
-    // Redirect ke halaman suratmasuk-index setelah data disimpan
-    return redirect()->to('/suratmasuk-index');
-}
 
     public function render()
     {
-        $surat = ModelsSuratKeluar::first(); // Contoh pengambilan data surat, sesuaikan dengan kebutuhan Anda
         return view('livewire.surat.surat-keluar');
     }
 }

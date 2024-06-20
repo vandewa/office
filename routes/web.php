@@ -4,18 +4,19 @@ use App\Livewire\Coba;
 use App\Livewire\Login;
 use App\Livewire\Dashboard;
 use App\Livewire\Sppd\Sppd;
+use App\Livewire\ConvertToPdf;
 use App\Livewire\Sppd\SppdEdit;
 use App\Livewire\Sppd\SppdIndex;
+use App\Livewire\Sppd\SppdDetail;
 use App\Livewire\Surat\SuratMasuk;
 use App\Livewire\Surat\SuratKeluar;
 use Illuminate\Support\Facades\File;
 use App\Livewire\Pegawai\DataPegawai;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Surat\SuratMasukIndex;
+use App\Http\Controllers\WordController;
 use App\Livewire\Surat\SuratKeluarIndex;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\WordController;
-use App\Livewire\Sppd\SppdDetail;
 
 Route::get('/word', function () {
     return view('word');
@@ -53,13 +54,14 @@ Route::get('suratkeluar/{id?}', SuratKeluar::class)->name('suratkeluar');
 Route::get('suratkeluar/{id?}/verifikasi', SuratKeluar::class)->name('suratkeluar-verifikasi');
 Route::get('suratkeluar-index', SuratKeluarIndex::class)->name('suratkeluar-index');
 Route::get('datapegawai', DataPegawai::class)->name('datapegawai');
+Route::get('/convert-to-pdf', ConvertToPdf::class);
 
 Route::get('/word', function () {
     return view('word');
 })->name('word');
 
-Route::post('/word-index', [WordController::class, 'index'])->name('word.index');
-Route::post('/word-convert', [WordController::class, 'convertToPdf'])->name('word.convert');
+Route::get('/word-index', [WordController::class, 'index'])->name('word.index');
+Route::post('/word-convert', [WordController::class, 'generatePdf'])->name('word.convert');
 
 // Route::post('/send-whatsapp', [SuratMasuk::class, 'sendWhatsApp'])->name('send.whatsapp');
 

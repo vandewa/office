@@ -2,26 +2,67 @@
 
 namespace App\Http\Controllers;
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\IOFactory;
-use Dompdf\Dompdf;
 
 class WordController extends Controller
 {
-    public function index(Request $request)
+    // public function index(Request $request)
+    // {
+    //     $nama = $request->nama;
+    //     $kelas = $request->kelas;
+
+    //     // Creating the new document...
+    //     $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template1.docx');
+
+    //     $phpWord->setValues([
+    //         'nama' => $nama,
+    //         'kelas' => $kelas
+    //     ]);
+    //     $phpWord->saveAs('document1.docx');
+    // }
+
+    public function index()
     {
-        $nama = $request->nama;
-        $kelas = $request->kelas;
-
-        // Creating the new document...
-        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template1.docx');
-
-        $phpWord->setValues([
-            'nama' => $nama,
-            'kelas' => $kelas
-        ]);
-        $phpWord->saveAs('document1.docx');
+        return view('word.index');
     }
+
+    public function generatePdf(Request $request)
+    {
+        // Mendapatkan path dokumen HTML dari form input
+        $htmlFilePath = storage_path('app/public/' . $request->input('html_filename'));
+
+        if (!file_exists($htmlFilePath)) {
+            abort(404, "Dokumen HTML tidak ditemukan");
+        }
+
+        try {
+            // Mengatur opsi Dompdf (optional)
+            $options = new Options();
+            $options->set('isHtml5ParserEnabled', true); // Mengaktifkan parser HTML5
+
+            // Instantiate Dompdf class
+            $dompdf = new Dompdf($options);
+
+            // Load HTML content
+            $htmlContent = file_get_contents($htmlFilePath);
+            $dompdf->loadHtml($htmlContent);
+
+            // (Optional) Setup the paper size and orientation
+            $dompdf->setPaper('A4', 'portrait');
+
+            // Render the HTML as PDF
+            $dompdf->render();
+
+            // Output the generated PDF to Browser
+            return $dompdf->stream('dokumen.pdf');
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 
     public function convertToPdf()
     {

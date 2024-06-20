@@ -39,7 +39,7 @@ class SuratKeluar extends Component
     public function mount($id = null)
     {
         $this->suratkeluar = $id;
-        $this->readonly = request()->routeIs('suratmasuk');
+        $this->readonly = request()->routeIs('suratkeluar-verifikasi');
         $this->tindakLanjut = TindakLanjut::where('surat_keluar_id', $id)->first();
         $opdList = ASkpd::all();
         foreach ($opdList as $opd) {
@@ -109,9 +109,31 @@ class SuratKeluar extends Component
 
     public function storeUpdate()
     {
-        $this->suratkeluar->update($this->form);
-        $this->edit = false;
+        $suratkeluar = ModelsSuratKeluar::findOrFail($this->suratkeluarId);
+        if (Gate::allows('sekretariat', Auth::user())) {
+            $this->suratkeluar->update($this->form);
+            $this->edit = false;
+        }
+
+        if (Gate::allows('kepala_dinas', Auth::user())) {
+            TindakLanjut::updateOrCreate([
+                'surat_keluar_id' => $suratkeluar->id,
+                'deskripsi' => $this->formTindakLanjut['deskripsi'],
+                'nama' => Auth::user()->nama,
+                'nip' => Auth::user()->nip
+            ]);
+            $statusSurat = StatusSurat::where('surat_keluar_id', $suratkeluar->id)->first();
+            $statusSurat->update([
+                'status_surat' => 'Perlu Verifikasi Kepala Bidang',
+            ]);
+        }
+        // Reset variabel setelah disimpan
+        $this->reset();
+
+        // Redirect ke halaman suratkeluar-index setelah data disimpan
+        return redirect()->to('/suratkeluar-index');
     }
+
 
     public function getIsReadonlyProperty()
     {

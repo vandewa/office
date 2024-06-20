@@ -20,6 +20,7 @@
         type="text/css">
     <link href="{{ asset('limitless/layout_1/LTR/default/full/assets/css/colors.min.css') }}  " rel="stylesheet"
         type="text/css">
+
     <!-- /global stylesheets -->
 
     @stack('css')
@@ -45,11 +46,14 @@
     <script src="{{ asset('limitless/layout_1/LTR/default/full/assets/js/app.js') }} "></script>
     <script src="{{ asset('limitless/global_assets/js/demo_pages/dashboard.js') }}"></script>
     <script src="{{ asset('limitless/global_assets/js/plugins/extensions/jquery_ui/interactions.min.js') }}"></script>
-	<script src="{{ asset('limitless/global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+    <script src="{{ asset('limitless/global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
 
-	<script src="assets/js/app.js"></script>
-	<script src="{{ asset('limitless/global_assets/js/demo_pages/form_select2.js') }}"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="{{ asset('limitless/global_assets/js/demo_pages/form_select2.js') }}"></script>
     <!-- /theme JS files -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.0/viewer.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.0/viewer.min.css">
 
 </head>
 
@@ -139,8 +143,7 @@ background-size: cover;">
                     <div class="card-body">
                         <div class="media">
                             <div class="mr-3">
-                                <a href="#"><img
-                                        src="limitless/global_assets/images/placeholders/placeholder.jpg"
+                                <a href="#"><img src="limitless/global_assets/images/placeholders/placeholder.jpg"
                                         width="38" height="38" class="rounded-circle" alt=""></a>
                             </div>
 
@@ -150,9 +153,9 @@ background-size: cover;">
                                 </div>
                                 <div class="media-title font-weight-normal">
                                     @php
-                                    $skpdData = json_decode(auth()->user()->skpd, true);
-                                    $skpd = isset($skpdData['skpd']) ? $skpdData['skpd'] : '';
-                                @endphp
+                                        $skpdData = json_decode(auth()->user()->skpd, true);
+                                        $skpd = isset($skpdData['skpd']) ? $skpdData['skpd'] : '';
+                                    @endphp
                                 </div>
                                 <span>{{ $skpd }}</span>
 

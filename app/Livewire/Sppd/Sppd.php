@@ -253,8 +253,10 @@ class Sppd extends Component
         // Membuat nama file berdasarkan tanggal
         $namaDokumen = 'SPT_' . date('d F Y', strtotime($tanggal)) . '.docx';
 
+        // $namaDokumenHTML = 'SPT_' . date('d F Y', strtotime($tanggal)) . '.html';
         // Menyimpan dokumen dengan nama yang telah dibuat
         $phpWord->saveAs($namaDokumen);
+        // $phpWord->saveAs($namaDokumenHTML);
     }
 
     public function storeUpdate()

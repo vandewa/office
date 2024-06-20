@@ -17,6 +17,7 @@
 
                 <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
             </div>
+            @can('sekretariat')
             <div class="header-elements d-none">
                 <div class="breadcrumb justify-content-center">
                     <div class="p-0 breadcrumb-elements-item dropdown">
@@ -27,6 +28,7 @@
                     </div>
                 </div>
             </div>
+            @endcan
         </div>
     </x-slot>
     <div class="content">
@@ -53,9 +55,7 @@
                                 <th style="width: 310px;" aria-label="Disposisi">Disposisi</th>
                                 <th style="width: 191px;" aria-label="Subject">Subject</th>
                                 <th style="width: 222px;" aria-label="Keterangan">Keterangan</th>
-                                @can('view-status-surat')
-                                    <th style="width: 222px;" aria-label="Keterangan">Status Surat</th>
-                                @endcan
+                                <th style="width: 222px;" aria-label="Keterangan">Status Surat</th>
                                 <th style="width: 176px;" aria-label="Aksi">Aksi</th>
                             </tr>
                         </thead>
@@ -66,15 +66,26 @@
                                     </td>
                                     <td>{{ $suratkeluar->tanggal_surat }}</td>
                                     <td></td>
+                                    <td>
+                                        @foreach ($suratkeluar->tindakLanjuts as $tindakLanjut)
+                                            <span class="badge bg-purple"> {{ $tindakLanjut->diteruskan_kepada }}
+                                            </span>
+                                            <span class="badge bg-blue">  {{ $tindakLanjut->disposisi }} </span>
+                                        @endforeach
+                                    </td>
                                     <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>
+                                        @foreach ($suratkeluar->tindakLanjuts as $tindakLanjut)
+                                            {{ $tindakLanjut->deskripsi }}
+                                        @endforeach
+                                    </td>
                                     <td>
                                         @foreach ($suratkeluar->statusSurats as $statusSurat)
                                             <span class="badge bg-danger">{{ $statusSurat->status_surat }}</span>
                                         @endforeach
                                     </td>
                                     <td>
+                                        @can('sekretariat')
                                         <button type="button" wire:click="delete(' {{ $suratkeluar->id }}')"
                                             class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
                                             title="Edit"><i class="icon-trash"></i>
@@ -83,6 +94,7 @@
                                             class="btn btn-flat btn-sm">
                                             <i class="icon-pencil"></i>
                                         </a>
+                                        @endcan
                                         <a href="{{ route('suratkeluar-verifikasi', ['id' => $suratkeluar->id]) }}"
                                             class="btn btn-flat btn-sm">
                                             <i class="icon-eye"></i>

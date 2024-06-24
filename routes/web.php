@@ -54,7 +54,6 @@ Route::get('suratkeluar/{id?}', SuratKeluar::class)->name('suratkeluar');
 Route::get('suratkeluar/{id?}/verifikasi', SuratKeluar::class)->name('suratkeluar-verifikasi');
 Route::get('suratkeluar-index', SuratKeluarIndex::class)->name('suratkeluar-index');
 Route::get('datapegawai', DataPegawai::class)->name('datapegawai');
-Route::get('/convert-to-pdf', ConvertToPdf::class);
 
 Route::get('/word', function () {
     return view('word');

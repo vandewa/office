@@ -17,7 +17,7 @@ class SuratMasuk extends Component
 {
     use WithFileUploads;
 
-    public $nama, $suratmasuk, $opdOptions = [], $suratmasukId = null, $edit = false, $readonly = false, $skpd, $tindakLanjut;
+    public $nama, $suratmasuk, $opdOptions = [], $suratmasukId = null, $edit = false, $readonly = false, $skpd, $tindakLanjut, $dok_surat;
     public $form = [
         'jenis_agenda_tp' => null,
         'kode_lama' => null,
@@ -32,7 +32,7 @@ class SuratMasuk extends Component
         'jamMulai' => null,
         'tempat' => null,
         'perihal' => null,
-        'dok_surat' => null,
+        // 'dok_surat' => null,
     ];
 
     public $formTindakLanjut  = [
@@ -49,7 +49,7 @@ class SuratMasuk extends Component
 
     public function mount($id = null)
     {
-        $this->suratmasuk = ModelsSuratMasuk::findOrFail($id);
+        $this->suratmasuk = $id;
         $this->tindakLanjut = TindakLanjut::where('surat_masuk_id', $id)->first();
         $this->readonly = request()->routeIs('suratmasuk-disposisi'); // Tentukan readonly berdasarkan route
         // Ambil data OPD dari database dan susun ke dalam array untuk opsi dropdown
@@ -111,10 +111,11 @@ class SuratMasuk extends Component
 
     public function store()
     {
-        // Pastikan ada file yang diunggah sebelum menyimpan
-        // if ($this->form['dok_surat']) {
-        // Mengunggah file dan mendapatkan path file
-        // $path = $this->form['dok_surat']->store('dokumen', 'public');
+        $this->validate([
+            'dok_surat' => 'file|mimes:pdf|max:10240', // 10MB Max and only PDF files
+        ]);
+        // Simpan file dan dapatkan path-nya
+        $path = $this->dok_surat->store('dok_surat');
 
         // Menyimpan path file ke dalam database dan membuat entri surat masuk baru
         $suratmasuk = ModelsSuratMasuk::create([
@@ -131,7 +132,7 @@ class SuratMasuk extends Component
             'jamMulai' => $this->form['jamMulai'],
             'tempat' => $this->form['tempat'],
             'perihal' => $this->form['perihal'],
-            // 'dok_surat' => $path
+            'dok_surat' => $path
         ]);
 
         // Buat entri status surat baru dengan status 'Verifikasi Kepala Dinas'

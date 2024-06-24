@@ -27,7 +27,7 @@
                                     <label class="col-lg-3 col-form-label">Unggah Surat Masuk</label>
                                     <div class="col-lg-9">
                                         <input type="file" id="fileInput" class="form-control"
-                                            wire:model='form.dok_surat' name="dok_surat" {{ $readonly ? 'disabled' : '' }}>
+                                            wire:model='dok_surat' name="dok_surat" {{ $readonly ? 'disabled' : '' }}>
                                     </div>
                                 </div>
                             @endcan
@@ -46,7 +46,7 @@
                                     @endif
                                 </div>
                                 <div class="col-6">
-                                    @if (request()->routeIs('suratmasuk-disposisi'))
+                                    @if (request()->routeIs('suratmasuk'))
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Kode (Lama)</label>
                                             <div class="col-lg-9">
@@ -249,87 +249,4 @@
             </div>
         </div>
     </div>
-    {{-- @if (request()->routeIs('suratmasuk'))
-        <script>
-            $(document).ready(function() {
-                // Sembunyikan semua form saat halaman dimuat
-                $('.form0').hide();
-                $('.form1').hide();
-                $('.form2').hide();
-
-                $('select[name=jenis_agenda_tp]').change(function() {
-                    let isi = $(this).val();
-
-                    if (isi == 'none') {
-                        $('.form0').hide('slow');
-                        $('.form1').hide('slow');
-                        $('.form2').hide('slow');
-                    }
-
-                    if (isi == 'JENIS_SURAT_TP_01') {
-                        $('.form0').show();
-                        $('.form1').show('slow');
-                    } else {
-                        $('.form1').hide('slow');
-                    }
-
-                    if (isi == 'JENIS_SURAT_TP_02') {
-                        $('.form0').show();
-                        $('.form2').show('slow');
-                    } else {
-                        $('.form2').hide('slow');
-                    }
-
-                    if (isi != 'JENIS_SURAT_TP_01' && isi != 'JENIS_SURAT_TP_02') {
-                        $('.form0').hide('slow');
-                    }
-                });
-
-                // Handle form submission via AJAX
-                $('#suratMasukForm').submit(function(e) {
-                    e.preventDefault(); // Prevent default form submission
-
-                    let formData = new FormData(this);
-
-                    $.ajax({
-                        url: $(this).attr('action'), // Get the form action URL
-                        method: $(this).attr('method'), // Get the form method
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function(response) {
-                            // Redirect to suratmasuk-index on success
-                            window.location.href = '/suratmasuk-index';
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle error here
-                            console.error(error);
-                        }
-                    });
-                });
-            });
-        </script>
-    @endif
-    <script>
-        $(document).ready(function() {
-            $('input[name=dok_surat]').change(function() {
-                let dokumen = $(this).prop('files')[0];
-
-                // Membuat objek FileReader
-                let reader = new FileReader();
-
-                // Event handler untuk menangani saat file selesai dibaca
-                reader.onload = function(e) {
-                    // Mengambil URL hasil pembacaan file sebagai sumber gambar
-                    let previewUrl = e.target.result;
-
-                    // Menampilkan preview file
-                    $('#preview').attr('src', previewUrl);
-                };
-
-                // Membaca konten file sebagai URL data
-                reader.readAsDataURL(dokumen);
-            });
-        });
-    </script> --}}
 </div>

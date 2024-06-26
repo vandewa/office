@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Sppd;
 
+use Dompdf\Dompdf;
 use App\Jobs\KirimWA;
 use Livewire\Component;
 use App\Models\DasarSppd;
@@ -11,8 +12,11 @@ use App\Models\SppdPegawai;
 use App\Models\StatusSurat;
 use App\Models\Simpeg\ASkpd;
 use App\Models\StatusLaporan;
+use PhpOffice\PhpWord\IOFactory;
 use App\Models\Sppd as ModelsSppd;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class Sppd extends Component
 {
@@ -49,10 +53,11 @@ class Sppd extends Component
 
     public function mount($id = null)
     {
-        $this->sppdId = $id;
+        // $this->loadSppdData($id);
         $this->readonly = request()->routeIs('sppd-laporan'); // Tentukan readonly berdasarkan route
+        $this->sppd = $id;
         if ($id) {
-            $this->getEdit($id);
+            $this->sppdId = $id;
         } else {
             $this->edit = false;
         }
@@ -98,6 +103,12 @@ class Sppd extends Component
         }
     }
 
+    public function sendWhatsApp($phone, $message)
+    {
+
+        KirimWA::dispatch($phone, $message);
+    }
+
     public function store()
     {
         //simpan input form ke tabel sppd
@@ -122,154 +133,153 @@ class Sppd extends Component
                     'idskpd' => $pegawai->idskpd
                 ]);
             }
+            StatusLaporan::updateOrCreate(
+                ['sppd_id' => $sppd->id],
+                ['status_laporan' => 'Belum Selesai']
+            );
         }
-
-        // Simpan input dasar ke tabel dasar_sppd
-        LaporanSppd::create([
-            'sppd_id' => $sppd->id,
-            'laporan_sppd' => $this->formLaporan['laporan_sppd']
-        ]);
-
-        if ($this->formLaporan['laporan_sppd'] === null) {
-            // Simpan data dengan nilai "Belum Selesai"
-            StatusLaporan::create([
-                'sppd_id' => $sppd->id,
-                'status_laporan' => 'Belum Selesai',
-            ]);
-        } else {
-            // Simpan data dengan nilai "Selesai"
-            StatusLaporan::create([
-                'sppd_id' => $sppd->id,
-                'status_laporan' => 'Selesai',
-            ]);
-        }
-
-        // Generate and save the document
-        $this->generateSpt($sppd);
-        $this->sendWhatsApp();
 
         return redirect()->to('/sppd-index');
     }
 
-    public function sendWhatsApp()
+    public function submitLaporan()
     {
-        // Tetapkan nilai phone dan message langsung
-        $phone = "081393982874";
-        $message = "qwerty";
-        // Dispatch job untuk mengirim pesan WhatsApp
-        KirimWA::dispatch($phone, $message);
+
+        $sppd = ModelsSppd::findOrFail($this->sppdId);
+
+        // Simpan input dasar ke tabel dasar_sppd
+        LaporanSppd::create([
+            'sppd_id' => $sppd->id,
+            'laporan_sppd' => $this->formLaporan['laporan_sppd'],
+        ]);
+
+        // Kirim pesan WhatsApp setelah laporan disimpan
+        $phone = "089603967291"; // Nomor telepon untuk status Selesai
+        $message = "Ye selesai. Silakan lihat";
+        $this->sendWhatsApp($phone, $message);
+
+        if ($this->formLaporan['laporan_sppd'] != null) {
+            // Simpan data dengan nilai "Selesai"
+            StatusLaporan::updateOrCreate(
+                ['sppd_id' => $sppd->id],
+                ['status_laporan' => 'Selesai']
+            );
+        }
+
+        return redirect()->to('/sppd-index');
     }
 
+    //word aja asli
+    // public function generateSpt($sppd)
+    // {
+    //     // Membuat objek TemplateProcessor
+    //     $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template1.docx');
 
-    public function generateSpt($sppd)
-    {
-        // Membuat objek TemplateProcessor
-        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template1.docx');
 
+    //     // Mengambil data dari database dan membentuk string
+    //     $listDasar = $this->formDasar;
+    //     $block_dasar = [];
+    //     $n = 1;
 
-        // Mengambil data dari database dan membentuk string
-        $listDasar = $this->formDasar;
-        $block_dasar = [];
-        $n = 1;
+    //     foreach ($listDasar as $index => $dasarnya) {
+    //         // Menambahkan data ke dalam array blocks
+    //         $block_dasar[] = [
+    //             'dasar' => $index == 0 ? 'Dasar' : '', // Hanya mengatur 'Dasar' untuk iterasi pertama
+    //             'i' => $index == 0 ? ':' : '', // Hanya mengatur ':' untuk iterasi pertama
+    //             'n' => $n++, // Nomor urut
+    //             'dasarnya' => $dasarnya // Isi dasar
+    //         ];
+    //     }
 
-        foreach ($listDasar as $index => $dasarnya) {
-            // Menambahkan data ke dalam array blocks
-            $block_dasar[] = [
-                'dasar' => $index == 0 ? 'Dasar' : '', // Hanya mengatur 'Dasar' untuk iterasi pertama
-                'i' => $index == 0 ? ':' : '', // Hanya mengatur ':' untuk iterasi pertama
-                'n' => $n++, // Nomor urut
-                'dasarnya' => $dasarnya // Isi dasar
-            ];
-        }
+    //     $nipList = $this->formNama['nip'] ?? [];
+    //     $block_name = []; // Array to hold the data for the repeating block
 
-        $nipList = $this->formNama['nip'] ?? [];
-        $block_name = []; // Array to hold the data for the repeating block
+    //     foreach ($nipList as $index => $nip) {
+    //         $pegawai = Tb01::where('nip', $nip)->first();
+    //         if ($pegawai) {
+    //             $gdp = $pegawai->gdp ?? '';
+    //             $nama = $pegawai->nama ?? '';
+    //             $gdb = $pegawai->gdb ?? '';
+    //             $nip = $pegawai->nip ?? '';
+    //             $jabatan = '';
 
-        foreach ($nipList as $index => $nip) {
-            $pegawai = Tb01::where('nip', $nip)->first();
-            if ($pegawai) {
-                $gdp = $pegawai->gdp ?? '';
-                $nama = $pegawai->nama ?? '';
-                $gdb = $pegawai->gdb ?? '';
-                $nip = $pegawai->nip ?? '';
-                $jabatan = '';
+    //             // Cek apakah pegawai memiliki jabfung
+    //             $jabfung = Tb01::join('a_jabfung', 'tb_01.idjabfung', '=', 'a_jabfung.idjabfung')
+    //                 ->where('tb_01.nip', $nip)
+    //                 ->select('a_jabfung.jabfung')
+    //                 ->first();
 
-                // Cek apakah pegawai memiliki jabfung
-                $jabfung = Tb01::join('a_jabfung', 'tb_01.idjabfung', '=', 'a_jabfung.idjabfung')
-                    ->where('tb_01.nip', $nip)
-                    ->select('a_jabfung.jabfung')
-                    ->first();
+    //             // Jika pegawai tidak memiliki jabfung, coba cari jabfungum
+    //             if ($jabfung) {
+    //                 $jabatan = $jabfung->jabfung;
+    //             } else {
+    //                 $jabfungum = Tb01::join('a_jabfungum', 'tb_01.idjabfungum', '=', 'a_jabfungum.idjabfungum')
+    //                     ->where('tb_01.nip', $nip)
+    //                     ->select('a_jabfungum.jabfungum')
+    //                     ->first();
 
-                // Jika pegawai tidak memiliki jabfung, coba cari jabfungum
-                if ($jabfung) {
-                    $jabatan = $jabfung->jabfung;
-                } else {
-                    $jabfungum = Tb01::join('a_jabfungum', 'tb_01.idjabfungum', '=', 'a_jabfungum.idjabfungum')
-                        ->where('tb_01.nip', $nip)
-                        ->select('a_jabfungum.jabfungum')
-                        ->first();
+    //                 if ($jabfungum) {
+    //                     $jabatan = $jabfungum->jabfungum;
+    //                 } else {
+    //                     $jabjbt = Tb01::join('a_skpd', 'tb_01.idjabjbt', '=', 'a_skpd.idskpd')
+    //                         ->where('tb_01.nip', $nip)
+    //                         ->select('a_skpd.jab')
+    //                         ->first();
 
-                    if ($jabfungum) {
-                        $jabatan = $jabfungum->jabfungum;
-                    } else {
-                        $jabjbt = Tb01::join('a_skpd', 'tb_01.idjabjbt', '=', 'a_skpd.idskpd')
-                            ->where('tb_01.nip', $nip)
-                            ->select('a_skpd.jab')
-                            ->first();
+    //                     if ($jabjbt) {
+    //                         $jabatan = $jabjbt->jab;
+    //                     }
+    //                 }
+    //             }
 
-                        if ($jabjbt) {
-                            $jabatan = $jabjbt->jab;
-                        }
-                    }
-                }
+    //             $golonganData = Tb01::join('a_golruang', 'tb_01.idgolrupkt', '=', 'a_golruang.idgolru')
+    //                 ->where('tb_01.nip', $nip)
+    //                 ->select('a_golruang.golru', 'a_golruang.pangkat')
+    //                 ->first();
+    //             $golongan = $golonganData ? str_replace('\/', '/', $golonganData->golru) : '';
+    //             $pangkat = $golonganData ? $golonganData->pangkat : '';
+    //             // Add the data to the block
+    //             $block_name[] = [
+    //                 'kepada' => $index == 0 ? 'Kepada' : '',
+    //                 'o' => $index + 1,
+    //                 'i2' => $index == 0 ? ':' : '',
+    //                 'nama' => $gdp . ' ' . $nama . ' ' . $gdb,
+    //                 'nip' => $nip,
+    //                 'pangkat' => $pangkat,
+    //                 'golongan' => $golongan,
+    //                 'jabatan' => $jabatan
+    //             ];
+    //         }
+    //     }
 
-                $golonganData = Tb01::join('a_golruang', 'tb_01.idgolrupkt', '=', 'a_golruang.idgolru')
-                    ->where('tb_01.nip', $nip)
-                    ->select('a_golruang.golru', 'a_golruang.pangkat')
-                    ->first();
-                $golongan = $golonganData ? str_replace('\/', '/', $golonganData->golru) : '';
-                $pangkat = $golonganData ? $golonganData->pangkat : '';
-                // Add the data to the block
-                $block_name[] = [
-                    'kepada' => $index == 0 ? 'Kepada' : '',
-                    'o' => $index + 1,
-                    'i2' => $index == 0 ? ':' : '',
-                    'nama' => $gdp . ' ' . $nama . ' ' . $gdb,
-                    'nip' => $nip,
-                    'pangkat' => $pangkat,
-                    'golongan' => $golongan,
-                    'jabatan' => $jabatan
-                ];
-            }
-        }
+    //     // Mengambil data kepala dinas dari tabel tb_01
+    //     $kepalaDinas = Tb01::where('idskpd', $this->form['kdunit'] ?? '')->first();
+    //     // Mengambil tanggal dari input data
+    //     $tanggal = $this->form['ditetapkan_tgl'] ?? now()->format('Y-m-d'); // Menggunakan tanggal saat ini jika tidak ada tanggal di input data
+    //     // Memastikan data kepala dinas ada sebelum digunakan
+    //     if ($kepalaDinas) {
+    //         // Set nilai untuk placeholder dalam dokumen
+    //         $phpWord->setValues([
+    //             'untuk' => strval($this->form['untuk'] ?? ''),
+    //             'tanggal' => $tanggal,
+    //             'n_kep' => $kepalaDinas->nama ?? '',
+    //             'n_pangkat' => $kepalaDinas->pangkat ?? '',
+    //             'n_nip' => $kepalaDinas->nip ?? ''
+    //         ]);
+    //     }
+    //     // Mengisi block dasar
+    //     $phpWord->cloneBlock('block_dasar', 0, true, false, $block_dasar);
+    //     $phpWord->cloneBlock('block_name', 0, true, false, $block_name);
 
-        // Mengambil data kepala dinas dari tabel tb_01
-        $kepalaDinas = Tb01::where('idskpd', $this->form['kdunit'] ?? '')->first();
-        // Mengambil tanggal dari input data
-        $tanggal = $this->form['ditetapkan_tgl'] ?? now()->format('Y-m-d'); // Menggunakan tanggal saat ini jika tidak ada tanggal di input data
-        // Memastikan data kepala dinas ada sebelum digunakan
-        if ($kepalaDinas) {
-            // Set nilai untuk placeholder dalam dokumen
-            $phpWord->setValues([
-                'untuk' => strval($this->form['untuk'] ?? ''),
-                'tanggal' => $tanggal,
-                'n_kep' => $kepalaDinas->nama ?? '',
-                'n_pangkat' => $kepalaDinas->pangkat ?? '',
-                'n_nip' => $kepalaDinas->nip ?? ''
-            ]);
-        }
-        // Mengisi block dasar
-        $phpWord->cloneBlock('block_dasar', 0, true, false, $block_dasar);
-        $phpWord->cloneBlock('block_name', 0, true, false, $block_name);
+    //     // Membuat nama file berdasarkan tanggal
+    //     $namaDokumen = 'SPT_' . date('d F Y', strtotime($tanggal)) . '.docx';
 
-        // Membuat nama file berdasarkan tanggal
-        $namaDokumen = 'SPT_' . date('d F Y', strtotime($tanggal)) . '.docx';
-
-        // $namaDokumenHTML = 'SPT_' . date('d F Y', strtotime($tanggal)) . '.html';
-        // Menyimpan dokumen dengan nama yang telah dibuat
-        $phpWord->saveAs($namaDokumen);
-        // $phpWord->saveAs($namaDokumenHTML);
-    }
+    //     // $namaDokumenHTML = 'SPT_' . date('d F Y', strtotime($tanggal)) . '.html';
+    //     // Menyimpan dokumen dengan nama yang telah dibuat
+    //     $phpWord->saveAs($namaDokumen);
+    //     // $this->convertToPdf($namaDokumen);
+    //     // $phpWord->saveAs($namaDokumenHTML);
+    // }
 
     public function storeUpdate()
     {

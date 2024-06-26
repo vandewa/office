@@ -2,15 +2,16 @@
 
 namespace App\Livewire\Sppd;
 
+use App\Jobs\KirimWA;
 use Livewire\Component;
 use App\Models\DasarSppd;
 use App\Models\LaporanSppd;
-use App\Models\Simpeg\ASkpd;
 use App\Models\Simpeg\Tb01;
 use App\Models\SppdPegawai;
-use App\Models\Sppd as ModelsSppd;
-use App\Models\StatusLaporan;
 use App\Models\StatusSurat;
+use App\Models\Simpeg\ASkpd;
+use App\Models\StatusLaporan;
+use App\Models\Sppd as ModelsSppd;
 use Illuminate\Support\Facades\Auth;
 
 class Sppd extends Component
@@ -145,9 +146,20 @@ class Sppd extends Component
 
         // Generate and save the document
         $this->generateSpt($sppd);
+        $this->sendWhatsApp();
 
         return redirect()->to('/sppd-index');
     }
+
+    public function sendWhatsApp()
+    {
+        // Tetapkan nilai phone dan message langsung
+        $phone = "081393982874";
+        $message = "qwerty";
+        // Dispatch job untuk mengirim pesan WhatsApp
+        KirimWA::dispatch($phone, $message);
+    }
+
 
     public function generateSpt($sppd)
     {

@@ -1,154 +1,250 @@
 
-<?php
-namespace App\Livewire\Surat;
-use Livewire\Component;
-use App\Models\Simpeg\Tb01;
-use App\Models\StatusSurat;
-use App\Models\Simpeg\ASkpd;
-use App\Models\TindakLanjut;
-use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use App\Models\SuratKeluar as ModelsSuratKeluar;
-class SuratKeluar extends Component
-{
-    use WithFileUploads;
-    public $suratkeluar, $skpd, $nama,  $opdOptions = [], $tindakLanjut, $edit = false, $suratkeluarId = null;
-    public $form = [
-        'nomor_surat'  => null,
-        'tanggal_surat' => null,
-        'perihal' => null,
-        'tujuan' => null,
-        'pembukaan_surat' => null,
-        'isi_surat' => null,
-        'penutup_surat' => null,
-        'lampiran' => null,
-    ];
-    public $formTindakLanjut  = [
-        'deskripsi' => null,
-        'nama' => null,
-        'nip' => null,
-        'diteruskan_kepada' => [],
-        'disposisi' => []
-    ];
-    public function mount($id = null)
-    {
-        $this->suratkeluar = ModelsSuratKeluar::findOrFail($id);
-        $this->tindakLanjut = TindakLanjut::where('surat_keluar_id', $id)->first();
-        $opdList = ASkpd::all();
-        foreach ($opdList as $opd) {
-            $this->opdOptions[$opd->idskpd] = $opd->skpd;
-        }
-        $this->suratkeluarId = $id;
-        if ($id) {
-            $this->getEdit($id);
-        } else {
-            $this->edit = false;
-        }
-        if (Auth::check()) {
-            $nip = Auth::user()->nip;
-            $kdunit = Tb01::where('nip', $nip)->value('kdunit');
-            $idskpd = Tb01::where('nip', $nip)->value('idskpd');
-            $this->skpd = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
-                ->where('a_skpd.kdunit', $kdunit)
-                ->where('idjenkedudupeg', 1)
-                ->whereColumn('tb_01.idjabjbt', 'tb_01.idskpd')
-                ->distinct()
-                ->pluck('a_skpd.skpd', 'tb_01.nip')
-                ->map(function ($skpd, $nip) {
-                    $pegawai = Tb01::where('nip', $nip)->first();
-                    return $pegawai->skpd->skpd; // Menambahkan nama SKPD ke dalam nama pegawai
-                });
-        }
-        // Kondisi untuk Kepala Bidang
-        if (Gate::allows('kepala_bidang', Auth::user())) {
-            $this->nama = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
-                ->where('tb_01.idskpd', $idskpd)
-                ->where('idjenkedudupeg', 1)
-                ->distinct()
-                ->pluck(Tb01::raw("CONCAT(tb_01.gdp, ' ', tb_01.nama, ' ', tb_01.gdb) AS full_name"), 'tb_01.nip')
-                ->map(function ($fullName, $nip) {
-                    $pegawai = Tb01::where('nip', $nip)->first();
-                    return $fullName . ' - ' . $pegawai->skpd->skpd;
-                });
-        }
-    }
-
-    public function getEdit($id)
-    {
-        $this->edit = true;
-        $this->suratkeluar = ModelsSuratKeluar::findOrFail($id);
-        $this->form = array_intersect_key($this->suratkeluar->toArray(), $this->form);
-    }
-    public function save()
-    {
-        if ($this->edit) {
-            $this->storeUpdate();
-        } else {
-            $this->store();
-        }
-    }
-    public function store()
-    {
-        $suratkeluar = ModelsSuratKeluar::create($this->form);
-        StatusSurat::create([
-            'surat_keluar_id' => $suratkeluar->id,
-            'status_surat' => 'Perlu Verifikasi Kepala Dinas',
-        ]);
-    }
-    public function storeUpdate()
-    {
-        $this->suratkeluar->update($this->form);
-        $this->edit = false;
-        $suratkeluar = ModelsSuratKeluar::findOrFail($this->suratkeluarId);
-        if  (Gate::allows('kepala_dinas', Auth::user())) {
-            // Create or update tindak lanjut records for Kepala Dinas without deleting existing ones
-            foreach ($this->formTindakLanjut['diteruskan_kepada'] as $diteruskan_kepada) {
-                TindakLanjut::updateOrCreate([
-                    'surat_keluar_id' => $suratkeluar->id,
-                    'deskripsi' => $this->formTindakLanjut['deskripsi'],
-                    'diteruskan_kepada' => $diteruskan_kepada,
-                    'nama' => Auth::user()->nama,
-                    'nip' => Auth::user()->nip
-                ]);
-            }
-            $statusSurat = StatusSurat::where('surat_keluar_id', $suratkeluar->id)->first();
-            $statusSurat->update([
-                'status_surat' => 'Perlu Verifikasi Kepala Bidang',
-            ]);
-    } elseif (Gate::allows('kepala_bidang', Auth::user())) {
-        // Create or update tindak lanjut records for Kepala Bidang without deleting existing ones
-        foreach ($this->formTindakLanjut['disposisi'] as $disposisi) {
-            TindakLanjut::updateOrCreate([
-                'suart_keluar_id' => $suratkeluar->id,
-                'disposisi' => $disposisi,
-                'nama' => Auth::user()->nama,
-                'nip' => Auth::user()->nip
-            ]);
-        }
-        $statusSurat = StatusSurat::where('suart_keluar_id', $suratkeluar->id)->first();
-        $statusSurat->update([
-            'status_surat' => 'Sekretariat',
-        ]);
-    }
-    $statusSurat = StatusSurat::where('suart_keluar_id', $suratkeluar->id)->first();
-        if ($statusSurat) {
-            // Update status jika status surat saat ini adalah 'Sekretariat'
-            if ($statusSurat->status_surat === 'Sekretariat') {
-                $statusSurat->update([
-                    'status_surat' => 'Sudah Distribusikan',
-                ]);
-            }
-        }
-}
-    public function render()
-    {
-        $surat = ModelsSuratKeluar::first(); // Contoh pengambilan data surat, sesuaikan dengan kebutuhan Anda
-        return view('livewire.surat.surat-keluar', [
-            'surat' => $surat,
-            'skpd' => $this->skpd,
-            'nama' => $this->nama,
-            'tindakLanjut' => $this->tindakLanjut
-        ]);
-    }
-}
+<div>
+    <div class="content">
+        <div class="card">
+            <div class="card-header">
+                <h2>{{ $edit ? 'Edit Form Surat Masuk' : 'Buat Form Surat Masuk Baru' }}</h2>
+                <div class="dropdown-divider"></div>
+            </div>
+            <div class="card-body">
+                <form action="" wire:submit='save'>
+                    @csrf
+                    <div class="row">
+                        <div class="col-12">
+                            {{-- jenis surat --}}
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Pilih Jenis Surat</label>
+                                <div class="col-lg-9">
+                                    <select id="selectSurat" class="form-control" name="jenis_agenda_tp"
+                                        wire:model='form.jenis_agenda_tp' {{ $readonly ? 'disabled' : '' }}>
+                                        <option value="none" selected>Pilih</option>
+                                        <option value="JENIS_SURAT_TP_01">Surat Masuk (Agenda)</option>
+                                        <option value="JENIS_SURAT_TP_02">Surat Masuk (Biasa)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            @can('sekretariat')
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Unggah Surat Masuk</label>
+                                    <div class="col-lg-9">
+                                        <input type="file" id="fileInput" class="form-control" wire:model='dok_surat'
+                                            name="dok_surat" {{ $readonly ? 'disabled' : '' }}>
+                                    </div>
+                                </div>
+                            @endcan
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-6">
+                                    @if (request()->routeIs('suratmasuk-disposisi') && $suratmasuk)
+                                        <embed src="{{ asset('storage/' . $suratmasuk->dok_surat) }}"
+                                            type="application/pdf" width="100%" height="600">
+                                    @else
+                                        <embed id="preview" src="" type="application/pdf" width="100%"
+                                            height="600">
+                                    @endif
+                                </div>
+                                <div class="col-6">
+                                    @if (request()->routeIs('suratmasuk'))
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Kode (Lama)</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" name="kode_lama"
+                                                    wire:model='form.kode_lama'
+                                                    @if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                     @else
+                                                     {{ $readonly ? 'disabled' : '' }} @endif>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Kode (Baru)</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" name="kode_baru"
+                                                    wire:model='form.kode_baru'@if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                     @else
+                                                     {{ $readonly ? 'disabled' : '' }} @endif>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Nomor Surat</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" name="nomor_surat"
+                                                    wire:model='form.nomor_surat'@if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                     @else
+                                                     {{ $readonly ? 'disabled' : '' }} @endif>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Pengirim</label>
+                                            <div class="col-lg-9">
+                                                <select class="form-control" name="opd_id" wire:model='form.opd_id'
+                                                    @if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                     @else
+                                                     {{ $readonly ? 'disabled' : '' }} @endif>
+                                                    <option value="" selected>Pilih</option>
+                                                    @foreach ($opdOptions as $id => $opd)
+                                                        <option value="{{ $id }}">{{ $opd }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Tanggal Surat</label>
+                                            <div class="col-lg-9">
+                                                <input type="date" class="form-control" name="tgl_surat"
+                                                    wire:model='form.tgl_surat'@if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                     @else
+                                                     {{ $readonly ? 'disabled' : '' }} @endif>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Tanggal Terima</label>
+                                            <div class="col-lg-9">
+                                                <input type="date" class="form-control" name="tgl_terima"
+                                                    wire:model='form.tgl_terima'@if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                     @else
+                                                     {{ $readonly ? 'disabled' : '' }} @endif>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Subject</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" name="acara"
+                                                    wire:model='form.acara'@if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                     @else
+                                                     {{ $readonly ? 'disabled' : '' }} @endif>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Tanggal Mulai</label>
+                                            <div class="col-lg-9">
+                                                <input type="date" class="form-control" name="tanggalBerangkat"
+                                                    wire:model='form.tanggalBerangkat'
+                                                    @if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                     @else
+                                                     {{ $readonly ? 'disabled' : '' }} @endif>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Tanggal Selesai</label>
+                                            <div class="col-lg-9">
+                                                <input type="date" class="form-control" name="tanggalPulang"
+                                                    wire:model='form.tanggalPulang'@if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                     @else
+                                                     {{ $readonly ? 'disabled' : '' }} @endif>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Jam Mulai</label>
+                                            <div class="col-lg-9">
+                                                <input type="time" class="form-control" name="jamMulai"
+                                                    wire:model='form.jamMulai'@if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                     @else
+                                                     {{ $readonly ? 'disabled' : '' }} @endif>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Tempat</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" name="tempat"
+                                                    wire:model='form.tempat'@if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                     @else
+                                                     {{ $readonly ? 'disabled' : '' }} @endif>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Perihal</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" name="perihal"
+                                                    wire:model='form.perihal'@if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                     @else
+                                                     {{ $readonly ? 'disabled' : '' }} @endif>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            @if (request()->routeIs('suratmasuk-disposisi'))
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">komentar</label>
+                                    <div class="col-lg-9">
+                                        @if (Gate::allows('kepala_dinas', Auth::user()))
+                                            <textarea type="text" class="form-control" name="deskripsi" wire:model='formTindakLanjut.deskripsi'
+                                                {{ $readonly ? 'enabled' : '' }}></textarea>
+                                        @else
+                                            <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>{{ $tindakLanjut->deskripsi }}</textarea>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Diteruskan Kepada</label>
+                                    <div class="col-lg-9">
+                                        @if (Gate::allows('kepala_dinas', Auth::user()))
+                                            <select multiple class="form-control" name="diteruskan_kepada"
+                                                wire:model='formTindakLanjut.diteruskan_kepada'
+                                                {{ $readonly ? 'enabled' : '' }}>
+                                                <option value="" selected>Pilih</option>
+                                                @foreach ($skpd as $skpdOption)
+                                                    <option value="{{ $skpdOption }}">{{ $skpdOption }}</option>
+                                                @endforeach
+                                            </select>
+                                        @else
+                                            <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>{{ $tindakLanjut->diteruskan_kepada }}</textarea>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">disposisi</label>
+                                    <div class="col-lg-9">
+                                        @if (Gate::allows('kepala_bidang', Auth::user()))
+                                            <select multiple class="form-control" name="disposisi"
+                                                wire:model='formTindakLanjut.disposisi'
+                                                {{ $readonly ? 'enabled' : '' }}>
+                                                <option value="" selected>Pilih</option>
+                                                @foreach ($nama as $nip => $fullName)
+                                                    <option value="{{ $nip }}">{{ $fullName }}</option>
+                                                @endforeach
+                                            </select>
+                                        @else
+                                            <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>{{ $tindakLanjut->disposisi }}</textarea>
+                                        @endif
+                                    </div>
+                                </div>
+                                {{-- @can('sekretariat')
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label">komentar</label>
+                                        <div class="col-lg-9">
+                                            <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>{{ $tindakLanjut->deskripsi }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label">Diteruskan Kepada</label>
+                                        <div class="col-lg-9">
+                                            <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>{{ $tindakLanjut->diteruskan_kepada }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label">Diteruskan Kepada</label>
+                                        <div class="col-lg-9">
+                                            <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>{{ $tindakLanjut->disposisi }}</textarea>
+                                        </div>
+                                    </div>
+                                @endcan --}}
+                            @endif
+                            <div class="text-right">
+                                <button type="submit"
+                                    class="btn btn-primary">{{ $edit ? 'Simpan Perubahan' : 'Buat SUrat Masuk Baru' }}<i
+                                        class="icon-paperplane ml-2"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -17,6 +17,17 @@ class TindakLanjut extends Model
         return $this->belongsTo(SuratMasuk::class, 'surat_masuk_id');
     }
 
+    public function dashboard()
+    {
+        return $this->belongsTo(Dashboard::class, 'surat_masuk_id');
+    }
+
+
+    public function suratMasukIndex()
+    {
+        return $this->belongsTo(suratMasukIndex::class, 'surat_masuk_id');
+    }
+
     public function suratKeluar()
     {
         return $this->belongsTo(SuratKeluar::class, 'surat_keluar_id');

@@ -13,7 +13,7 @@ use Livewire\WithPagination;
 class SuratMasukIndex extends Component
 {
     use WithPagination;
-    public $idHapus, $suratmasuks, $cari, $tindak_lanjuts, $status_surats;
+    public $idHapus, $suratmasuks, $cari, $tindak_lanjuts, $status_surats, $data1;
 
     public $form = [
         'jenis_agenda_tp' => null,
@@ -51,7 +51,16 @@ class SuratMasukIndex extends Component
         $this->suratmasuks = SuratMasuk::all();
         $this->tindak_lanjuts = TindakLanjut::all();
         $this->status_surats = StatusSurat::all();
+        $this->data1 = SuratMasuk::with(['tindakLanjuts', 'statusSurats'])->get();
     }
+
+    public function getFilteredDataProperty()
+    {
+        return $this->data1->filter(function($item) {
+            return $item->statusSurats->contains('status_surat', 'Sudah Distribusikan');
+        });
+    }
+
 
     public function delete($id)
     {
@@ -94,6 +103,7 @@ class SuratMasukIndex extends Component
             'data' => $data,
             'tindakLanjut' => $tindak_lanjuts,
             'statusSurat' => $status_surats,
+            'filteredData' => $this->filteredData
         ]);
     }
 }

@@ -60,17 +60,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($data as $suratmasuk)
+                            @foreach ($this->filteredData as $suratmasuk)
                                 <tr wire:key='{{ $suratmasuk->id }}'>
-                                    <td>{{ $loop->index + $data->firstItem() }}
-                                    </td>
+                                    <td>{{ $loop->index + $data->firstItem() }}</td>
                                     <td>{{ $suratmasuk->tgl_surat }}</td>
                                     <td>{{ $suratmasuk->jenis_agenda_tp }}</td>
                                     <td>
                                         @foreach ($suratmasuk->tindakLanjuts as $tindakLanjut)
-                                            <span class="badge bg-purple"> {{ $tindakLanjut->diteruskan_kepada }}
-                                            </span>
-                                            <span class="badge bg-blue">  {{ $tindakLanjut->disposisi }} </span>
+                                            <span class="badge bg-purple">{{ $tindakLanjut->diteruskan_kepada }}</span>
+                                            <span class="badge bg-blue">{{ $tindakLanjut->disposisi }}</span>
                                         @endforeach
                                     </td>
                                     <td>{{ $suratmasuk->acara }} {{ $suratmasuk->perihal }}</td>
@@ -81,30 +79,25 @@
                                     </td>
                                     <td>
                                         @can('view-status-surat')
-                                        @foreach ($suratmasuk->statusSurats as $statusSurat)
-                                            <span class="badge bg-danger">{{ $statusSurat->status_surat }}</span>
-                                        @endforeach
+                                            @foreach ($suratmasuk->statusSurats as $statusSurat)
+                                                <span class="badge bg-danger">{{ $statusSurat->status_surat }}</span>
+                                            @endforeach
                                         @endcan
                                     </td>
                                     <td>
                                         @can('sekretariat')
-                                            <button type="button" wire:click="delete(' {{ $suratmasuk->id }}')"
-                                                class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
-                                                title="Edit"><i class="icon-trash"></i>
+                                            <button type="button" wire:click="delete('{{ $suratmasuk->id }}')" class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left" title="Edit">
+                                                <i class="icon-trash"></i>
                                             </button>
-                                            {{-- <a href="{{ route('suratmasuk', ['id' => $suratmasuk->id]) }}"
-                                                class="btn btn-flat btn-sm">
-                                                <i class="icon-pencil"></i>
-                                            </a> --}}
                                         @endcan
-                                        <a href="{{ route('suratmasuk-disposisi', ['id' => $suratmasuk->id]) }}"
-                                            class="btn btn-flat btn-sm">
+                                        <a href="{{ route('suratmasuk-disposisi', ['id' => $suratmasuk->id]) }}" class="btn btn-flat btn-sm">
                                             <i class="icon-eye"></i>
                                         </a>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
+
                     </table>
                     {{ $data->links() }}
                 </div>

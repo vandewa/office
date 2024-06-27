@@ -18,13 +18,6 @@ use App\Http\Controllers\WordController;
 use App\Livewire\Surat\SuratKeluarIndex;
 use App\Http\Controllers\LoginController;
 
-Route::get('/word', function () {
-    return view('word');
-});
-
-Route::post('word', [WordController::class, 'index'])->name('word.index');
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -55,12 +48,6 @@ Route::get('suratkeluar/{id?}/verifikasi', SuratKeluar::class)->name('suratkelua
 Route::get('suratkeluar-index', SuratKeluarIndex::class)->name('suratkeluar-index');
 Route::get('datapegawai', DataPegawai::class)->name('datapegawai');
 
-Route::get('/word', function () {
-    return view('word');
-})->name('word');
-
-Route::get('/word-index', [WordController::class, 'index'])->name('word.index');
-Route::post('/word-convert', [WordController::class, 'generatePdf'])->name('word.convert');
 
 // Route::post('/send-whatsapp', [SuratMasuk::class, 'sendWhatsApp'])->name('send.whatsapp');
 

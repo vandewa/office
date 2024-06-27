@@ -6,7 +6,7 @@
                 <div class="dropdown-divider"></div>
             </div>
             <div class="card-body">
-                <div class="col-6">
+                <div class="col-12">
                     <form action=""
                         @if (request()->routeIs('sppd')) wire:submit='save' @else  wire:submit='submitLaporan' @endif>
                         <div class="row" style="margin: 20px">

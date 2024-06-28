@@ -115,6 +115,8 @@ class SuratMasuk extends Component
 
         KirimWA::dispatch($phone, $message);
     }
+
+
     public function store()
     {
         // $this->validate([
@@ -141,6 +143,7 @@ class SuratMasuk extends Component
             // 'dok_surat' => $path
         ]);
 
+
         // Buat entri status surat baru dengan status 'Verifikasi Kepala Dinas'
         StatusSurat::create([
             'surat_masuk_id' => $suratmasuk->id,
@@ -150,7 +153,7 @@ class SuratMasuk extends Component
         // Kirim pesan WhatsApp setelah laporan disimpan
         $phone = "081393982874"; // Nomor telepon untuk status Selesai
         $message = "k1"; // ke kadin
-        $this->sendWhatsApp($phone, $message);
+         $this->sendWhatsApp($phone, $message);
 
         // Redirect ke halaman suratmasuk-index setelah data disimpan
         return redirect()->to('/suratmasuk-index');
@@ -196,7 +199,7 @@ class SuratMasuk extends Component
             // Kirim pesan WhatsApp setelah laporan disimpan
             $phone = "081393982874"; // Nomor telepon untuk status Selesai
             $message = "k2"; // ke kabid
-            $this->sendWhatsApp($phone, $message);
+             $this->sendWhatsApp($phone, $message);
         } elseif (Gate::allows('kepala_bidang', Auth::user())) {
             // Create or update tindak lanjut records for Kepala Bidang without deleting existing ones
             foreach ($this->formTindakLanjut['disposisi'] as $disposisi) {
@@ -214,7 +217,7 @@ class SuratMasuk extends Component
             // Kirim pesan WhatsApp setelah laporan disimpan
             $phone = "081393982874"; // Nomor telepon untuk status Selesai
             $message = "k3"; // ke sekretariat
-            $this->sendWhatsApp($phone, $message);
+             $this->sendWhatsApp($phone, $message);
         }
 
         // Reset variabel setelah disimpan
@@ -239,7 +242,7 @@ class SuratMasuk extends Component
                     // Send WhatsApp message after status is updated
                     $phone = "081393982874"; // Phone number for status Selesai
                     $message = "k4"; // Message to all staff
-                    $this->sendWhatsApp($phone, $message);
+                     $this->sendWhatsApp($phone, $message);
                 }
             }
         }

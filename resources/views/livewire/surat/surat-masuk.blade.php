@@ -176,15 +176,17 @@
                                 <div class="form-group row">
                                     <div class="col-lg-9">
                                         @if (Gate::allows('sekretariat', Auth::user()))
-                                            <button type="button" wire:click="distribusikan" class="btn btn-primary">Distribusikan</button>
+                                            <button type="button" wire:click="distribusikan"
+                                                class="btn btn-primary">Distribusikan</button>
                                         @endif
                                     </div>
                                 </div>
                             @endif
                             <div class="text-right">
-                                <button type="submit"
-                                    class="btn btn-primary">{{ $edit ? 'Simpan Perubahan' : 'Buat SUrat Masuk Baru' }}<i
-                                        class="icon-paperplane ml-2"></i></button>
+                                <button type="submit" class="btn btn-primary">
+                                    {{ $edit ? 'Simpan Perubahan' : 'Buat Surat Masuk Baru' }}
+                                    <i class="icon-paperplane ml-2"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -192,3 +194,4 @@
             </div>
         </div>
     </div>
+</div>

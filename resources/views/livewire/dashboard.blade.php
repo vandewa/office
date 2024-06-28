@@ -1,6 +1,10 @@
 <div>
     <div class="content">
         <div class="card">
+            <div class="card-header">
+                <h1>Surat Masuk Untuk Anda</h1>
+            </div>
+            <div class="dropdown-divider"></div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-8">

@@ -39,7 +39,7 @@ class Dashboard extends Component
             return $this->data1->filter(function ($item) {
                 return $item->statusSurats->contains('status_surat', 'Sekretariat');
             });
-        }elseif (Gate::allows('staff', Auth::user())) {
+        } elseif (Gate::allows('staff', Auth::user())) {
             return $this->data1->filter(function ($item) {
                 return $item->statusSurats->contains('status_surat', 'Sudah Distribusikan');
             });

@@ -28,6 +28,10 @@
 
     @vite([])
 
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
+
     <!-- Core JS files -->
     <script src="{{ asset('limitless/global_assets/js/main/jquery.min.js') }} "></script>
     <script src="{{ asset('limitless/global_assets/js/main/bootstrap.bundle.min.js') }} "></script>

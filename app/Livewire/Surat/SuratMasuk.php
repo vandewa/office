@@ -113,6 +113,7 @@ class SuratMasuk extends Component
             $this->store();
         }
     }
+
     public function sendWhatsApp($phone, $message)
     {
 
@@ -184,11 +185,11 @@ class SuratMasuk extends Component
                 'perihal' => $this->form['perihal'],
                 'dok_surat' => isset($path) ? $path : $suratmasuk->dok_surat
             ]);
-             // Buat entri status surat baru dengan status 'Verifikasi Kepala Dinas'
-        StatusSurat::updateOrCreate([
-            'surat_masuk_id' => $suratmasuk->id,
-            'status_surat' => 'Perlu Verifikasi Kepala Dinas',
-        ]);
+            // Buat entri status surat baru dengan status 'Verifikasi Kepala Dinas'
+            StatusSurat::updateOrCreate([
+                'surat_masuk_id' => $suratmasuk->id,
+                'status_surat' => 'Perlu Verifikasi Kepala Dinas',
+            ]);
             // Kirim pesan WhatsApp setelah laporan disimpan
             $phone = "081393982874"; // Nomor telepon untuk status Selesai
             $message = "k1"; // ke kadin
@@ -237,16 +238,27 @@ class SuratMasuk extends Component
                     'nip' => Auth::user()->nip
                 ]);
             }
-            $statusSurat = StatusSurat::where('surat_masuk_id', $suratmasuk->id)->first();
-            $statusSurat->update([
-                'status_surat' => 'Sekretariat',
-            ]);
-            // Kirim pesan WhatsApp setelah laporan disimpan
-            $phone = "081393982874"; // Nomor telepon untuk status Selesai
-            $message = "k3"; // ke sekretariat
-            // // $this->sendWhatsApp($phone, $message);
-        }
+            if ($this->formTindakLanjut['revisi']) {
+                $statusSurat = StatusSurat::where('surat_masuk_id', $suratmasuk->id)->first();
+                $statusSurat->update([
+                    'status_surat' => 'Sekretariat',
+                ]);
+                // Kirim pesan WhatsApp setelah laporan disimpan
+                $phone = "081393982874"; // Nomor telepon untuk status Selesai
+                $message = "k1"; // ke kadin
+                // $this->sendWhatsApp($phone, $message);
 
+            } else {
+                $statusSurat = StatusSurat::where('surat_masuk_id', $suratmasuk->id)->first();
+                $statusSurat->update([
+                    'status_surat' => 'Sekretariat',
+                ]);
+                // Kirim pesan WhatsApp setelah laporan disimpan
+                $phone = "081393982874"; // Nomor telepon untuk status Selesai
+                $message = "k2"; // ke kabid
+                // $this->sendWhatsApp($phone, $message);
+            }
+        }
 
         // Reset variabel setelah disimpan
         $this->reset();

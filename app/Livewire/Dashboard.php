@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\SuratMasuk;
+use App\Models\SuratKeluar;
 use App\Models\StatusSurat;
 use App\Models\TindakLanjut;
 use Livewire\WithPagination;
@@ -14,54 +15,76 @@ use App\Models\Dashboard as ModelsDashboard;
 class Dashboard extends Component
 {
     use WithPagination;
-    public $idHapus, $suratmasuks, $cari, $tindak_lanjuts, $status_surats, $data1;
-
+    public $idHapus, $cari, $tindak_lanjuts, $status_surats;
 
     public function mount()
     {
-        $this->suratmasuks = SuratMasuk::all();
         $this->tindak_lanjuts = TindakLanjut::all();
         $this->status_surats = StatusSurat::all();
-        $this->data1 = SuratMasuk::with(['tindakLanjuts', 'statusSurats'])->get();
     }
 
-    public function getFilteredDataProperty()
+    public function filteredSuratMasuk()
     {
-        if (Gate::allows('kepala_dinas', Auth::user())) {
-            return $this->data1->filter(function ($item) {
-                return $item->statusSurats->contains('status_surat', 'Perlu Verifikasi Kepala Dinas');
-            });
-        } elseif (Gate::allows('kepala_bidang', Auth::user())) {
-            return $this->data1->filter(function ($item) {
-                return $item->statusSurats->contains('status_surat', 'Perlu Verifikasi Kepala Bidang');
-            });
-        } elseif (Gate::allows('sekretariat', Auth::user())) {
-            return $this->data1->filter(function ($item) {
-                return $item->statusSurats->contains('status_surat', 'Sekretariat');
-            });
-        } elseif (Gate::allows('staff', Auth::user())) {
-            return $this->data1->filter(function ($item) {
-                return $item->statusSurats->contains('status_surat', 'Sudah Distribusikan');
-            });
-        }
+        return SuratMasuk::with(['tindakLanjuts', 'statusSurats'])
+            ->when(Gate::allows('kepala_dinas', Auth::user()), function ($query) {
+                $query->whereHas('statusSurats', function ($q) {
+                    $q->where('status_surat', 'Perlu Verifikasi Kepala Dinas');
+                });
+            })
+            ->when(Gate::allows('kepala_bidang', Auth::user()), function ($query) {
+                $query->whereHas('statusSurats', function ($q) {
+                    $q->where('status_surat', 'Perlu Verifikasi Kepala Bidang');
+                });
+            })
+            ->when(Gate::allows('sekretariat', Auth::user()), function ($query) {
+                $query->whereHas('statusSurats', function ($q) {
+                    $q->where('status_surat', 'Sekretariat');
+                });
+            })
+            ->when(Gate::allows('staff', Auth::user()), function ($query) {
+                $query->whereHas('statusSurats', function ($q) {
+                    $q->where('status_surat', 'Sudah Distribusikan');
+                });
+            })
+            ->get();
+    }
+
+    public function filteredSuratKeluar()
+    {
+        return SuratKeluar::with(['tindakLanjuts', 'statusSurats'])
+            ->when(Gate::allows('kepala_dinas', Auth::user()), function ($query) {
+                $query->whereHas('statusSurats', function ($q) {
+                    $q->where('status_surat', 'Perlu Verifikasi Kepala Dinas');
+                });
+            })
+            ->when(Gate::allows('kepala_bidang', Auth::user()), function ($query) {
+                $query->whereHas('statusSurats', function ($q) {
+                    $q->where('status_surat', 'Perlu Verifikasi Kepala Bidang');
+                });
+            })
+            ->when(Gate::allows('sekretariat', Auth::user()), function ($query) {
+                $query->whereHas('statusSurats', function ($q) {
+                    $q->where('status_surat', 'Sekretariat');
+                });
+            })
+            ->when(Gate::allows('staff', Auth::user()), function ($query) {
+                $query->whereHas('statusSurats', function ($q) {
+                    $q->where('status_surat', 'Sudah Distribusikan');
+                });
+            })
+            ->get();
     }
 
     public function render()
     {
-        $data = ModelsDashboard::query()
-            ->with('tindakLanjuts', 'statusSurats')
-            ->where('nomor_surat', 'like', '%' . $this->cari . '%')
-            ->orWhere('acara', 'like', '%' . $this->cari . '%')
-            ->paginate(10);
-
-        $tindak_lanjuts = TindakLanjut::all();
-        $status_surats = StatusSurat::all();
+        $suratMasuk = $this->filteredSuratMasuk();
+        $suratKeluar = $this->filteredSuratKeluar();
 
         return view('livewire.dashboard', [
-            'data' => $data,
-            'tindakLanjut' => $tindak_lanjuts,
-            'statusSurat' => $status_surats,
-            'filteredData' => $this->filteredData
+            'suratMasuk' => $suratMasuk,
+            'suratKeluar' => $suratKeluar,
+            'tindakLanjut' => $this->tindak_lanjuts,
+            'statusSurat' => $this->status_surats,
         ]);
     }
 }

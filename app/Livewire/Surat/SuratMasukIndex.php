@@ -15,37 +15,6 @@ class SuratMasukIndex extends Component
     use WithPagination;
     public $idHapus, $suratmasuks, $cari, $tindak_lanjuts, $status_surats, $data1;
 
-    public $form = [
-        'jenis_agenda_tp' => null,
-        'kode_lama' => null,
-        'kode_baru' => null,
-        'nomor_surat' => null,
-        'opd_id' => null,
-        'tgl_surat' => null,
-        'tgl_terima' => null,
-        'acara' => null,
-        'tanggalBerangkat' => null,
-        'tanggalPulang' => null,
-        'jamMulai' => null,
-        'tempat' => null,
-        'perihal' => null,
-        // 'no_surat' => null,
-        'dok_surat' => null,
-    ];
-
-    public $formTindakLanjut  = [
-        'deskripsi' => null,
-        'nama' => null,
-        'nip' => null,
-        'diteruskan_kepada' => [],
-        'disposisi' => []
-    ];
-
-    public $formStatus = [
-        'status_surat' => null
-    ];
-
-
     public function mount()
     {
         $this->suratmasuks = SuratMasuk::all();
@@ -74,19 +43,6 @@ class SuratMasukIndex extends Component
         SuratMasuk::destroy($this->idHapus);
         return redirect()->to('/suratmasuk-index');
     }
-
-    public function storeUpdate()
-    {
-        SuratMasuk::find($this->idHapus)->update($this->form);
-        $this->reset();
-    }
-
-    // public function render()
-    // {
-    //     return view('livewire.surat.surat-masuk-index', [
-    //         'suratmasuks' => $this->suratmasuks
-    //     ]);
-    // }
 
     public function render()
     {

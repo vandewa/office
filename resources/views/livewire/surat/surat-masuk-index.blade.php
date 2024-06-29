@@ -91,9 +91,9 @@
                                                 title="Edit">
                                                 <i class="icon-trash"></i>
                                             </button>
-                                            <a href="{{ route('suratmasuk/{id}', ['id' => $suratmasuk->id]) }}"
+                                            <a href="{{ route('suratmasuk', ['id' => $suratmasuk->id]) }}"
                                                 class="btn btn-flat btn-sm">
-                                                <i class="icon-add"></i>
+                                                <i class="icon-pencil"></i>
                                             </a>
                                         @endcan
                                         <a href="{{ route('suratmasuk-disposisi', ['id' => $suratmasuk->id]) }}"
@@ -104,7 +104,6 @@
                                 </tr>
                             @endforeach
                         </tbody>
-
                     </table>
                     {{ $data->links() }}
                 </div>

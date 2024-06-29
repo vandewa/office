@@ -42,7 +42,8 @@ class SuratMasuk extends Component
         'nama' => null,
         'nip' => null,
         'diteruskan_kepada' => [],
-        'disposisi' => []
+        'disposisi' => [],
+        'revisi' => null
     ];
 
     public $formStatusSurat = [
@@ -70,28 +71,30 @@ class SuratMasuk extends Component
             $nip = Auth::user()->nip;
             $kdunit = Tb01::where('nip', $nip)->value('kdunit');
             $idskpd = Tb01::where('nip', $nip)->value('idskpd');
-            $this->skpd = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
-                ->where('a_skpd.kdunit', $kdunit)
-                ->where('idjenkedudupeg', 1)
-                ->whereColumn('tb_01.idjabjbt', 'tb_01.idskpd')
-                ->distinct()
-                ->pluck('a_skpd.skpd', 'tb_01.nip')
-                ->map(function ($skpd, $nip) {
-                    $pegawai = Tb01::where('nip', $nip)->first();
-                    return $pegawai->skpd->skpd; // Menambahkan nama SKPD ke dalam nama pegawai
-                });
-        }
-        // Kondisi untuk Kepala Bidang
-        if (Gate::allows('kepala_bidang', Auth::user())) {
-            $this->nama = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
-                ->where('tb_01.idskpd', $idskpd)
-                ->where('idjenkedudupeg', 1)
-                ->distinct()
-                ->pluck(Tb01::raw("CONCAT(tb_01.gdp, ' ', tb_01.nama, ' ', tb_01.gdb) AS full_name"), 'tb_01.nip')
-                ->map(function ($fullName, $nip) {
-                    $pegawai = Tb01::where('nip', $nip)->first();
-                    return $fullName . ' - ' . $pegawai->skpd->skpd;
-                });
+            if (Gate::allows('kepala_dinas', Auth::user())) {
+                $this->skpd = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
+                    ->where('a_skpd.kdunit', $kdunit)
+                    ->where('idjenkedudupeg', 1)
+                    ->whereColumn('tb_01.idjabjbt', 'tb_01.idskpd')
+                    ->distinct()
+                    ->pluck('a_skpd.skpd', 'tb_01.nip')
+                    ->map(function ($skpd, $nip) {
+                        $pegawai = Tb01::where('nip', $nip)->first();
+                        return $pegawai->skpd->skpd; // Menambahkan nama SKPD ke dalam nama pegawai
+                    });
+            }
+            // Kondisi untuk Kepala Bidang
+            if (Gate::allows('kepala_bidang', Auth::user())) {
+                $this->nama = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
+                    ->where('tb_01.idskpd', $idskpd)
+                    ->where('idjenkedudupeg', 1)
+                    ->distinct()
+                    ->pluck(Tb01::raw("CONCAT(tb_01.gdp, ' ', tb_01.nama, ' ', tb_01.gdb) AS full_name"), 'tb_01.nip')
+                    ->map(function ($fullName, $nip) {
+                        $pegawai = Tb01::where('nip', $nip)->first();
+                        return $fullName . ' - ' . $pegawai->skpd->skpd;
+                    });
+            }
         }
     }
 
@@ -153,7 +156,7 @@ class SuratMasuk extends Component
         // Kirim pesan WhatsApp setelah laporan disimpan
         $phone = "081393982874"; // Nomor telepon untuk status Selesai
         $message = "k1"; // ke kadin
-         $this->sendWhatsApp($phone, $message);
+        // $this->sendWhatsApp($phone, $message);
 
         // Redirect ke halaman suratmasuk-index setelah data disimpan
         return redirect()->to('/suratmasuk-index');
@@ -181,6 +184,16 @@ class SuratMasuk extends Component
                 'perihal' => $this->form['perihal'],
                 'dok_surat' => isset($path) ? $path : $suratmasuk->dok_surat
             ]);
+             // Buat entri status surat baru dengan status 'Verifikasi Kepala Dinas'
+        StatusSurat::updateOrCreate([
+            'surat_masuk_id' => $suratmasuk->id,
+            'status_surat' => 'Perlu Verifikasi Kepala Dinas',
+        ]);
+            // Kirim pesan WhatsApp setelah laporan disimpan
+            $phone = "081393982874"; // Nomor telepon untuk status Selesai
+            $message = "k1"; // ke kadin
+            // $this->sendWhatsApp($phone, $message);
+
         } elseif (Gate::allows('kepala_dinas', Auth::user())) {
             // Create or update tindak lanjut records for Kepala Dinas without deleting existing ones
             foreach ($this->formTindakLanjut['diteruskan_kepada'] as $diteruskan_kepada) {
@@ -188,24 +201,38 @@ class SuratMasuk extends Component
                     'surat_masuk_id' => $suratmasuk->id,
                     'deskripsi' => $this->formTindakLanjut['deskripsi'],
                     'diteruskan_kepada' => $diteruskan_kepada,
+                    'revisi' => $this->formTindakLanjut['revisi'],
                     'nama' => Auth::user()->nama,
                     'nip' => Auth::user()->nip
                 ]);
             }
-            $statusSurat = StatusSurat::where('surat_masuk_id', $suratmasuk->id)->first();
-            $statusSurat->update([
-                'status_surat' => 'Perlu Verifikasi Kepala Bidang',
-            ]);
-            // Kirim pesan WhatsApp setelah laporan disimpan
-            $phone = "081393982874"; // Nomor telepon untuk status Selesai
-            $message = "k2"; // ke kabid
-             $this->sendWhatsApp($phone, $message);
+            if ($this->formTindakLanjut['revisi']) {
+                $statusSurat = StatusSurat::where('surat_masuk_id', $suratmasuk->id)->first();
+                $statusSurat->update([
+                    'status_surat' => 'Sekretariat',
+                ]);
+                // Kirim pesan WhatsApp setelah laporan disimpan
+                $phone = "081393982874"; // Nomor telepon untuk status Selesai
+                $message = "k1"; // ke kadin
+                // $this->sendWhatsApp($phone, $message);
+
+            } else {
+                $statusSurat = StatusSurat::where('surat_masuk_id', $suratmasuk->id)->first();
+                $statusSurat->update([
+                    'status_surat' => 'Perlu Verifikasi Kepala Bidang',
+                ]);
+                // Kirim pesan WhatsApp setelah laporan disimpan
+                $phone = "081393982874"; // Nomor telepon untuk status Selesai
+                $message = "k2"; // ke kabid
+                // $this->sendWhatsApp($phone, $message);
+            }
         } elseif (Gate::allows('kepala_bidang', Auth::user())) {
             // Create or update tindak lanjut records for Kepala Bidang without deleting existing ones
             foreach ($this->formTindakLanjut['disposisi'] as $disposisi) {
                 TindakLanjut::updateOrCreate([
                     'surat_masuk_id' => $suratmasuk->id,
                     'disposisi' => $disposisi,
+                    'revisi' => $this->formTindakLanjut['revisi'],
                     'nama' => Auth::user()->nama,
                     'nip' => Auth::user()->nip
                 ]);
@@ -217,8 +244,9 @@ class SuratMasuk extends Component
             // Kirim pesan WhatsApp setelah laporan disimpan
             $phone = "081393982874"; // Nomor telepon untuk status Selesai
             $message = "k3"; // ke sekretariat
-             $this->sendWhatsApp($phone, $message);
+            // // $this->sendWhatsApp($phone, $message);
         }
+
 
         // Reset variabel setelah disimpan
         $this->reset();
@@ -229,21 +257,19 @@ class SuratMasuk extends Component
 
     public function distribusikan()
     {
-        if (Gate::allows('sekretariat', Auth::user())) {
-            $statusSurat = StatusSurat::where('surat_masuk_id', $this->suratmasuk->id)->first();
+        $statusSurat = StatusSurat::where('surat_masuk_id', $this->suratmasuk->id)->first();
 
-            if ($statusSurat) {
-                // Update status if the current status is 'Sekretariat'
-                if ($statusSurat->status_surat === 'Sekretariat') {
-                    $statusSurat->update([
-                        'status_surat' => 'Sudah Distribusikan',
-                    ]);
+        if ($statusSurat) {
+            // Update status if the current status is 'Sekretariat'
+            if ($statusSurat->status_surat === 'Sekretariat') {
+                $statusSurat->update([
+                    'status_surat' => 'Sudah Distribusikan',
+                ]);
 
-                    // Send WhatsApp message after status is updated
-                    $phone = "081393982874"; // Phone number for status Selesai
-                    $message = "k4"; // Message to all staff
-                     $this->sendWhatsApp($phone, $message);
-                }
+                // Send WhatsApp message after status is updated
+                $phone = "081393982874"; // Phone number for status Selesai
+                $message = "k4"; // Message to all staff
+                // $this->sendWhatsApp($phone, $message);
             }
         }
         // Redirect ke halaman suratmasuk-index setelah data disimpan
@@ -262,7 +288,7 @@ class SuratMasuk extends Component
             'surat' => $surat,
             'skpd' => $this->skpd,
             'nama' => $this->nama,
-            'tindakLanjut' => $this->tindakLanjut
+            'tindakLanjut' => $this->tindakLanjut,
         ]);
     }
 }

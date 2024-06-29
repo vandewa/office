@@ -22,6 +22,7 @@ return new class extends Migration
         $table->string('deskripsi')->nullable();
         $table->string('diteruskan_kepada')->nullable();
         $table->string('disposisi')->nullable();
+        $table->boolean('revisi')->default(false)->nullable(); // Kolom untuk checkbox
         $table->timestamps();
     });
 }

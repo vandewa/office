@@ -86,11 +86,18 @@
                                     </td>
                                     <td>
                                         @can('sekretariat')
-                                            <button type="button" wire:click="delete('{{ $suratmasuk->id }}')" class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left" title="Edit">
+                                            <button type="button" wire:click="delete('{{ $suratmasuk->id }}')"
+                                                class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
+                                                title="Edit">
                                                 <i class="icon-trash"></i>
                                             </button>
+                                            <a href="{{ route('suratmasuk/{id}', ['id' => $suratmasuk->id]) }}"
+                                                class="btn btn-flat btn-sm">
+                                                <i class="icon-add"></i>
+                                            </a>
                                         @endcan
-                                        <a href="{{ route('suratmasuk-disposisi', ['id' => $suratmasuk->id]) }}" class="btn btn-flat btn-sm">
+                                        <a href="{{ route('suratmasuk-disposisi', ['id' => $suratmasuk->id]) }}"
+                                            class="btn btn-flat btn-sm">
                                             <i class="icon-eye"></i>
                                         </a>
                                     </td>

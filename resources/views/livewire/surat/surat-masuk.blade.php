@@ -135,7 +135,7 @@
                                             <textarea type="text" class="form-control" name="deskripsi" wire:model='formTindakLanjut.deskripsi'
                                                 {{ $readonly ? 'enabled' : '' }}></textarea>
                                         @else
-                                            <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>{{ $tindakLanjut->deskripsi }}</textarea>
+                                            <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>{{ $tindakLanjut->deskripsi ?? 'no data' }}</textarea>
                                         @endif
                                     </div>
                                 </div>
@@ -152,7 +152,9 @@
                                                 @endforeach
                                             </select>
                                         @else
-                                            <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>{{ $tindakLanjut->diteruskan_kepada }}</textarea>
+                                            <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>
+                                            {{ $tindakLanjut->diteruskan_kepada ?? 'no data' }}
+                                        </textarea>
                                         @endif
                                     </div>
                                 </div>
@@ -165,22 +167,36 @@
                                                 {{ $readonly ? 'enabled' : '' }}>
                                                 <option value="" selected>Pilih</option>
                                                 @foreach ($nama as $nip => $fullName)
-                                                    <option value="{{ $nip }}">{{ $fullName }}</option>
+                                                    <option value="{{ $fullName }}">{{ $fullName }}</option>
                                                 @endforeach
                                             </select>
                                         @else
-                                            <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>{{ $tindakLanjut->disposisi }}</textarea>
+                                            <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>
+                                                {{ $tindakLanjut->disposisi ?? 'no data' }}
+                                            </textarea>
                                         @endif
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-lg-9">
-                                        @if (Gate::allows('sekretariat', Auth::user()))
+                                        @can('sekretariat')
                                             <button type="button" wire:click="distribusikan"
                                                 class="btn btn-primary">Distribusikan</button>
-                                        @endif
+                                        @endcan
+                                        @can('add-disposisi')
+                                            <div class="form-group">
+                                                <label class="d-block font-weight-semibold">Perlu revisi</label>
+                                                <div class="form-check form-check-inline">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input"
+                                                            wire:model="formTindakLanjut.revisi" name="revisi"
+                                                            value="1">
+                                                        Ya
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        @endcan
                                     </div>
-                                </div>
                             @endif
                             <div class="text-right">
                                 <button type="submit" class="btn btn-primary">

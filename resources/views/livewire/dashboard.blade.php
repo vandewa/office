@@ -63,6 +63,10 @@
                                             <button type="button" wire:click="delete('{{ $suratmasuk->id }}')" class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left" title="Edit">
                                                 <i class="icon-trash"></i>
                                             </button>
+                                            <a href="{{ route('suratmasuk', ['id' => $suratmasuk->id]) }}"
+                                                class="btn btn-flat btn-sm">
+                                                <i class="icon-add"></i>
+                                            </a>
                                         @endcan
                                         <a href="{{ route('suratmasuk-disposisi', ['id' => $suratmasuk->id]) }}" class="btn btn-flat btn-sm">
                                             <i class="icon-eye"></i>

@@ -26,6 +26,11 @@ class Dashboard extends Component
     public function filteredSuratMasuk()
     {
         return SuratMasuk::with(['tindakLanjuts', 'statusSurats'])
+            ->when(Gate::allows('sekretariat', Auth::user()), function ($query) {
+                $query->whereHas('statusSurats', function ($q) {
+                    $q->where('status_surat', 'Sekretariat');
+                });
+            })
             ->when(Gate::allows('kepala_dinas', Auth::user()), function ($query) {
                 $query->whereHas('statusSurats', function ($q) {
                     $q->where('status_surat', 'Perlu Verifikasi Kepala Dinas');
@@ -34,11 +39,6 @@ class Dashboard extends Component
             ->when(Gate::allows('kepala_bidang', Auth::user()), function ($query) {
                 $query->whereHas('statusSurats', function ($q) {
                     $q->where('status_surat', 'Perlu Verifikasi Kepala Bidang');
-                });
-            })
-            ->when(Gate::allows('sekretariat', Auth::user()), function ($query) {
-                $query->whereHas('statusSurats', function ($q) {
-                    $q->where('status_surat', 'Sekretariat');
                 });
             })
             ->when(Gate::allows('staff', Auth::user()), function ($query) {
@@ -52,9 +52,9 @@ class Dashboard extends Component
     public function filteredSuratKeluar()
     {
         return SuratKeluar::with(['tindakLanjuts', 'statusSurats'])
-            ->when(Gate::allows('kepala_dinas', Auth::user()), function ($query) {
+            ->when(Gate::allows('sekretariat', Auth::user()), function ($query) {
                 $query->whereHas('statusSurats', function ($q) {
-                    $q->where('status_surat', 'Perlu Verifikasi Kepala Dinas');
+                    $q->where('status_surat', 'Sekretariat');
                 });
             })
             ->when(Gate::allows('kepala_bidang', Auth::user()), function ($query) {
@@ -62,9 +62,9 @@ class Dashboard extends Component
                     $q->where('status_surat', 'Perlu Verifikasi Kepala Bidang');
                 });
             })
-            ->when(Gate::allows('sekretariat', Auth::user()), function ($query) {
+            ->when(Gate::allows('kepala_dinas', Auth::user()), function ($query) {
                 $query->whereHas('statusSurats', function ($q) {
-                    $q->where('status_surat', 'Sekretariat');
+                    $q->where('status_surat', 'Perlu Verifikasi Kepala Dinas');
                 });
             })
             ->when(Gate::allows('staff', Auth::user()), function ($query) {

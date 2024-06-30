@@ -3,34 +3,41 @@
         <div class="row">
             @can('sekretariat')
                 <div class="col-lg-4">
-                    <div class="card" style="height: 200px; background-color: #B0B4ED">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <h3 class="font-weight-semibold mb-0" style="color: #FFFFFF">Buat Surat Masuk</h3>
+                    <a href="{{ route('suratmasuk') }}">
+                        <div class="card" style="height: 200px; background-color: #B0B4ED;">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <h3 class="font-weight-semibold mb-0" style="color: #FFFFFF;">Buat Surat Masuk</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-lg-4">
-                    <div class="card" style="height: 200px; background-color: #8288E3">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <h3 class="font-weight-semibold mb-0" style="color: #FFFFFF">Buat Surat Keluar</h3>
+                    <a href="{{ route('suratkeluar') }}">
+                        <div class="card" style="height: 200px; background-color: #8288E3;">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <h3 class="font-weight-semibold mb-0" style="color: #FFFFFF;">Buat Surat Keluar</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             @endcan
             <div class="col-lg-4">
-                <div class="card" style="height: 200px; background-color: #676EDC">
-                    <div class="card-body">
-                        <div class="d-flex">
-                            <h3 class="font-weight-semibold mb-0" style="color: #FFFFFF">Buat SPPD</h3>
+                <a href="{{ route('sppd') }}">
+                    <div class="card" style="height: 200px; background-color: #676EDC;">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <h3 class="font-weight-semibold mb-0" style="color: #FFFFFF;">Buat SPPD</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
+
         <div class="card">
             <div class="card-header">
                 <h1>Surat Masuk Untuk Anda</h1>
@@ -59,9 +66,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($suratMasuk as $suratmasuk)
+                            @foreach ($suratMasuk as $index => $suratmasuk)
                                 <tr wire:key='{{ $suratmasuk->id }}'>
-                                    <td>{{ $loop->index + $suratMasuk->firstItem() }}</td>
+                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $suratmasuk->tgl_surat }}</td>
                                     <td>{{ $suratmasuk->jenis_agenda_tp }}</td>
                                     <td>
@@ -150,7 +157,7 @@
                                             <span class="badge bg-blue">{{ $tindakLanjut->disposisi }}</span>
                                         @endforeach
                                     </td>
-                                    <td>{{ $suratkeluar->acara }} {{ $suratkeluar->perihal }}</td>
+                                    <td> {{ $suratkeluar->perihal }}</td>
                                     <td>
                                         @foreach ($suratkeluar->tindakLanjuts as $tindakLanjut)
                                             {{ $tindakLanjut->deskripsi }}

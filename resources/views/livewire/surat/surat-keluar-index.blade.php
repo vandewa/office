@@ -60,7 +60,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($this->filteredData as $suratmasuk)
+                            @foreach ($this->filteredData as $suratkeluar)
                                 <tr wire:key='{{ $suratkeluar->id }}'>
                                     <td>{{ $loop->index + $data->firstItem() }}
                                     </td>

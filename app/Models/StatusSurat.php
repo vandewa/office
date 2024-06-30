@@ -18,15 +18,19 @@ class StatusSurat extends Model
         return $this->belongsTo(SuratMasuk::class, 'surat_masuk_id');
     }
 
-    public function dashboard()
+    public function dashboardSuratMasuk()
     {
         return $this->belongsTo(Dashboard::class, 'surat_masuk_id');
     }
 
-
     public function suratKeluar()
     {
         return $this->belongsTo(SuratKeluar::class, 'surat_keluar_id');
+    }
+
+    public function dashboardSuratKeluar()
+    {
+        return $this->belongsTo(Dashboard::class, 'surat_keluar_id');
     }
 
 }

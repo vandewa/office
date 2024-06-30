@@ -15,7 +15,7 @@ class Sppd extends Model
     {
         return static::find($id) ?: abort(404);
     }
-    
+
     public function sppdPegawais()
     {
         return $this->hasMany(SppdPegawai::class, 'sppd_id');
@@ -31,4 +31,8 @@ class Sppd extends Model
         return $this->hasMany(laporanSppd::class, 'sppd_id');
     }
 
+    public function dasarSppd()
+    {
+        return $this->hasMany(DasarSppd::class, 'sppd_id');
+    }
 }

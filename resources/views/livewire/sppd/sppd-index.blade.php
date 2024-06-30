@@ -91,6 +91,17 @@
                                                 </a>
                                             @endif
                                         @endforeach
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-flat btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="icon-printer"></i> Print
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="{{ route('print-spt', ['id' => $sppd->id, 'type' => 'spt']) }}" target="_blanks">SPT</a>
+                                                <a class="dropdown-item" href="{{ route('print-spt-kadin', ['id' => $sppd->id, 'type' => 'spt-kadin']) }}" target="_blanks">SPT KADIN</a>
+                                                <a class="dropdown-item" href="{{ route('print-spd', ['id' => $sppd->id, 'type' => 'spd']) }}" target="_blanks">SPD</a>
+                                                <a class="dropdown-item" href="{{ route('print-spd-kadin', ['id' => $sppd->id, 'type' => 'spd-kadin']) }}" target="_blanks">SPD KADIN</a>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

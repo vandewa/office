@@ -27,7 +27,7 @@
                                     <label class="col-lg-3 col-form-label">Unggah Surat Masuk</label>
                                     <div class="col-lg-9">
                                         <input type="file" id="fileInput" class="form-control"
-                                            wire:model='form.dok_surat' name="dok_surat" {{ $readonly ? 'disabled' : '' }}>
+                                            wire:model='dok_surat' name="dok_surat" {{ $readonly ? 'disabled' : '' }}>
                                     </div>
                                 </div>
                             @endcan

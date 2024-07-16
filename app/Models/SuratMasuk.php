@@ -22,4 +22,9 @@ class SuratMasuk extends Model
         return $this->hasMany(TindakLanjut::class, 'surat_masuk_id');
     }
 
+    public function document()
+    {
+        return $this->belongsTo(Document::class);
+    }
+
 }

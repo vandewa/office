@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('surat_masuks', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('document_id')->nullable(); // Tambahkan kolom ini
             $table->string('jenis_agenda_tp')->nullable();
             $table->string('kode_lama')->nullable();
             $table->string('kode_baru')->nullable();
@@ -27,13 +28,11 @@ return new class extends Migration
             $table->time('jamMulai')->nullable();
             $table->string('tempat')->nullable();
             $table->string('perihal')->nullable();
-            $table->string('dok_surat')->nullable();
-
-            // $table->string('phone');
-            // $table->string('message');
             $table->timestamps();
+            // $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
         });
     }
+
 
     /**
      * Reverse the migrations.

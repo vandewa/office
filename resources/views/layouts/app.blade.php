@@ -12,52 +12,47 @@
     <link href="{{ asset('limitless/global_assets/css/icons/icomoon/styles.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('limitless/layout_1/LTR/default/full/assets/css/bootstrap.min.css') }}" rel="stylesheet"
         type="text/css">
-    <link href="{{ asset('limitless/layout_1/LTR/default/full/assets/css/bootstrap_limitless.min.css') }} "
+    <link href="{{ asset('limitless/layout_1/LTR/default/full/assets/css/bootstrap_limitless.min.css') }}"
         rel="stylesheet" type="text/css">
-    <link href="{{ asset('limitless/layout_1/LTR/default/full/assets/css/layout.min.css') }} " rel="stylesheet"
+    <link href="{{ asset('limitless/layout_1/LTR/default/full/assets/css/layout.min.css') }}" rel="stylesheet"
         type="text/css">
-    <link href="{{ asset('limitless/layout_1/LTR/default/full/assets/css/components.min.css') }}  " rel="stylesheet"
+    <link href="{{ asset('limitless/layout_1/LTR/default/full/assets/css/components.min.css') }}" rel="stylesheet"
         type="text/css">
-    <link href="{{ asset('limitless/layout_1/LTR/default/full/assets/css/colors.min.css') }}  " rel="stylesheet"
+    <link href="{{ asset('limitless/layout_1/LTR/default/full/assets/css/colors.min.css') }}" rel="stylesheet"
         type="text/css">
-
     <!-- /global stylesheets -->
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.0/viewer.min.css" rel="stylesheet">
 
     @stack('css')
     @livewireStyles
-
     @vite([])
 
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
-
     <!-- Core JS files -->
-    <script src="{{ asset('limitless/global_assets/js/main/jquery.min.js') }} "></script>
-    <script src="{{ asset('limitless/global_assets/js/main/bootstrap.bundle.min.js') }} "></script>
-    <script src="{{ asset('limitless/global_assets/js/plugins/loaders/blockui.min.js') }} "></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('limitless/global_assets/js/main/jquery.min.js') }}"></script>
+    <script src="{{ asset('limitless/global_assets/js/main/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('limitless/global_assets/js/plugins/loaders/blockui.min.js') }}"></script>
     <!-- /core JS files -->
 
     <!-- Theme JS files -->
-    <script src="{{ asset('limitless/global_assets/js/plugins/visualization/d3/d3.min.js') }} "></script>
+    <script src="{{ asset('limitless/global_assets/js/plugins/visualization/d3/d3.min.js') }}"></script>
     <script src="{{ asset('limitless/global_assets/js/plugins/visualization/d3/d3_tooltip.js') }}"></script>
-    <script src="{{ asset('limitless/global_assets/js/plugins/forms/styling/switchery.min.js') }} "></script>
+    <script src="{{ asset('limitless/global_assets/js/plugins/forms/styling/switchery.min.js') }}"></script>
     <script src="{{ asset('limitless/global_assets/js/plugins/forms/selects/bootstrap_multiselect.js') }}"></script>
     <script src="{{ asset('limitless/global_assets/js/plugins/ui/moment/moment.min.js') }}"></script>
-    <script src="{{ asset('limitless/global_assets/js/plugins/pickers/daterangepicker.js') }} "></script>
-
-    <script src="{{ asset('limitless/layout_1/LTR/default/full/assets/js/app.js') }} "></script>
+    <script src="{{ asset('limitless/global_assets/js/plugins/pickers/daterangepicker.js') }}"></script>
+    <script src="{{ asset('limitless/layout_1/LTR/default/full/assets/js/app.js') }}"></script>
     <script src="{{ asset('limitless/global_assets/js/demo_pages/dashboard.js') }}"></script>
     <script src="{{ asset('limitless/global_assets/js/plugins/extensions/jquery_ui/interactions.min.js') }}"></script>
     <script src="{{ asset('limitless/global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
-
     <script src="{{ asset('limitless/global_assets/js/demo_pages/form_select2.js') }}"></script>
+    <script src="{{ asset('limitless/global_assets/js/plugins/editors/summernote/summernote.min.js') }}"></script>
+    <script src="{{ asset('limitless/global_assets/js/plugins/forms/styling/uniform.min.js') }}"></script>
+    <script src="{{ asset('limitless/global_assets/js/demo_pages/editor_summernote.js') }}"></script>
     <!-- /theme JS files -->
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.0/viewer.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.0/viewer.min.css">
-
 </head>
 
 <body>
@@ -118,68 +113,374 @@
     <!-- Page content -->
     <div class="page-content">
 
-        <!-- Main sidebar -->
-        <div class="sidebar sidebar-light sidebar-main sidebar-expand-md"
-            style="background-color: #e3e4f1;
-background-image: linear-gradient(180deg,#ffffff 10%,#5d65da 100%);
-background-size: cover;">
+        @can('sekre-staff')
+            <!-- Main sidebar -->
+            <div class="sidebar sidebar-light sidebar-main sidebar-expand-md"
+                style="background-color: #e3e4f1; background-image: linear-gradient(180deg,#ffffff 10%,#5d65da 100%);
+            background-size: cover;">
 
-            <!-- Sidebar mobile toggler -->
-            <div class="sidebar-mobile-toggler text-center">
-                <a href="#" class="sidebar-mobile-main-toggle">
-                    <i class="icon-arrow-left8"></i>
-                </a>
-                Navigation
-                <a href="#" class="sidebar-mobile-expand">
-                    <i class="icon-screen-full"></i>
-                    <i class="icon-screen-normal"></i>
-                </a>
-            </div>
-            <!-- /sidebar mobile toggler -->
+                <!-- Sidebar mobile toggler -->
+                <div class="sidebar-mobile-toggler text-center">
+                    <a href="#" class="sidebar-mobile-main-toggle">
+                        <i class="icon-arrow-left8"></i>
+                    </a>
+                    Navigation
+                    <a href="#" class="sidebar-mobile-expand">
+                        <i class="icon-screen-full"></i>
+                        <i class="icon-screen-normal"></i>
+                    </a>
+                </div>
+                <!-- /sidebar mobile toggler -->
 
 
-            <!-- Sidebar content -->
-            <div class="sidebar-content">
+                <!-- Sidebar content -->
+                <div class="sidebar-content">
 
-                <!-- User menu -->
-                <div class="sidebar-user">
-                    <div class="card-body">
-                        <div class="media">
-                            <div class="mr-3">
-                                <a href="#"><img src="limitless/global_assets/images/placeholders/placeholder.jpg"
-                                        width="38" height="38" class="rounded-circle" alt=""></a>
-                            </div>
-
-                            <div class="media-body">
-                                <div class="media-title font-weight-semibold">
-                                    {{ auth()->user()->nama }} <br>
+                    <!-- User menu -->
+                    <div class="sidebar-user">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="mr-3">
+                                    <a href="#"><img src="limitless/global_assets/images/placeholders/placeholder.jpg"
+                                            width="38" height="38" class="rounded-circle" alt=""></a>
                                 </div>
-                                <div class="media-title font-weight-normal">
-                                    @php
-                                        $skpdData = json_decode(auth()->user()->skpd, true);
-                                        $skpd = isset($skpdData['skpd']) ? $skpdData['skpd'] : '';
-                                    @endphp
+
+                                <div class="media-body">
+                                    <div class="media-title font-weight-semibold">
+                                        {{ auth()->user()->nama }} <br>
+                                    </div>
+                                    <div class="media-title font-weight-normal">
+                                        @php
+                                            $skpdData = json_decode(auth()->user()->skpd, true);
+                                            $skpd = isset($skpdData['skpd']) ? $skpdData['skpd'] : '';
+                                        @endphp
+                                        <div class="media-title font-weight-normal">
+                                            @can('sekretariat')
+                                                <span> Sekretariat {{ $skpd }}</span>
+                                            @elsecan('kepala_dinas')
+                                                <span> Kepala Dinas {{ $skpd }}</span>
+                                            @elsecan('kepala_bidang')
+                                                <span> kepala Bidang {{ $skpd }}</span>
+                                            @elsecan('staff')
+                                                <span> Staff {{ $skpd }}</span>
+                                            @endcan
+                                        </div>
+                                    </div>
+                                    {{-- <sp>{{ $skpd }}</sp<an> --}}
+
                                 </div>
-                                <span>{{ $skpd }}</span>
 
-                            </div>
-
-                            <div class="ml-3 align-self-center">
-                                <a href="#" class="text-white"><i class="icon-cog3"></i></a>
+                                <div class="ml-3 align-self-center">
+                                    <a href="#" class="text-white"><i class="icon-cog3"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <!-- /user menu -->
+
+
+                    @include('layouts.sidebar')
+
                 </div>
-                <!-- /user menu -->
-
-
-                @include('layouts.sidebar')
+                <!-- /sidebar content -->
 
             </div>
-            <!-- /sidebar content -->
+            <!-- /main sidebar -->
+        @elsecan('staff')
+            <!-- Main sidebar -->
+            <div class="sidebar sidebar-light sidebar-main sidebar-expand-md"
+                style="background-color: #e3e4f1; background-image: linear-gradient(180deg,#ffffff 10%,#d8da5d 100%);
+            background-size: cover;">
 
-        </div>
-        <!-- /main sidebar -->
+                <!-- Sidebar mobile toggler -->
+                <div class="sidebar-mobile-toggler text-center">
+                    <a href="#" class="sidebar-mobile-main-toggle">
+                        <i class="icon-arrow-left8"></i>
+                    </a>
+                    Navigation
+                    <a href="#" class="sidebar-mobile-expand">
+                        <i class="icon-screen-full"></i>
+                        <i class="icon-screen-normal"></i>
+                    </a>
+                </div>
+                <!-- /sidebar mobile toggler -->
+
+
+                <!-- Sidebar content -->
+                <div class="sidebar-content">
+
+                    <!-- User menu -->
+                    <div class="sidebar-user">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="mr-3">
+                                    <a href="#"><img
+                                            src="limitless/global_assets/images/placeholders/placeholder.jpg"
+                                            width="38" height="38" class="rounded-circle" alt=""></a>
+                                </div>
+
+                                <div class="media-body">
+                                    <div class="media-title font-weight-semibold">
+                                        {{ auth()->user()->nama }} <br>
+                                    </div>
+                                    <div class="media-title font-weight-normal">
+                                        @php
+                                            $skpdData = json_decode(auth()->user()->skpd, true);
+                                            $skpd = isset($skpdData['skpd']) ? $skpdData['skpd'] : '';
+                                        @endphp
+                                        <div class="media-title font-weight-normal">
+                                            @can('sekretariat')
+                                                <span> Sekretariat {{ $skpd }}</span>
+                                            @elsecan('kepala_dinas')
+                                                <span> Kepala Dinas {{ $skpd }}</span>
+                                            @elsecan('kepala_bidang')
+                                                <span> kepala Bidang {{ $skpd }}</span>
+                                            @elsecan('staff')
+                                                <span> Staff {{ $skpd }}</span>
+                                            @endcan
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="ml-3 align-self-center">
+                                    <a href="#" class="text-white"><i class="icon-cog3"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /user menu -->
+
+
+                    @include('layouts.sidebar')
+
+                </div>
+                <!-- /sidebar content -->
+
+            </div>\
+            <!-- /main sidebar -->
+        @elsecan('kabid-sekre')
+            <!-- Main sidebar -->
+            <div class="sidebar sidebar-light sidebar-main sidebar-expand-md"
+                style="background-color: #e3e4f1; background-image: linear-gradient(180deg,#ffffff 10%,#5d65da 100%);
+            background-size: cover;">
+
+                <!-- Sidebar mobile toggler -->
+                <div class="sidebar-mobile-toggler text-center">
+                    <a href="#" class="sidebar-mobile-main-toggle">
+                        <i class="icon-arrow-left8"></i>
+                    </a>
+                    Navigation
+                    <a href="#" class="sidebar-mobile-expand">
+                        <i class="icon-screen-full"></i>
+                        <i class="icon-screen-normal"></i>
+                    </a>
+                </div>
+                <!-- /sidebar mobile toggler -->
+
+
+                <!-- Sidebar content -->
+                <div class="sidebar-content">
+
+                    <!-- User menu -->
+                    <div class="sidebar-user">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="mr-3">
+                                    <a href="#"><img
+                                            src="limitless/global_assets/images/placeholders/placeholder.jpg"
+                                            width="38" height="38" class="rounded-circle" alt=""></a>
+                                </div>
+
+                                <div class="media-body">
+                                    <div class="media-title font-weight-semibold">
+                                        {{ auth()->user()->nama }} <br>
+                                    </div>
+                                    <div class="media-title font-weight-normal">
+                                        @php
+                                            $skpdData = json_decode(auth()->user()->skpd, true);
+                                            $skpd = isset($skpdData['skpd']) ? $skpdData['skpd'] : '';
+                                        @endphp
+                                        <div class="media-title font-weight-normal">
+                                            @can('sekretariat')
+                                                <span> Sekretariat {{ $skpd }}</span>
+                                            @elsecan('kepala_dinas')
+                                                <span> Kepala Dinas {{ $skpd }}</span>
+                                            @elsecan('kepala_bidang')
+                                                <span> kepala Bidang {{ $skpd }}</span>
+                                            @elsecan('staff')
+                                                <span> Staff {{ $skpd }}</span>
+                                            @endcan
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="ml-3 align-self-center">
+                                    <a href="#" class="text-white"><i class="icon-cog3"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /user menu -->
+
+
+                    @include('layouts.sidebar')
+
+                </div>
+                <!-- /sidebar content -->
+
+            </div>
+            <!-- /main sidebar -->
+        @elsecan('kepala_dinas')
+            <!-- Main sidebar -->
+            <div class="sidebar sidebar-light sidebar-main sidebar-expand-md"
+                style="background-color: #e3e4f1; background-image: linear-gradient(180deg,#ffffff 10%,#8bda5d 100%);
+            background-size: cover;">
+
+                <!-- Sidebar mobile toggler -->
+                <div class="sidebar-mobile-toggler text-center">
+                    <a href="#" class="sidebar-mobile-main-toggle">
+                        <i class="icon-arrow-left8"></i>
+                    </a>
+                    Navigation
+                    <a href="#" class="sidebar-mobile-expand">
+                        <i class="icon-screen-full"></i>
+                        <i class="icon-screen-normal"></i>
+                    </a>
+                </div>
+                <!-- /sidebar mobile toggler -->
+
+
+                <!-- Sidebar content -->
+                <div class="sidebar-content">
+
+                    <!-- User menu -->
+                    <div class="sidebar-user">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="mr-3">
+                                    <a href="#"><img
+                                            src="limitless/global_assets/images/placeholders/placeholder.jpg"
+                                            width="38" height="38" class="rounded-circle" alt=""></a>
+                                </div>
+
+                                <div class="media-body">
+                                    <div class="media-title font-weight-semibold">
+                                        {{ auth()->user()->nama }} <br>
+                                    </div>
+                                    <div class="media-title font-weight-normal">
+                                        @php
+                                            $skpdData = json_decode(auth()->user()->skpd, true);
+                                            $skpd = isset($skpdData['skpd']) ? $skpdData['skpd'] : '';
+                                        @endphp
+                                        <div class="media-title font-weight-normal">
+                                            @can('sekretariat')
+                                                <span> Sekretariat {{ $skpd }}</span>
+                                            @elsecan('kepala_dinas')
+                                                <span> Kepala Dinas {{ $skpd }}</span>
+                                            @elsecan('kepala_bidang')
+                                                <span> kepala Bidang {{ $skpd }}</span>
+                                            @elsecan('staff')
+                                                <span> Staff {{ $skpd }}</span>
+                                            @endcan
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="ml-3 align-self-center">
+                                    <a href="#" class="text-white"><i class="icon-cog3"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /user menu -->
+
+
+                    @include('layouts.sidebar')
+
+                </div>
+                <!-- /sidebar content -->
+
+            </div>
+            <!-- /main sidebar -->
+        @elsecan('kepala_bidang')
+            <!-- Main sidebar -->
+            <div class="sidebar sidebar-light sidebar-main sidebar-expand-md"
+                style="background-color: #e3e4f1; background-image: linear-gradient(180deg,#ffffff 10%,#da6e5d 100%);
+            background-size: cover;">
+
+                <!-- Sidebar mobile toggler -->
+                <div class="sidebar-mobile-toggler text-center">
+                    <a href="#" class="sidebar-mobile-main-toggle">
+                        <i class="icon-arrow-left8"></i>
+                    </a>
+                    Navigation
+                    <a href="#" class="sidebar-mobile-expand">
+                        <i class="icon-screen-full"></i>
+                        <i class="icon-screen-normal"></i>
+                    </a>
+                </div>
+                <!-- /sidebar mobile toggler -->
+
+
+                <!-- Sidebar content -->
+                <div class="sidebar-content">
+
+                    <!-- User menu -->
+                    <div class="sidebar-user">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="mr-3">
+                                    <a href="#"><img
+                                            src="limitless/global_assets/images/placeholders/placeholder.jpg"
+                                            width="38" height="38" class="rounded-circle" alt=""></a>
+                                </div>
+
+                                <div class="media-body">
+                                    <div class="media-title font-weight-semibold">
+                                        {{ auth()->user()->nama }} <br>
+                                    </div>
+                                    <div class="media-title font-weight-normal">
+                                        @php
+                                            $skpdData = json_decode(auth()->user()->skpd, true);
+                                            $skpd = isset($skpdData['skpd']) ? $skpdData['skpd'] : '';
+                                        @endphp
+                                        <div class="media-title font-weight-normal">
+                                            @can('sekretariat')
+                                                <span> Sekretariat {{ $skpd }}</span>
+                                            @elsecan('kepala_dinas')
+                                                <span> Kepala Dinas {{ $skpd }}</span>
+                                            @elsecan('kepala_bidang')
+                                                <span> kepala Bidang {{ $skpd }}</span>
+                                            @elsecan('staff')
+                                                <span> Staff {{ $skpd }}</span>
+                                            @endcan
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="ml-3 align-self-center">
+                                    <a href="#" class="text-white"><i class="icon-cog3"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /user menu -->
+
+
+                    @include('layouts.sidebar')
+
+                </div>
+                <!-- /sidebar content -->
+
+            </div>
+            <!-- /main sidebar -->
+        @endcan
+
+
 
         <!-- Main content -->
         <div class="content-wrapper">
@@ -203,7 +504,16 @@ background-size: cover;">
 
     @livewireScripts
     @stack('js')
+    <!-- Additional JS files -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.0/viewer.min.js"></script>
 
+    <!-- Your custom JS -->
+    <script>
+        // Your custom JavaScript here
+    </script>
 </body>
 
 </html>

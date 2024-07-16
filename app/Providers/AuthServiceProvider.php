@@ -68,5 +68,13 @@ class AuthServiceProvider extends ServiceProvider
             return Gate::allows('sekretariat', $user) ||
                    Gate::allows('kepala_bidang', $user);
         });
+         // Gate untuk sekre-staff
+    Gate::define('sekre-staff', function ($user) {
+        return Gate::allows('sekretariat', $user) && Gate::allows('staff', $user);
+    });
+        Gate::define('kabid-sekre', function ($user) {
+            return Gate::allows('kabid', $user) &&
+                   Gate::allows('sekretariat', $user);
+        });
     }
 }

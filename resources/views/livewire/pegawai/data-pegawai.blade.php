@@ -32,6 +32,7 @@
                             <th>Nama</th>
                             <th>NIP</th>
                             <th>Bidang</th>
+                            <th>Idskpd</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,6 +42,7 @@
                                 <td>{{ $rowTb01->gdp }} {{ $rowTb01->nama }} {{ $rowTb01->gdb }}</td>
                                 <td>{{ $rowTb01->nip }}</td>
                                 <td>{{ $rowTb01->skpd->skpd }}</td>
+                                <td>{{ $rowTb01->skpd->idskpd }}</td>
                         @endforeach
                         </tr>
                     </tbody>

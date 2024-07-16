@@ -55,9 +55,9 @@ class Sppd extends Component
     {
         // $this->loadSppdData($id);
         $this->readonly = request()->routeIs('sppd-laporan'); // Tentukan readonly berdasarkan route
-        $this->sppd = $id;
+        $this->sppdId = $id;
         if ($id) {
-            $this->sppdId = $id;
+            $this->getEdit($id);
         } else {
             $this->edit = false;
         }
@@ -78,7 +78,8 @@ class Sppd extends Component
 
     public function addDasar()
     {
-        $this->formDasar[] = '';
+        // $this->formDasar[] = '';
+        $this->formDasar[] = ['dasar' => ''];
     }
 
     public function removeDasar($index)
@@ -92,7 +93,18 @@ class Sppd extends Component
         $this->edit = true;
         $this->sppd = ModelsSppd::findOrFail($id); // Gunakan ModelsSppd, bukan Sppd
         $this->form = array_intersect_key($this->sppd->toArray(), $this->form);
+
+        // Memuat data dasar_sppd ke dalam $formDasar
+        $dasarList = DasarSppd::where('sppd_id', $id)->pluck('dasar')->toArray();
+        $this->formDasar = []; // Reset $formDasar
+        foreach ($dasarList as $dasar) {
+            $this->formDasar[] = ['dasar' => $dasar]; // Isi $formDasar dengan setiap dasar sebagai array
+        }
+
+        // Memuat data sppd_pegawai ke dalam $formNama
+        $this->formNama['nip'] = SppdPegawai::where('sppd_id', $id)->pluck('nip')->toArray();
     }
+
 
     public function save()
     {
@@ -113,7 +125,6 @@ class Sppd extends Component
     {
         //simpan input form ke tabel sppd
         $sppd = ModelsSppd::create($this->form);
-
         // Simpan input dasar ke tabel dasar_sppd
         foreach ($this->formDasar as $dasar) {
             DasarSppd::create([
@@ -121,6 +132,14 @@ class Sppd extends Component
                 'dasar' => $dasar
             ]);
         }
+
+        // Simpan input dasar ke tabel dasar_sppd
+        // foreach ($this->formDasar as $item) {
+        //     DasarSppd::create([
+        //         'sppd_id' => $sppd->id,
+        //         'dasar' => $item['dasar']
+        //     ]);
+        // }
 
         // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai
         $nipList = $this->formNama['nip'] ?? []; // Ambil nip dari formNama
@@ -153,6 +172,7 @@ class Sppd extends Component
             'laporan_sppd' => $this->formLaporan['laporan_sppd'],
         ]);
 
+
         // Kirim pesan WhatsApp setelah laporan disimpan
         $phone = "089603967291"; // Nomor telepon untuk status Selesai
         $message = "Ye selesai. Silakan lihat";
@@ -169,158 +189,31 @@ class Sppd extends Component
         return redirect()->to('/sppd-index');
     }
 
-    //word aja asli
-    public function generateSpt($sppd)
-    {
-        // Membuat objek TemplateProcessor
-        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template1.docx');
-
-
-        // Mengambil data dari database dan membentuk string
-        $listDasar = $this->formDasar;
-        $block_dasar = [];
-        $n = 1;
-
-        foreach ($listDasar as $index => $dasarnya) {
-            // Menambahkan data ke dalam array blocks
-            $block_dasar[] = [
-                'dasar' => $index == 0 ? 'Dasar' : '', // Hanya mengatur 'Dasar' untuk iterasi pertama
-                'i' => $index == 0 ? ':' : '', // Hanya mengatur ':' untuk iterasi pertama
-                'n' => $n++, // Nomor urut
-                'dasarnya' => $dasarnya // Isi dasar
-            ];
-        }
-
-        $nipList = $this->formNama['nip'] ?? [];
-        $block_name = []; // Array to hold the data for the repeating block
-
-        foreach ($nipList as $index => $nip) {
-            $pegawai = Tb01::where('nip', $nip)->first();
-            if ($pegawai) {
-                $gdp = $pegawai->gdp ?? '';
-                $nama = $pegawai->nama ?? '';
-                $gdb = $pegawai->gdb ?? '';
-                $nip = $pegawai->nip ?? '';
-                $jabatan = '';
-
-                // Cek apakah pegawai memiliki jabfung
-                $jabfung = Tb01::join('a_jabfung', 'tb_01.idjabfung', '=', 'a_jabfung.idjabfung')
-                    ->where('tb_01.nip', $nip)
-                    ->select('a_jabfung.jabfung')
-                    ->first();
-
-                // Jika pegawai tidak memiliki jabfung, coba cari jabfungum
-                if ($jabfung) {
-                    $jabatan = $jabfung->jabfung;
-                } else {
-                    $jabfungum = Tb01::join('a_jabfungum', 'tb_01.idjabfungum', '=', 'a_jabfungum.idjabfungum')
-                        ->where('tb_01.nip', $nip)
-                        ->select('a_jabfungum.jabfungum')
-                        ->first();
-
-                    if ($jabfungum) {
-                        $jabatan = $jabfungum->jabfungum;
-                    } else {
-                        $jabjbt = Tb01::join('a_skpd', 'tb_01.idjabjbt', '=', 'a_skpd.idskpd')
-                            ->where('tb_01.nip', $nip)
-                            ->select('a_skpd.jab')
-                            ->first();
-
-                        if ($jabjbt) {
-                            $jabatan = $jabjbt->jab;
-                        }
-                    }
-                }
-
-                $golonganData = Tb01::join('a_golruang', 'tb_01.idgolrupkt', '=', 'a_golruang.idgolru')
-                    ->where('tb_01.nip', $nip)
-                    ->select('a_golruang.golru', 'a_golruang.pangkat')
-                    ->first();
-                $golongan = $golonganData ? str_replace('\/', '/', $golonganData->golru) : '';
-                $pangkat = $golonganData ? $golonganData->pangkat : '';
-                // Add the data to the block
-                $block_name[] = [
-                    'kepada' => $index == 0 ? 'Kepada' : '',
-                    'o' => $index + 1,
-                    'i2' => $index == 0 ? ':' : '',
-                    'nama' => $gdp . ' ' . $nama . ' ' . $gdb,
-                    'nip' => $nip,
-                    'pangkat' => $pangkat,
-                    'golongan' => $golongan,
-                    'jabatan' => $jabatan
-                ];
-            }
-        }
-
-        // Mengambil data kepala dinas dari tabel tb_01
-        $kepalaDinas = Tb01::where('idskpd', $this->form['kdunit'] ?? '')->first();
-        // Mengambil tanggal dari input data
-        $tanggal = $this->form['ditetapkan_tgl'] ?? now()->format('Y-m-d'); // Menggunakan tanggal saat ini jika tidak ada tanggal di input data
-        // Memastikan data kepala dinas ada sebelum digunakan
-        if ($kepalaDinas) {
-            // Set nilai untuk placeholder dalam dokumen
-            $phpWord->setValues([
-                'untuk' => strval($this->form['untuk'] ?? ''),
-                'tanggal' => $tanggal,
-                'n_kep' => $kepalaDinas->nama ?? '',
-                'n_pangkat' => $kepalaDinas->pangkat ?? '',
-                'n_nip' => $kepalaDinas->nip ?? ''
-            ]);
-        }
-        // Mengisi block dasar
-        $phpWord->cloneBlock('block_dasar', 0, true, false, $block_dasar);
-        $phpWord->cloneBlock('block_name', 0, true, false, $block_name);
-
-        // Membuat nama file berdasarkan tanggal
-        $namaDokumen = 'SPT_' . date('d F Y', strtotime($tanggal)) . '.docx';
-
-        // $namaDokumenHTML = 'SPT_' . date('d F Y', strtotime($tanggal)) . '.html';
-        // Menyimpan dokumen dengan nama yang telah dibuat
-        $phpWord->saveAs($namaDokumen);
-        // $this->convertToPdf($namaDokumen);
-        // $phpWord->saveAs($namaDokumenHTML);
-    }
 
     public function storeUpdate()
     {
         // Temukan data SPPD yang akan diperbarui
-        $sppd = ModelsSppd::findOrFail($this->sppdId); // Menggunakan $this->sppdId daripada $this->sppd->id
+        $sppd = ModelsSppd::findOrFail($this->sppdId);
 
-        // Perbarui data SPPD dengan nilai baru dari formulir yang diedit
         $sppd->update($this->form);
 
+        // Hapus semua dasar yang lama
+        DasarSppd::where('sppd_id', $sppd->id)->delete();
+
         // Simpan input dasar ke tabel dasar_sppd
-        DasarSppd::where('sppd_id', $sppd->id)->update([
-            'dasar' => $this->formDasar['dasar']
-        ]);
-
-        LaporanSppd::where('sppd_id', $sppd->id)->update([
-            'laporan_sppd' => $this->formLaporan['laporan_sppd']
-        ]);
-
-        $laporanSppd = $this->formLaporan['laporan_sppd'];
-
-        if ($laporanSppd !== null) {
-            // Jika laporan_sppd diisi, maka simpan data dengan nilai "Selesai"
-            StatusLaporan::updateOrCreate(
-                ['sppd_id' => $sppd->id],
-                ['status_laporan' => 'Selesai']
-            );
+        foreach ($this->formDasar as $item) {
+            DasarSppd::create([
+                'sppd_id' => $sppd->id,
+                'dasar' => $item['dasar']
+            ]);
         }
 
 
-        // Ambil nip yang di-submit dari form
+        // Hapus semua entri sppd_pegawai untuk sppd_id yang bersangkutan
+        SppdPegawai::where('sppd_id', $sppd->id)->delete();
+        // Simpan nip dan idskpd dari select nama ke tabel sppd_pegawai
         $nipList = $this->formNama['nip'] ?? []; // Ambil nip dari formNama
-
-        // Dapatkan daftar nip yang sudah ada di database untuk sppd_id yang spesifik
-        $existingNips = SppdPegawai::where('sppd_id', $sppd->id)->pluck('nip')->toArray();
-
-        // Cari nip yang perlu ditambahkan dan yang perlu dihapus
-        $nipsToAdd = array_diff($nipList, $existingNips);
-        $nipsToRemove = array_diff($existingNips, $nipList);
-
-        // Tambahkan nip baru yang tidak ada di database
-        foreach ($nipsToAdd as $nip) {
+        foreach ($nipList as $nip) {
             $pegawai = Tb01::where('nip', $nip)->first(); // Cari data pegawai berdasarkan nip
             if ($pegawai) {
                 SppdPegawai::create([
@@ -331,26 +224,12 @@ class Sppd extends Component
             }
         }
 
-        // Hapus nip yang tidak lagi ada di form
-        SppdPegawai::where('sppd_id', $sppd->id)->whereIn('nip', $nipsToRemove)->delete();
+        StatusLaporan::updateOrCreate(
+            ['sppd_id' => $sppd->id],
+            ['status_laporan' => 'Belum Selesai']
+        );
 
-        // Update nip yang ada di database
-        foreach ($nipList as $nip) {
-            $pegawai = Tb01::where('nip', $nip)->first(); // Cari data pegawai berdasarkan nip
-            if ($pegawai) {
-                SppdPegawai::where('sppd_id', $sppd->id)->where('nip', $nip)->update([
-                    'idskpd' => $pegawai->idskpd
-                ]);
-            }
-        }
 
-        // Reset nilai variabel setelah disimpan
-        $this->reset();
-
-        // Generate and save the document
-        $this->generateSpt($sppd);
-
-        // Redirect ke halaman sppd-index setelah data disimpan
         return redirect()->to('/sppd-index');
     }
 

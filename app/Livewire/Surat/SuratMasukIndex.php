@@ -13,14 +13,16 @@ use Livewire\WithPagination;
 class SuratMasukIndex extends Component
 {
     use WithPagination;
-    public $idHapus, $suratmasuks, $cari, $tindak_lanjuts, $status_surats, $data1;
+    public $idHapus, $suratmasuks, $cari, $tindak_lanjuts, $status_surats, $data1, $filteredData, $showHeader = true;
 
-    public function mount()
+    public function mount($showHeader = true)
     {
-        $this->suratmasuks = SuratMasuk::all();
+        $this->showHeader = $showHeader;
+        // $this->suratmasuks = SuratMasuk::all();
         $this->tindak_lanjuts = TindakLanjut::all();
         $this->status_surats = StatusSurat::all();
-        $this->data1 = SuratMasuk::with(['tindakLanjuts', 'statusSurats'])->get();
+        // $this->data1 = SuratMasuk::with(['tindakLanjuts', 'statusSurats'])->get();
+        // $this->filteredData = SuratMasuk::orderBy('id', 'desc')->get();
     }
 
     public function getFilteredDataProperty()
@@ -36,6 +38,7 @@ class SuratMasukIndex extends Component
         $this->idHapus = $id;
         $this->hapus();
         $this->suratmasuks = $this->suratmasuks->except($id);
+        // $this->filteredData = SuratMasuk::orderBy('id', 'desc')->get();
     }
 
     public function hapus()
@@ -48,9 +51,10 @@ class SuratMasukIndex extends Component
     {
         $data = ModelsSuratMasukIndex::query()
             ->with('tindakLanjuts', 'statusSurats')
+            ->orderBy('id', 'desc')
             ->where('nomor_surat', 'like', '%' . $this->cari . '%')
             ->orWhere('acara', 'like', '%' . $this->cari . '%')
-            ->paginate(10);
+            ->paginate(5);
 
         $tindak_lanjuts = TindakLanjut::all();
         $status_surats = StatusSurat::all();

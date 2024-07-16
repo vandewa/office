@@ -7,8 +7,11 @@
             </div>
             <div class="card-body">
                 <div class="col-12">
-                    <form action=""
-                        @if (request()->routeIs('sppd')) wire:submit='save' @else  wire:submit='submitLaporan' @endif>
+                    {{-- <form action=""
+
+                        @if (request()->routeIs('sppd')) wire:submit='save' @else  wire:submit='submitLaporan' @endif> --}}
+                    <form action="" wire:submit.prevent='save'>
+                        @csrf
                         <div class="row" style="margin: 20px">
                             <div class="col-6">
                                 <!-- Nama Pegawai -->
@@ -232,7 +235,7 @@
                                         @foreach ($formDasar as $index => $dasar)
                                             <div class="form-group">
                                                 <textarea class="form-control" rows="6" cols="50" required="" data-name="dasar" rows="2"
-                                                    cols="50" name="dasar[]" wire:model="formDasar.{{ $index }}" {{ $readonly ? 'disabled' : '' }}></textarea>
+                                                    cols="50" name="dasar[]" wire:model="formDasar.{{ $index }}.dasar" {{ $readonly ? 'disabled' : '' }}></textarea>
                                                 <button type="button" class="btn btn-danger"
                                                     wire:click="removeDasar({{ $index }})">Hapus
                                                     Dasar</button>

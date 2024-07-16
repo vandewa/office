@@ -67,12 +67,6 @@ class SppdIndex extends Component
         return redirect()->to('/sppd-index');
     }
 
-    public function storeUpdate()
-    {
-        Sppd::find($this->idHapus)->update($this->form);
-        $this->reset();
-    }
-
     public function render()
     {
         $data = Sppd::query()

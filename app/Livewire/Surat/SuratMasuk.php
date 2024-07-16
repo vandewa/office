@@ -4,6 +4,7 @@ namespace App\Livewire\Surat;
 
 use App\Jobs\KirimWA;
 use Livewire\Component;
+use App\Models\Document;
 use App\Models\Simpeg\Tb01;
 use App\Models\StatusSurat;
 use App\Models\Simpeg\ASkpd;
@@ -18,8 +19,8 @@ class SuratMasuk extends Component
 {
     use WithFileUploads;
 
-    public $nama, $suratmasuk, $opdOptions = [], $suratmasukId = null, $edit = false, $readonly = false, $skpd, $tindakLanjut;
-    // public $dok_surat;
+    public $nama, $suratmasuk, $opdOptions = [], $suratmasukId = null, $edit = false, $readonly = false, $skpd, $tindakLanjut, $document_id, $document;
+
     public $form = [
         'jenis_agenda_tp' => null,
         'kode_lama' => null,
@@ -34,7 +35,7 @@ class SuratMasuk extends Component
         'jamMulai' => null,
         'tempat' => null,
         'perihal' => null,
-        // 'dok_surat' => null,
+
     ];
 
     public $formTindakLanjut  = [
@@ -52,6 +53,7 @@ class SuratMasuk extends Component
 
     public function mount($id = null)
     {
+        $this->document_id = session('document_id');
         $this->suratmasuk = $id;
         $this->tindakLanjut = TindakLanjut::where('surat_masuk_id', $id)->first();
         $this->readonly = request()->routeIs('suratmasuk-disposisi'); // Tentukan readonly berdasarkan route
@@ -66,7 +68,6 @@ class SuratMasuk extends Component
         } else {
             $this->edit = false;
         }
-
         if (Auth::check()) {
             $nip = Auth::user()->nip;
             $kdunit = Tb01::where('nip', $nip)->value('kdunit');
@@ -123,30 +124,28 @@ class SuratMasuk extends Component
 
     public function store()
     {
-        // $this->validate([
-        //     'dok_surat' => 'file|mimes:pdf|max:10240', // 10MB Max and only PDF files
-        // ]);
-        // // Simpan file dan dapatkan path-nya
-        // $path = $this->dok_surat->store('dok_surat');
-
-        // Menyimpan path file ke dalam database dan membuat entri surat masuk baru
-        $suratmasuk = ModelsSuratMasuk::create([
-            'jenis_agenda_tp' => $this->form['jenis_agenda_tp'],
-            'kode_lama' => $this->form['kode_lama'],
-            'kode_baru' => $this->form['kode_baru'],
-            'nomor_surat' => $this->form['nomor_surat'],
-            'opd_id' => $this->form['opd_id'],
-            'tgl_surat' => $this->form['tgl_surat'],
-            'tgl_terima' => $this->form['tgl_terima'],
-            'acara' => $this->form['acara'],
-            'tanggalBerangkat' => $this->form['tanggalBerangkat'],
-            'tanggalPulang' => $this->form['tanggalPulang'],
-            'jamMulai' => $this->form['jamMulai'],
-            'tempat' => $this->form['tempat'],
-            'perihal' => $this->form['perihal'],
-            // 'dok_surat' => $path
+        $this->validate([
+            // 'form.jenis_agenda_tp' => 'required|in:JENIS_SURAT_TP_01,JENIS_SURAT_TP_02',
+            'form.kode_lama' => 'nullable|string',
+            'form.kode_baru' => 'nullable|string',
+            'form.nomor_surat' => 'nullable|string',
+            'form.opd_id' => 'nullable|string',
+            'form.tgl_surat' => 'nullable|date',
+            'form.tgl_terima' => 'nullable|date',
+            'form.acara' => 'nullable|string',
+            'form.tanggalBerangkat' => 'nullable|date',
+            'form.tanggalPulang' => 'nullable|date',
+            'form.jamMulai' => 'nullable|time',
+            'form.tempat' => 'nullable|string',
+            'form.perihal' => 'nullable|string',
+            'document_id' => 'required|exists:documents,id',
         ]);
 
+        // Masukkan document_id ke dalam $form
+        $this->form['document_id'] = $this->document_id;
+
+        // Buat entri SuratMasuk yang baru
+        $suratmasuk = ModelsSuratMasuk::create($this->form);
 
         // Buat entri status surat baru dengan status 'Verifikasi Kepala Dinas'
         StatusSurat::create([
@@ -155,8 +154,8 @@ class SuratMasuk extends Component
         ]);
 
         // Kirim pesan WhatsApp setelah laporan disimpan
-        $phone = "081393982874"; // Nomor telepon untuk status Selesai
-        $message = "k1"; // ke kadin
+        $phone = ""; // Nomor telepon kepala dinas
+        $message = "Pesan WhatsApp Kepada Kepala Dinas untuk Memberikan komentar dan disposisi"; // ke kadin
         // $this->sendWhatsApp($phone, $message);
 
         // Redirect ke halaman suratmasuk-index setelah data disimpan
@@ -165,6 +164,8 @@ class SuratMasuk extends Component
 
     public function storeUpdate()
     {
+        // dd($this->formTindakLanjut);
+
         $suratmasuk = ModelsSuratMasuk::findOrFail($this->suratmasukId);
 
         if (Gate::allows('sekretariat', Auth::user())) {
@@ -191,11 +192,12 @@ class SuratMasuk extends Component
                 'status_surat' => 'Perlu Verifikasi Kepala Dinas',
             ]);
             // Kirim pesan WhatsApp setelah laporan disimpan
-            $phone = "081393982874"; // Nomor telepon untuk status Selesai
-            $message = "k1"; // ke kadin
-            // $this->sendWhatsApp($phone, $message);
+            $phone = ""; // Nomor telepon untuk status Selesai
+            $message = "Pesan WhatsApp Kepada Kepala Dinas untuk Memberikan komentar dan disposisi"; // ke kadin
+            $this->sendWhatsApp($phone, $message);
 
         } elseif (Gate::allows('kepala_dinas', Auth::user())) {
+            // dd($this->formTindakLanjut);
             // Create or update tindak lanjut records for Kepala Dinas without deleting existing ones
             foreach ($this->formTindakLanjut['diteruskan_kepada'] as $diteruskan_kepada) {
                 TindakLanjut::updateOrCreate([
@@ -207,14 +209,16 @@ class SuratMasuk extends Component
                     'nip' => Auth::user()->nip
                 ]);
             }
+
+            // dd('Data disimpan untuk Kepala Dinas');
             if ($this->formTindakLanjut['revisi']) {
                 $statusSurat = StatusSurat::where('surat_masuk_id', $suratmasuk->id)->first();
                 $statusSurat->update([
                     'status_surat' => 'Sekretariat',
                 ]);
                 // Kirim pesan WhatsApp setelah laporan disimpan
-                $phone = "081393982874"; // Nomor telepon untuk status Selesai
-                $message = "k1"; // ke kadin
+                $phone = ""; // Nomor telepon untuk status Selesai
+                $message = "Pesan WhatsApp Kepada Sekretariat untuk Revisi"; // ke kadin
                 // $this->sendWhatsApp($phone, $message);
 
             } else {
@@ -223,9 +227,9 @@ class SuratMasuk extends Component
                     'status_surat' => 'Perlu Verifikasi Kepala Bidang',
                 ]);
                 // Kirim pesan WhatsApp setelah laporan disimpan
-                $phone = "081393982874"; // Nomor telepon untuk status Selesai
-                $message = "k2"; // ke kabid
-                // $this->sendWhatsApp($phone, $message);
+                $phone = ""; // Nomor telepon untuk status Selesai
+                $message = "Pesan WhatsApp Kepada Kepala Bidang untuk Memberikan komentar dan disposisi"; // ke kabid
+                $this->sendWhatsApp($phone, $message);
             }
         } elseif (Gate::allows('kepala_bidang', Auth::user())) {
             // Create or update tindak lanjut records for Kepala Bidang without deleting existing ones
@@ -244,8 +248,8 @@ class SuratMasuk extends Component
                     'status_surat' => 'Sekretariat',
                 ]);
                 // Kirim pesan WhatsApp setelah laporan disimpan
-                $phone = "081393982874"; // Nomor telepon untuk status Selesai
-                $message = "k1"; // ke kadin
+                $phone = ""; // Nomor telepon untuk status Selesai
+                $message = "Pesan WhatsApp Kepada Sekretariat untuk Revisi"; // ke kadin
                 // $this->sendWhatsApp($phone, $message);
 
             } else {
@@ -254,8 +258,8 @@ class SuratMasuk extends Component
                     'status_surat' => 'Sekretariat',
                 ]);
                 // Kirim pesan WhatsApp setelah laporan disimpan
-                $phone = "081393982874"; // Nomor telepon untuk status Selesai
-                $message = "k2"; // ke kabid
+                $phone = ""; // Nomor telepon untuk status Selesai
+                $message = "Pesan WhatsApp Kepada Sekretariat untuk Mendeskripsikan Surat"; // ke kabid
                 // $this->sendWhatsApp($phone, $message);
             }
         }
@@ -279,8 +283,8 @@ class SuratMasuk extends Component
                 ]);
 
                 // Send WhatsApp message after status is updated
-                $phone = "081393982874"; // Phone number for status Selesai
-                $message = "k4"; // Message to all staff
+                $phone = ""; // Phone number for status Selesai
+                $message = "Ada surat masuk"; // Message to all staff
                 // $this->sendWhatsApp($phone, $message);
             }
         }
@@ -293,14 +297,20 @@ class SuratMasuk extends Component
         return $this->readonly;
     }
 
+    public function back()
+    {
+        return redirect()->route('suratmasuk-index');
+    }
+
     public function render()
     {
-        $surat = ModelsSuratMasuk::first(); // Contoh pengambilan data surat, sesuaikan dengan kebutuhan Anda
+        $surat = ModelsSuratMasuk::with('document')->find($this->suratmasukId);
         return view('livewire.surat.surat-masuk', [
             'surat' => $surat,
             'skpd' => $this->skpd,
             'nama' => $this->nama,
             'tindakLanjut' => $this->tindakLanjut,
+            // 'document' => $this->document
         ]);
     }
 }

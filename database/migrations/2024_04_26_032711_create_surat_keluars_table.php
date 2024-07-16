@@ -13,14 +13,22 @@ return new class extends Migration
     {
         Schema::create('surat_keluars', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('document_id')->nullable(); // Tambahkan kolom ini
+            // $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
             $table->string('nomor_surat')->nullable();
             $table->string('jenis_surat')->nullable();
             $table->string('tanggal_surat')->nullable();
             $table->string('perihal')->nullable();
             $table->string('tujuan')->nullable();
-            $table->string('pembukaan_surat')->nullable();
-            $table->string('isi_surat')->nullable();
-            $table->string('penutup_surat')->nullable();
+            $table->string('tempat_tujuan')->nullable();
+            $table->string('pembukaan')->nullable();
+            $table->string('isi')->nullable();
+            $table->string('hari')->nullable();
+            $table->date('tanggal')->nullable();
+            $table->time('pukul_mulai')->nullable();
+            $table->time('pukul_selesai')->nullable();
+            $table->string('tempat_acara')->nullable();
+            $table->string('penutup')->nullable();
             $table->string('lampiran')->nullable();
             $table->timestamps();
         });

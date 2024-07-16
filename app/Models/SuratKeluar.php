@@ -20,4 +20,9 @@ class SuratKeluar extends Model
     {
         return $this->hasMany(tindakLanjut::class, 'surat_keluar_id');
     }
+    
+    public function document()
+    {
+        return $this->belongsTo(Document::class);
+    }
 }

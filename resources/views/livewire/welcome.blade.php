@@ -324,7 +324,7 @@
                         SIPE</h1>
                     <span class="spannya">
                         Sistem Informasi Perkantoran Elektronik
-                        <h5>staff
+                        {{-- <h5>staff
                             199703032020121012
 
                             kepala dinas
@@ -340,7 +340,7 @@
                             sekretariat
                             196701011989032018
 
-                            </h5>
+                            </h5> --}}
                     </span>
                 </div>
                 <div class="paddingnya1">

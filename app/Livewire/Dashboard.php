@@ -26,9 +26,16 @@ class Dashboard extends Component
     public function filteredSuratMasuk()
     {
         return SuratMasuk::with(['tindakLanjuts', 'statusSurats'])
-            ->when(Gate::allows('sekretariat', Auth::user()), function ($query) {
+            ->when(Gate::allows('sekre-staff', Auth::user()), function ($query) {
                 $query->whereHas('statusSurats', function ($q) {
-                    $q->where('status_surat', 'Sekretariat');
+                    $q->where('status_surat', 'Sekretariat')
+                        ->orWhere('status_surat', 'Sudah Distribusikan');
+                });
+            })
+            ->when(Gate::allows('kabid-sekre', Auth::user()), function ($query) {
+                $query->whereHas('statusSurats', function ($q) {
+                    $q->where('status_surat', 'Sekretariat')
+                        ->orWhere('status_surat', 'Perlu Verifikasi Kepala Bidang');
                 });
             })
             ->when(Gate::allows('kepala_dinas', Auth::user()), function ($query) {
@@ -52,9 +59,15 @@ class Dashboard extends Component
     public function filteredSuratKeluar()
     {
         return SuratKeluar::with(['tindakLanjuts', 'statusSurats'])
-            ->when(Gate::allows('sekretariat', Auth::user()), function ($query) {
+            ->when(Gate::allows('sekre-staff', Auth::user()), function ($query) {
                 $query->whereHas('statusSurats', function ($q) {
                     $q->where('status_surat', 'Sekretariat');
+                });
+            })
+            ->when(Gate::allows('kabid-sekre', Auth::user()), function ($query) {
+                $query->whereHas('statusSurats', function ($q) {
+                    $q->where('status_surat', 'Sekretariat')
+                        ->orWhere('status_surat', 'Perlu Verifikasi Kepala Bidang');
                 });
             })
             ->when(Gate::allows('kepala_bidang', Auth::user()), function ($query) {

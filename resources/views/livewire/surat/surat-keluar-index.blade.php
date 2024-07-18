@@ -102,10 +102,10 @@
                                             class="btn btn-flat btn-sm">
                                             <i class="icon-eye"></i>
                                         </a>
-                                        <a href="{{ route('print-suratkeluar', ['id' => $suratkeluar->id]) }}"
-                                            class="btn btn-flat btn-sm">
+                                        <a href="{{ route('print-suratkeluar', ['id' => $suratkeluar->id]) }}" class="btn btn-flat btn-sm">
                                             <i class="icon-printer"></i>
                                         </a>
+
                                     </td>
                                 </tr>
                             @endforeach

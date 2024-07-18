@@ -76,6 +76,17 @@ class SppdController extends Controller
             }
         }
 
+        // Pemeriksaan keberadaan file gambar
+        $logoPath = public_path('surat/logo.png');
+        $qrCodePath = public_path('surat/qr-code.png');
+
+        if (!file_exists($logoPath) || !file_exists($qrCodePath)) {
+            abort(404, 'File gambar tidak ditemukan');
+        }
+
+        $logoUrl = asset('surat/logo.png');
+        $qrCodeUrl = asset('surat/qr-code.png');
+
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isPhpEnabled', true);
@@ -87,23 +98,19 @@ class SppdController extends Controller
             'kepalaDinas' => $kepalaDinas,
             'jab' => $jab,
             'sppdPegawais' => $sppdPegawais,
-            'pegawaiData' => $pegawaiData // Pass data pegawai ke view
+            'pegawaiData' => $pegawaiData,
+            'logoPath' => $logoPath,
+            'qrCodeUrl' => $qrCodeUrl
         ])->render();
 
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        // return $dompdf->stream('sppd.pdf');
-        return view('livewire.sppd.print-spt', [
-            'kepalaDinas' => $kepalaDinas,
-            'jab' => $jab,
-            'sppd' => $sppd,
-            'dasar_sppd' => $dasar_sppd,
-            'sppdPegawais' => $sppdPegawais,
-            'pegawaiData' => $pegawaiData // Pass data pegawai ke view
-        ]);
+        return $dompdf->stream('spt.pdf');
     }
+
+
 
     public function printspd($id)
     {
@@ -185,6 +192,7 @@ class SppdController extends Controller
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
+        return $dompdf->stream('spd.pdf');
         return view('livewire.sppd.print-spd', [
             'kepalaDinas' => $kepalaDinas,
             'jab' => $jab,

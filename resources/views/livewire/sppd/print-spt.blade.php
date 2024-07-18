@@ -41,9 +41,10 @@
 <body onload="window.print()">
     <center>
         <!-- Header and content specific to the first page -->
-        <table>
+        <table width="500">
             <tr>
-                <td style="text-align: left;"><img src="{{ asset('surat/logo.png') }}" alt="Logo" width="170"></td>
+                {{-- <td style="text-align: left;"><img src="{{ asset('surat/logo.png') }}" alt="Logo" width="170"></td> --}}
+                <td style="text-align: left;"><img src="{{ $logoPath }}" alt="Logo" width="170"></td>
                 <td>
                     <center>
                         <font size="3">PEMERINTAH KABUPATEN WONOSOBO</font><br>
@@ -58,7 +59,7 @@
             </tr>
         </table>
         <hr>
-        <table width="648">
+        <table width="500">
             <tr>
                 <td class="text"><b><u>SURAT PERINTAH TUGAS</u></b></td>
             </tr>
@@ -158,7 +159,7 @@
         <br>
         <br>
         <br>
-        <table width="700">
+        <table width="500">
 
             <tr>
                 <td width="350"></td>

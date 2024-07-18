@@ -11,6 +11,9 @@ class TindakLanjut extends Model
     use HasFactory;
     protected $guarded = [];
     protected $table = 'tindak_lanjuts';
+    protected $casts = [
+        'diteruskan_kepada' => 'array',
+    ];
 
     public function suratMasuk()
     {

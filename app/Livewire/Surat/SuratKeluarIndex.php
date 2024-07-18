@@ -26,10 +26,24 @@ class SuratKeluarIndex extends Component
 
     public function getFilteredDataProperty()
     {
-        return $this->data2->filter(function($item) {
+        return $this->data2->filter(function ($item) {
             return $item->statusSurats->contains('status_surat', 'Sudah Distribusikan');
         });
     }
+
+    // public function delete($id)
+    // {
+    //     $this->idHapus = $id;
+    //     $this->hapus();
+    //     $this->suratkeluars = $this->suratkeluars->except($id);
+    // }
+
+    // public function hapus()
+    // {
+    //     SuratKeluar::destroy($this->idHapus);
+    //     $this->idHapus = null; // Reset idHapus after deletion
+    //     return redirect()->to('/suratkeluar-index');
+    // }
 
 
     public function delete($id)
@@ -38,7 +52,7 @@ class SuratKeluarIndex extends Component
         $this->hapus();
         // $this->suratkeluars = $this->suratkeluars->except($id);
         $this->suratkeluars = $this->suratkeluars->where('id', '!=', $id);
-        // $this->filteredData = Suratkeluar::orderBy('id', 'desc')->get();
+        $this->filteredData = Suratkeluar::orderBy('id', 'desc')->get();
     }
 
     public function hapus()

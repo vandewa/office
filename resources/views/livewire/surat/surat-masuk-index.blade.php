@@ -1,3 +1,4 @@
+
 <div>
     @if ($showHeader)
         <x-slot name="header">
@@ -53,7 +54,7 @@
                                 <th class="text-left" style="width: 17px;" aria-label="No">Nomor Agenda</th>
                                 <th style="width: 150px;" aria-label="Tanggal">Tanggal</th>
                                 {{-- <th style="width: 222px;" aria-label="Jenis">Jenis</th> --}}
-                                <th style="width: 310px;" aria-label="Disposisi">Disposisi</th>
+                                <th class="fixed-width" style="width: 310px;" aria-label="Disposisi">Disposisi</th>
                                 <th style="width: 191px;" aria-label="Subject">Subject</th>
                                 <th style="width: 222px;" aria-label="Keterangan">Keterangan</th>
                                 @can('view-status-surat')
@@ -68,7 +69,7 @@
                                     <td>{{ $loop->index + $data->firstItem() }}</td>
                                     <td>{{ $suratmasuk->tgl_surat }}</td>
                                     {{-- <td>{{ $suratmasuk->jenis_agenda_tp }}</td> --}}
-                                    <td>
+                                    <td class="fixed-width">
                                         @foreach ($suratmasuk->tindakLanjuts as $tindakLanjut)
                                             <span class="badge bg-purple">{{ $tindakLanjut->diteruskan_kepada }}</span>
                                             <span class="badge bg-blue">{{ $tindakLanjut->disposisi }}</span>

@@ -41,7 +41,7 @@
 <body onload="window.print()">
     <center>
         <!-- Header and content specific to the first page -->
-        <table>
+        <table width="500">
             <tr>
                 <td><img src="{{ asset('surat/logo.png') }}" alt="Logo" width="200"></td>
                 <td>
@@ -57,7 +57,7 @@
             </tr>
         </table>
         <hr>
-        <table width="648">
+        <table width="500">
             <tr>
                 <td></td>
                 <td width="100">Lembar ke</td>
@@ -78,13 +78,13 @@
             </tr>
         </table>
         <br>
-        <table width="648">
+        <table width="500">
             <tr>
                 <td class="text"><b><u>SURAT PERJALANAN DINAS (SPD)</u></b></td>
             </tr>
         </table>
         <br>
-        <table width="648">
+        <table width="500">
             <tr>
                 <td width="20">1.</td>
                 <td width="200">Pejabat Pembuat Komitmen</td>
@@ -209,9 +209,9 @@
             </tr>
         </table>
         <br>
-        <table width="648">
+        <table width="500">
             <tr>
-                <td width="400"></td>
+                <td width="150"></td>
                 <td width="150">
                     <center>
                         Dikeluarkan di: Wonosobo<br>

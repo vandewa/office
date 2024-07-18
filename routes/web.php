@@ -59,14 +59,13 @@ Route::get('suratmasuk-index', SuratMasukIndex::class)->name('suratmasuk-index')
 Route::get('suratkeluar/{id?}', SuratKeluar::class)->name('suratkeluar')->middleware('can:sekretariat');
 Route::get('suratkeluar/{id?}/verifikasi', SuratKeluar::class)->name('suratkeluar-verifikasi');
 Route::get('suratkeluar-index', SuratKeluarIndex::class)->name('suratkeluar-index');
+// Route::get('suratkeluar/{id}/print-suratkeluar', [SuratController::class, 'printOrRenderSuratKeluar'])->name('print-suratkeluar');
+// Rute untuk menghasilkan PDF
 // Route::get('suratkeluar/{id}/print-suratkeluar', [SuratController::class, 'printsuratkeluar'])->name('print-suratkeluar');
-// Route::get('suratkeluar/{id}/print-suratkeluar', [SuratController::class, 'render']);
-Route::get('suratkeluar/{id}/print-suratkeluar', [SuratController::class, 'printOrRenderSuratKeluar'])->name('print-suratkeluar');
+Route::get('suratkeluar/{id}/print-suratkeluar', [SuratController::class, 'generateOrRenderSuratKeluar'])->name('print-suratkeluar');
+// Route::get('suratkeluar/{id}/print-suratkeluar', [SuratController::class, 'render'])->name('print-suratkeluar');
+
 Route::get('datapegawai', DataPegawai::class)->name('datapegawai');
-Route::get('/signature', [SignatureController::class, 'signature'])->name('signature.index');
-Route::post('/signature/pad', [SignatureController::class, 'signaturePadStore'])->name('post.signature');
-
-
 
 Route::get('/unggah-dokumen', [UnggahDokumenController::class, 'create'])->name('unggah-dokumen.create');
 Route::post('/unggah-dokumen', [UnggahDokumenController::class, 'store'])->name('unggah-dokumen.store');
@@ -75,7 +74,7 @@ Route::get('/preview-dokumen/{id}', [UnggahDokumenController::class, 'preview'])
 Route::get('/tampilkan-dokumen/{id}', [UnggahDokumenController::class, 'show'])->name('tampilkan-dokumen.show');
 Route::get('/tampilkan-dokumen/{id}/suratkeluar', [UnggahDokumenController::class, 'showKeluar'])->name('tampilkan-dokumen.showkeluar');
 Route::post('/documents/upload/{suratKeluarId}', [UnggahDokumenController::class, 'storeKeluar'])->name('documents.upload');
-
+// Route::get('suratkeluar/{id}/print-suratkeluar', [SuratController::class, 'printsuratkeluar'])->name('print-suratkeluar');
 
 
 // Route::post('/send-whatsapp', [SuratMasuk::class, 'sendWhatsApp'])->name('send.whatsapp');

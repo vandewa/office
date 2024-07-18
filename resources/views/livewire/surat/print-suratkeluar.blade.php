@@ -41,7 +41,7 @@
 <body onload="window.print()">
     <center>
         <!-- Header and content specific to the first page -->
-        <table>
+        <table width="500">
             <tr>
                 <td><img src="{{ asset('surat/logo.png') }}" alt="Logo" width="200"></td>
                 <td>
@@ -92,9 +92,9 @@
         <br>
         <br>
         <table width="648">
-            <tr>
+            {{-- <tr>
                 <td style="padding-bottom: 6px">Dengan hormat,</td>
-            </tr>
+            </tr> --}}
             <tr>
                 <td style="padding: 10px 0;">{{ $suratkeluar->pembukaan ?? '-' }}</td>
             </tr>
@@ -135,7 +135,7 @@
 
             <tr>
                 <td width="250"></td>
-                <td class="text" align="center"> {{ $jab }}</td>
+                <td class="text" align="center"> {{ $jab ?? '-' }}</td>
             </tr>
             <tr>
                 <td width="250"></td>
@@ -143,19 +143,19 @@
             </tr>
             <tr>
                 <td width="250" height="70"></td>
-                @if ($metodeTtd === 'ttd_online')
+                {{-- @if ($metodeTtd === 'ttd_online') --}}
                     <td align="center"><img src="{{ asset('surat/qr-code.png') }}" alt="Logo" width="100"></td>
-                @endif
+                {{-- @endif --}}
                 <td></td>
             </tr>
             <tr>
                 <td width="250"></td>
-                <td class="text" align="center"><b><u> {{ $kepalaDinas->gdp }} {{ $kepalaDinas->nama }}
-                            {{ $kepalaDinas->gdb }}</u></b></td>
+                <td class="text" align="center"><b><u> {{ $kepalaDinas->gdp ?? '-'}} {{ $kepalaDinas->nama ?? '-'}}
+                            {{ $kepalaDinas->gdb ?? '-'}}</u></b></td>
             </tr>
             <tr>
                 <td width="250"></td>
-                <td class="text" align="center">NIP. {{ $kepalaDinas->nip }}</td>
+                <td class="text" align="center">NIP. {{ $kepalaDinas->nip ?? '-'}}</td>
             </tr>
         </table>
         <br>

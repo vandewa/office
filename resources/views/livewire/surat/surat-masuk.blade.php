@@ -228,7 +228,7 @@
                                                     id="diteruskan_kepada"
                                                     wire:model='formTindakLanjut.diteruskan_kepada'
                                                     {{ $readonly ? 'enabled' : '' }}>
-                                                    <option value="" selected>Pilih</option>
+                                                    
                                                     @foreach ($skpd as $skpdOption)
                                                         <option value="{{ $skpdOption }}">{{ $skpdOption }}
                                                         </option>

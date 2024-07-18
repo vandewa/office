@@ -29,7 +29,7 @@ return new class extends Migration
             $table->time('pukul_selesai')->nullable();
             $table->string('tempat_acara')->nullable();
             $table->string('penutup')->nullable();
-            $table->string('lampiran')->nullable();
+            // $table->string('lampiran')->nullable();
             $table->timestamps();
         });
     }

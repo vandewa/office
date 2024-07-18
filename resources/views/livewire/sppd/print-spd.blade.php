@@ -103,18 +103,18 @@
                 </td>
             </tr>
             @foreach ($pegawaiData as $index => $pegawai)
-            <tr>
-                <td width="20">3.</td>
-                <td width="200">a. Pangkat dan golongan</td>
-                <td width="20">:</td>
-                <td>{{ $pegawai['golru'] }} {{ $pegawai['pangkat'] }}</td>
-            </tr>
-            <tr>
-                <td width="20"></td>
-                <td width="200">b. Jabatan / Instansi</td>
-                <td width="20">:</td>
-                <td>{{ $pegawai['jab'] }} {{ $pegawai['jabfung'] }} {{ $pegawai['jabfungum'] }}</td>
-            </tr>
+                <tr>
+                    <td width="20">3.</td>
+                    <td width="200">a. Pangkat dan golongan</td>
+                    <td width="20">:</td>
+                    <td>{{ $pegawai['golru'] }} {{ $pegawai['pangkat'] }}</td>
+                </tr>
+                <tr>
+                    <td width="20"></td>
+                    <td width="200">b. Jabatan / Instansi</td>
+                    <td width="20">:</td>
+                    <td>{{ $pegawai['jab'] }} {{ $pegawai['jabfung'] }} {{ $pegawai['jabfungum'] }}</td>
+                </tr>
             @endforeach
             <tr>
                 <td width="20"></td>
@@ -215,7 +215,7 @@
                 <td width="150">
                     <center>
                         Dikeluarkan di: Wonosobo<br>
-                        Pada tanggal: {{ $sppd->tgl_surat }}<br>
+                        Pada tanggal: {{ $sppd->ditetapkan_tgl }}<br>
                         Pejabat Pembuat Komitmen<br>
                         <br><br><br>
                         {{ $kepalaDinas->gdp }} {{ $kepalaDinas->nama }} {{ $kepalaDinas->gdb }}<br>
@@ -226,10 +226,10 @@
         </table>
         <br><br><br><br><br>
     </center>
-    <footer>
+    {{-- <footer>
         <img src="{{ asset('surat/footer.jpg') }}" alt="Footer">
-    </footer>
-    <div style="page-break-before: always;"></div>
+    </footer> --}}
+    {{-- <div style="page-break-before: always;"></div>
     <!-- Second page content -->
     <center>
         <br>
@@ -257,7 +257,7 @@
     </center>
     <footer>
         <img src="{{ asset('surat/footer.jpg') }}" alt="Footer">
-    </footer>
+    </footer> --}}
 </body>
 
 </html>

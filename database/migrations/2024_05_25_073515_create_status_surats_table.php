@@ -10,17 +10,17 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::create('status_surats', function (Blueprint $table) {
-        $table->id();
-        $table->unsignedBigInteger('surat_masuk_id')->nullable(); // Membuat kolom nullable
-        $table->unsignedBigInteger('surat_keluar_id')->nullable(); // Membuat kolom nullable
-        $table->foreign('surat_masuk_id')->references('id')->on('surat_masuks')->onDelete('cascade');
-        $table->foreign('surat_keluar_id')->references('id')->on('surat_keluars')->onDelete('cascade');
-        $table->enum('status_surat', ['Perlu Verifikasi Kepala Dinas', 'Perlu Verifikasi Kepala Bidang', 'Sekretariat', 'Sudah Distribusikan'])->nullable();
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('status_surats', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('surat_masuk_id')->nullable(); // Membuat kolom nullable
+            $table->unsignedBigInteger('surat_keluar_id')->nullable(); // Membuat kolom nullable
+            $table->foreign('surat_masuk_id')->references('id')->on('surat_masuks')->onDelete('cascade');
+            $table->foreign('surat_keluar_id')->references('id')->on('surat_keluars')->onDelete('cascade');
+            $table->enum('status_surat', ['Perlu Verifikasi Kepala Dinas', 'Perlu Verifikasi Kepala Bidang', 'Sekretariat', 'Sudah Distribusikan'])->nullable();
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.

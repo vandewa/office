@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@sweetalert2/theme-bootstrap-4": "^5.0.16",
+        "chart.js": "^4.4.3",
         "select2": "^4.1.0-rc.0",
         "signature_pad": "^5.0.2",
         "summernote": "^0.8.20",

@@ -18,7 +18,7 @@ class SuratMasukIndex extends Component
     public function mount($showHeader = true)
     {
         $this->showHeader = $showHeader;
-        // $this->suratmasuks = SuratMasuk::all();
+        $this->suratmasuks = SuratMasuk::all();
         $this->tindak_lanjuts = TindakLanjut::all();
         $this->status_surats = StatusSurat::all();
         // $this->data1 = SuratMasuk::with(['tindakLanjuts', 'statusSurats'])->get();
@@ -37,14 +37,15 @@ class SuratMasukIndex extends Component
     {
         $this->idHapus = $id;
         $this->hapus();
-        $this->suratmasuks = $this->suratmasuks->except($id);
+        // $this->suratmasuks = $this->suratmasuks->except($id);
+        $this->suratmasuks = $this->suratmasuks->where('id', '!=', $id);
         // $this->filteredData = SuratMasuk::orderBy('id', 'desc')->get();
     }
 
     public function hapus()
     {
         SuratMasuk::destroy($this->idHapus);
-        return redirect()->to('/suratmasuk-index');
+        // return redirect()->to('/suratmasuk-index');
     }
 
     public function render()

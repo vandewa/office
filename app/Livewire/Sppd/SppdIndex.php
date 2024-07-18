@@ -70,13 +70,14 @@ class SppdIndex extends Component
     public function render()
     {
         $data = Sppd::query()
-        ->with('statusLaporans') // Include related status laporans
+            ->with('statusLaporans') // Include related status laporans
+            ->orderBy('id', 'desc')
             ->where('tempat_tujuan', 'like', '%' . $this->cari . '%')
             ->orWhere('maksud', 'like', '%' . $this->cari . '%')
             ->paginate(5);
 
-            $sppdPegawai = SppdPegawai::all();
-            $status_laporans = StatusLaporan::all();
+        $sppdPegawai = SppdPegawai::all();
+        $status_laporans = StatusLaporan::all();
 
         return view('livewire.sppd.sppd-index', [
             'data' => $data,

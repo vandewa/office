@@ -11,7 +11,8 @@ class LoginController extends Controller
 {
     public function login(Request $request)
     {
-        $data = Tb01::with(['skpd'])->select('nip', 'email', 'gdp', 'gdb', 'email_dinas', 'nama', 'mkthnpkt', 'mkblnpkt', 'tb_01.idskpd', "jabatan.skpd", 'tb_01.idagama',
+        $data = Tb01::with(['skpd'])->select('nip', 'email', 'gdp', 'gdb', 'email_dinas', 'nama', 'mkthnpkt', 'mkblnpkt', 'tb_01.idskpd',
+        "jabatan.skpd", 'tb_01.idagama',
         'nonpwp', 'nokaris', 'tb_01.alm', 'notaspen', 'nobapertarum', 'noaskes', 'hp', 'tmlhr', 'noktp', DB::Raw("
             case when jabfung is null and jabfungum is null then jabatan.jab
                when jabfung is null then jabfungum

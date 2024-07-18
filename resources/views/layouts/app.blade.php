@@ -27,6 +27,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.0/viewer.min.css" rel="stylesheet">
 
+
+
     @stack('css')
     @livewireStyles
     @vite([])
@@ -52,6 +54,7 @@
     <script src="{{ asset('limitless/global_assets/js/plugins/editors/summernote/summernote.min.js') }}"></script>
     <script src="{{ asset('limitless/global_assets/js/plugins/forms/styling/uniform.min.js') }}"></script>
     <script src="{{ asset('limitless/global_assets/js/demo_pages/editor_summernote.js') }}"></script>
+    <script src="{{ asset('limitless/global_assets/js/demo_pages/charts/echarts/bars_tornados.js') }}"></script>
     <!-- /theme JS files -->
 </head>
 
@@ -509,6 +512,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.0/viewer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 
     <!-- Your custom JS -->
     <script>

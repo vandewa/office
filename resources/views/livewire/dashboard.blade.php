@@ -1,5 +1,15 @@
 <div>
     <div class="content">
+        <!-- dashboard.blade.php -->
+        <div class="card">
+            <div class="card-header">
+                <h3> Grafik Surat </h3>
+            </div>
+            <div class="card-body" style="height: 200px;">
+                <livewire:surat-chart />
+            </div>
+        </div>
+
         <div class="row">
             @can('sekretariat')
                 <div class="col-lg-4">

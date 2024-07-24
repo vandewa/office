@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 class Sppd extends Component
 {
+    public $inputs = [];
+
     public $nama, $sppd, $sppdId = null, $edit = false;
     public $formDasar = [
         'dasar' => null
@@ -41,17 +43,23 @@ class Sppd extends Component
         } else {
             $this->edit = false;
         }
-         //menampilkan nama di form select nama pegawai
-         $nip = Auth::user()->nip;
-         if (Auth::check()) {
-             $kdunit = Tb01::where('nip', $nip)->value('kdunit');
-             $this->nama = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
-                 ->where('a_skpd.kdunit', $kdunit)
-                 ->where('idjenkedudupeg', 1)
-                 ->distinct('tb_01.nama')
-                 ->pluck('tb_01.nama', 'tb_01.nip');
-         }
-     }
+
+        //menampilkan nama di form select nama pegawai
+        $nip = Auth::user()->nip;
+        if (Auth::check()) {
+            $kdunit = Tb01::where('nip', $nip)->value('kdunit');
+            $this->nama = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
+                ->where('a_skpd.kdunit', $kdunit)
+                ->where('idjenkedudupeg', 1)
+                ->distinct('tb_01.nama')
+                ->pluck('tb_01.nama', 'tb_01.nip');
+        }
+
+        // $this->form['untuk'] = '1. ';
+        $this->form['tempat_berangkat'] = 'Wonosobo';
+
+        // $this->inputs[] = ['name' => '', 'email' => ''];
+    }
 
     public function getEdit($id)
     {
@@ -71,6 +79,10 @@ class Sppd extends Component
 
     public function store()
     {
+        dd($this->form);
+
+        //Karakter awal besar
+        $this->form['tempat_tujuan'] = ucfirst($this->form['tempat_tujuan'] ?? '');
         //simpan input form ke tabel sppd
         $sppd = ModelsSppd::create($this->form);
 
@@ -126,6 +138,25 @@ class Sppd extends Component
         // Redirect ke halaman sppd-index setelah data disimpan
         return redirect()->to('/sppd-index');
     }
+
+    // public function addInput()
+    // {
+    //     $this->inputs[] = ['name' => '', 'email' => ''];
+    //     // $this->emit('inputAdded');
+    // }
+
+    // public function removeInput($index)
+    // {
+    //     unset($this->inputs[$index]);
+    //     $this->inputs = array_values($this->inputs); // Reindex array
+    // }
+
+    // public function updated($property)
+    // {
+    //     if ($property == 'form.tempat_tujuan') {
+    //         $this->form['tempat_tujuan'] = ucfirst($this->form['tempat_tujuan'] ?? '');
+    //     }
+    // }
 
     public function render()
     {

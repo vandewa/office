@@ -45,11 +45,12 @@
     <script src="{{ asset('limitless/layout_1/LTR/default/full/assets/js/app.js') }} "></script>
     <script src="{{ asset('limitless/global_assets/js/demo_pages/dashboard.js') }}"></script>
     <script src="{{ asset('limitless/global_assets/js/plugins/extensions/jquery_ui/interactions.min.js') }}"></script>
-	<script src="{{ asset('limitless/global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+    <script src="{{ asset('limitless/global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
 
-	<script src="assets/js/app.js"></script>
-	<script src="{{ asset('limitless/global_assets/js/demo_pages/form_select2.js') }}"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="{{ asset('limitless/global_assets/js/demo_pages/form_select2.js') }}"></script>
     <!-- /theme JS files -->
+    <script src="https://kit.fontawesome.com/bb9305debb.js" crossorigin="anonymous"></script>
 
 </head>
 
@@ -138,8 +139,7 @@ background-size: cover;">
                     <div class="card-body">
                         <div class="media">
                             <div class="mr-3">
-                                <a href="#"><img
-                                        src="limitless/global_assets/images/placeholders/placeholder.jpg"
+                                <a href="#"><img src="limitless/global_assets/images/placeholders/placeholder.jpg"
                                         width="38" height="38" class="rounded-circle" alt=""></a>
                             </div>
 

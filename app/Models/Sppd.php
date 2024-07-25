@@ -26,7 +26,7 @@ class Sppd extends Model
         return $this->hasMany(statusLaporan::class, 'sppd_id');
     }
 
-    public function laporanSppd()
+    public function laporanSppds()
     {
         return $this->hasMany(laporanSppd::class, 'sppd_id');
     }

@@ -74,15 +74,19 @@
                                             <span class="badge bg-danger">{{ $statusLaporan->status_laporan }}</span>
                                         @endforeach
                                     </td>
+
                                     <td>
-                                        <button type="button" wire:click="delete('{{ $sppd->id }}')"
-                                            class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
-                                            title="Delete">
-                                            <i class="icon-trash"></i>
-                                        </button>
-                                        <a href="{{ route('sppd', ['id' => $sppd->id]) }}" class="btn btn-flat btn-sm">
-                                            <i class="icon-pencil"></i>
-                                        </a>
+                                        @can('sekretariat')
+                                            <button type="button" wire:click="delete('{{ $sppd->id }}')"
+                                                class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
+                                                title="Delete">
+                                                <i class="icon-trash"></i>
+                                            </button>
+                                            <a href="{{ route('sppd', ['id' => $sppd->id]) }}" class="btn btn-flat btn-sm">
+                                                <i class="icon-pencil"></i>
+                                            </a>
+                                        @endcan
+
                                         @foreach ($sppd->statusLaporans as $statusLaporan)
                                             @if ($statusLaporan->status_laporan === 'Belum Selesai')
                                                 <a href="{{ route('sppd-laporan', ['id' => $sppd->id]) }}"
@@ -91,21 +95,23 @@
                                                 </a>
                                             @endif
                                         @endforeach
-                                        <a href="{{ route('print-spt', ['id' => $sppd->id]) }}"
-                                            class="btn btn-flat btn-sm">
-                                            <i class="icon-printer"></i>
-                                        </a>
-                                        {{-- <div class="btn-group"> --}}
-                                            {{-- <button type="button" class="btn btn-flat btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="icon-printer"></i> Print
-                                            </button> --}}
-                                            {{-- <div class="dropdown-menu"> --}}
-                                                {{-- <a class="dropdown-item" href="{{ route('print-spt', ['id' => $sppd->id, 'type' => 'spt']) }}">SPT</a> --}}
-                                                {{-- <a class="dropdown-item" href="{{ route('print-spt-kadin', ['id' => $sppd->id, 'type' => 'spt-kadin']) }}" target="_blanks">SPT KADIN</a> --}}
-                                                <a class="dropdown-item" href="{{ route('print-spd', ['id' => $sppd->id, 'type' => 'spd']) }}" target="_blanks">SPD</a>
-                                                {{-- <a class="dropdown-item" href="{{ route('print-spd-kadin', ['id' => $sppd->id, 'type' => 'spd-kadin']) }}" target="_blanks">SPD KADIN</a> --}}
-                                            {{-- </div> --}}
-                                        {{-- </div> --}}
+
+                                        {{-- <a href="{{ route('download.spt') }}" class="btn btn-primary">Unduh SPT</a> --}}
+
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                SPD
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                @foreach (session('dokumen_paths', []) as $nip => $path)
+                                                    <a href="{{ route('download.dokumen', ['nip' => $nip]) }}"
+                                                        class="dropdown-item">
+                                                        <i class="icon-printer"></i> Unduh SPD untuk {{ $nip }}
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

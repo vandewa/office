@@ -6,6 +6,7 @@ use App\Models\Disposisi;
 use App\Models\DataPegawai;
 use App\Models\SppdPegawai;
 use App\Models\Simpeg\ASkpd;
+use App\Models\SuratMasuk;
 use App\Models\TindakLanjut;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Jetstream\HasProfilePhoto;
@@ -1088,6 +1089,12 @@ class Tb01 extends Authenticatable
     public function pegawaiDisposisi()
     {
         return $this->belongsTo(Disposisi::class, 'nip');
+    }
+
+    public function suratMasuk()
+    {
+        return $this->belongsTo(SuratMasuk::class, 'nip')
+        ->select('hp', 'idjabjbt', 'idjenjab', 'idjenkedudupeg');
     }
 
 }

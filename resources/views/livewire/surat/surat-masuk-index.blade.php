@@ -1,4 +1,3 @@
-
 <div>
     @if ($showHeader)
         <x-slot name="header">
@@ -77,9 +76,9 @@
                                     </td>
                                     <td>{{ $suratmasuk->acara }} {{ $suratmasuk->perihal }}</td>
                                     <td>
-                                        @foreach ($suratmasuk->tindakLanjuts as $tindakLanjut)
-                                            {{ $tindakLanjut->deskripsi }}
-                                        @endforeach
+                                        @if ($suratmasuk->tindakLanjuts->isNotEmpty())
+                                            {{ $suratmasuk->tindakLanjuts->first()->deskripsi }}
+                                        @endif
                                     </td>
                                     @can('view-status-surat')
                                         <td>

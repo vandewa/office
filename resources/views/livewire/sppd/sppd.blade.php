@@ -7,10 +7,8 @@
             </div>
             <div class="card-body">
                 <div class="col-12">
-                    {{-- <form action=""
-
-                        @if (request()->routeIs('sppd')) wire:submit='save' @else  wire:submit='submitLaporan' @endif> --}}
-                    <form action="" wire:submit.prevent='save'>
+                    <form action=""
+                        @if (request()->routeIs('sppd')) wire:submit='save' @else  wire:submit='submitLaporan' @endif>
                         @csrf
                         <div class="row" style="margin: 20px">
                             <div class="col-6">
@@ -198,7 +196,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-6">
                                 <!--Untuk-->
                                 <div>
@@ -232,48 +229,120 @@
                                         Contoh Dasar
                                     </button>
                                     <div class="col-lg-12">
-                                        @foreach ($formDasar as $index => $dasar)
-                                            <div class="form-group">
-                                                <textarea class="form-control" rows="6" cols="50" required="" data-name="dasar" rows="2"
-                                                    cols="50" name="dasar[]" wire:model="formDasar.{{ $index }}.dasar" {{ $readonly ? 'disabled' : '' }}></textarea>
-                                                <button type="button" class="btn btn-danger"
-                                                    wire:click="removeDasar({{ $index }})">Hapus
-                                                    Dasar</button>
-                                            </div>
-                                        @endforeach
-
-                                        <button type="button" class="btn btn-primary pull-right"
-                                            wire:click="addDasar">Tambah Dasar</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <!-- Laporan Sppd -->
-                                @if (request()->routeIs('sppd-laporan'))
-                                    <div>
-                                        <label class="col-form-label col-lg-12">Laporan Sppd</label>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <input class="form-control " placeholder="Laporan Sppd"
-                                                    name="laporan_sppd" wire:model='formLaporan.laporan_sppd'
-                                                    type="text" {{ $readonly ? 'enabled' : '' }}>
-                                            </div>
+                                        <div class="form-group">
+                                            <textarea class="form-control" name="dasar" wire:model='formDasar.dasar' {{ $readonly ? 'disabled' : '' }}></textarea>
                                         </div>
                                     </div>
-                                @endif
+                                    <button type="button" class="btn btn-primary pull-right"
+                                        wire:click="addDasar">Tambah Dasar</button>
+                                </div>
                             </div>
                         </div>
-                        <!-- Button Submit -->
-                        <div class="text-right">
-                            <button class="btn bg-grey-400" wire:click='batal'>Batal <i
-                                    class="ml-2 icon-square-left"></i></button>
-                            <button type="submit"
-                                class="bg-teal-400 btn">{{ $edit ? 'Simpan Perubahan' : 'Buat SPT Baru' }}<i
-                                    class="ml-2 icon-paperplane"></i></button>
+                </div>
+
+                <div class="col-12">
+                    <div>
+                        <label class="col-form-label col-lg-12">Laporan Sppd</label>
+                        <div class="col-lg-12">
+                            @if (request()->routeIs('sppd-laporan'))
+                                <div class="form-group">
+                                    <input class="form-control" name="laporan_sppd"
+                                        wire:model='formLaporan.laporan_sppd' type="text"
+                                        {{ $readonly ? 'enabled' : '' }}>
+                                </div>
+                            @else
+                                @if ($sppd)
+                                    @if ($sppd->laporanSppds->isNotEmpty())
+                                        @foreach ($sppd->laporanSppds as $laporanSppd)
+                                            <span
+                                                class="form-control">{{ $laporanSppd->laporan_sppd ?? 'belum ada laporan' }}</span>
+                                        @endforeach
+                                    @else
+                                        <span class="form-control">belum ada laporan</span>
+                                    @endif
+                                @else
+                                    <span class="form-control">Data tidak ditemukan</span>
+                                @endif
+                            @endif
                         </div>
-                    </form>
+                    </div>
+                </div>
+
+                <!-- Button Submit -->
+                <div class="text-right">
+                    <button class="btn bg-grey-400" wire:click='batal'>Batal <i
+                            class="ml-2 icon-square-left"></i></button>
+                    <button type="submit"
+                        class="bg-teal-400 btn">{{ $edit ? 'Simpan Perubahan' : 'Buat SPT Baru' }}<i
+                            class="ml-2 icon-paperplane"></i></button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Preview Maksud
+                        Perjalanan Dinas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://diskominfo.wonosobokab.go.id/maksud.jpg" alt="" width="100%">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Preview Untuk</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="https://diskominfo.wonosobokab.go.id/untuk.jpg" alt="" width="100%">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter3" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Preview Dasar</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="https://diskominfo.wonosobokab.go.id/dasar.jpg" alt="" width="100%">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+</div>

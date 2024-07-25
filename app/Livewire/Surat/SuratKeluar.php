@@ -98,7 +98,6 @@ class SuratKeluar extends Component
         }
     }
 
-
     public function getEdit($id)
     {
         $this->edit = true;
@@ -115,35 +114,46 @@ class SuratKeluar extends Component
         }
     }
 
-    public function sendWhatsApp($phone, $message)
+    public function generateSuratKeluar()
     {
+        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template_suratkeluar.docx');
 
-        KirimWA::dispatch($phone, $message);
+        $user = Auth::user();
+        $nip = $user->nip;
+        $kepalaDinas = Tb01::where('idskpd', $user->kdunit)
+            ->where('idjabjbt', $user->kdunit)
+            ->where('idjenjab', 20)
+            ->where('idjenkedudupeg', 1)
+            ->first();
+
+        $values = [
+            'nomor_surat' => strval($this->form['nomor_surat'] ?? ''),
+            'perihal' => strval($this->form['perihal'] ?? ''),
+            'tujuan' => strval($this->form['tujuan'] ?? ''),
+            'tempat_tujuan' => strval($this->form['tempat_tujuan'] ?? ''),
+            'pembukaan' => strval($this->form['pembukaan'] ?? ''),
+            'isi' => strval($this->form['isi'] ?? ''),
+            'hari' => strval($this->form['hari'] ?? ''),
+            'tanggal' => strval($this->form['tanggal'] ?? ''),
+            'pukul_mulai' => strval($this->form['pukul_mulai'] ?? ''),
+            'pukul_selesai' => strval($this->form['pukul_selesai'] ?? ''),
+            'tempat_acara' => strval($this->form['tempat_acara'] ?? ''),
+            'penutup' => strval($this->form['penutup'] ?? ''),
+            'tanggal' => strval($this->form['tanggal'] ?? ''),
+            'perihal' => strval($this->form['perihal'] ?? ''),
+            'n_kep' => $kepalaDinas->nama ?? '',
+            'n_pangkat' => $kepalaDinas->pangkat ?? '',
+            'n_nip' => $kepalaDinas->nip ?? ''
+
+        ];
+        $phpWord->setValues($values);
+        $namaDokumen = 'Surat Keluar_' . '.docx';
+
+        $phpWord->saveAs($namaDokumen);
     }
 
     public function store()
     {
-        // $this->validate([
-        //     'form.nomor_surat' => 'required|string|max:255',
-        //     'form.jenis_surat' => 'required|string|max:255',
-        //     'form.tanggal_surat' => 'required|date',
-        //     'form.perihal' => 'required|string|max:255',
-        //     'form.tujuan' => 'required|string|max:255',
-        //     'form.tempat_tujuan' => 'nullable|string|max:255',
-        //     'form.pembukaan' => 'nullable|string|max:1000',
-        //     'form.isi' => 'required|string|max:2000',
-        //     'form.hari' => 'nullable|string|max:50',
-        //     'form.tanggal' => 'nullable|date',
-        //     'form.pukul_mulai' => 'nullable|string|max:50',
-        //     'form.pukul_selesai' => 'nullable|string|max:50',
-        //     'form.tempat_acara' => 'nullable|string|max:255',
-        //     'form.penutup' => 'nullable|string|max:1000',
-        //     // 'document_id' => 'nullable|exists:documents,id',
-        // ]);
-
-        // Masukkan document_id ke dalam $form
-        // $this->form['document_id'] = $this->document_id;
-
         $suratkeluar = ModelsSuratKeluar::create($this->form);
 
         StatusSurat::create([
@@ -151,10 +161,7 @@ class SuratKeluar extends Component
             'status_surat' => 'Perlu Verifikasi Kepala Bidang',
         ]);
 
-        // Kirim pesan WhatsApp setelah laporan disimpan
-        $phone = "081393982874"; // Nomor telepon untuk status Selesai
-        $message = "Pesan WhatsApp Kepada Kepala Bidang untuk Memberikan komentar pada Surat Keluar"; // ke kadin
-        $this->sendWhatsApp($phone, $message);
+        $this->generateSuratKeluar();
 
         // Redirect ke halaman suratkeluar-index setelah data disimpan
         return redirect()->to('/suratkeluar-index');
@@ -173,10 +180,7 @@ class SuratKeluar extends Component
                 ['surat_keluar_id' => $suratkeluar->id],
                 ['status_surat' => 'Perlu Verifikasi Kepala Bidang']
             );
-             // Kirim pesan WhatsApp setelah laporan disimpan
-             $phone = "081393982874"; // Nomor telepon untuk status Selesai
-             $message = "Pesan WhatsApp Kepada Kepala Bidang untuk Memberikan komentar untuk Surat Keluar"; // ke kabid
-             $this->sendWhatsApp($phone, $message);
+
         } elseif (Gate::allows('kepala_bidang', Auth::user())) {
             TindakLanjut::updateOrCreate(
                 ['surat_keluar_id' => $suratkeluar->id],
@@ -195,18 +199,10 @@ class SuratKeluar extends Component
                 ['status_surat' => $status]
             );
             if ($this->formTindakLanjut['revisi']) {
-                // Kirim pesan WhatsApp untuk revisi
-                $phone = "081393982874"; // Nomor telepon untuk status revisi
-                $message = "Pesan WhatsApp Kepada Sekretariat untuk Revisi Surat Masuk dari Kepala Bidang";
-                $this->sendWhatsApp($phone, $message);
+
             } else {
-                // Kirim pesan WhatsApp untuk verifikasi kepala dinas
-                $phone = "081393982874"; // Nomor telepon kepala dinas
-                $message = "Pesan WhatsApp Kepada Kepala Dinas untuk Memberikan komentar dan tanda tangan pada Surat Keluar";
-                $this->sendWhatsApp($phone, $message);
+
             }
-
-
         } elseif (Gate::allows('kepala_dinas', Auth::user())) {
             TindakLanjut::updateOrCreate(
                 ['surat_keluar_id' => $suratkeluar->id],
@@ -227,15 +223,9 @@ class SuratKeluar extends Component
             );
 
             if ($this->formTindakLanjut['revisi']) {
-                // Kirim pesan WhatsApp untuk revisi
-                $phone = "081393982874"; // Nomor telepon untuk status revisi
-                $message = "Pesan WhatsApp Kepada Sekretariat untuk Revisi Surat Masuk dari Kepala Dinas";
-                $this->sendWhatsApp($phone, $message);
+
             } else {
-                // Kirim pesan WhatsApp untuk verifikasi kepala dinas
-                $phone = "081393982874"; // Nomor telepon kepala dinas
-                $message = "Pesan WhatsApp Kepada Sekretariat untuk Mendistribusikan Surat";
-                $this->sendWhatsApp($phone, $message);
+
             }
         }
 
@@ -259,10 +249,7 @@ class SuratKeluar extends Component
                         'status_surat' => 'Sudah Distribusikan',
                     ]);
 
-                    // Kirim pesan WhatsApp setelah laporan disimpan
-                    $phone = "081393982874"; // Nomor telepon untuk status Selesai
-                    $message = "Pesan WhatsApp Kepada Sekretariat untuk Mendistribusikan Surat"; // ke kabid
-                    $this->sendWhatsApp($phone, $message);
+
                 }
             }
         }

@@ -61,25 +61,35 @@
                         <div class="col-6">
                             <form action="" wire:submit='save'>
                                 @csrf
+                                {{-- @if (Gate::allows('sekretariat', Auth::user())) --}}
                                 <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label">Pilihan</label>
+                                    <label class="col-lg-3 col-form-label">Jenis Surat</label>
                                     <div class="col-lg-9">
-                                        @if (Gate::allows('sekretariat', Auth::user()))
-                                            <select id="dynamicSelect" class="form-control" name="jenis_agenda_tp"
-                                                wire:model="form.jenis_agenda_tp" {{ $readonly ? 'enabled' : '' }}>
-                                                <option value="select" selected>Pilih</option>
-                                                <option value="JENIS_SURAT_TP_01">Surat Agenda</option>
-                                                <option value="JENIS_SURAT_TP_02">Surat Biasa</option>
-                                            </select>
-                                        @else
-                                            <textarea name="" id="" class="form-control"{{ $readonly ? 'disabled' : '' }}>
-                                                {{ $form['jenis_agenda_tp'] ?? 'no data' }}
-                                            </textarea>
-                                        @endif
+                                        <div class="form-check">
+                                            <input type="radio" id="radioSuratAgenda" class="form-check-input"
+                                                name="jenis_agenda_tp" value="JENIS_SURAT_TP_01"
+                                                wire:model="form.jenis_agenda_tp"
+                                                @if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                    @else
+                                                    {{ $readonly ? 'disabled' : '' }} @endif>
+                                            <label class="form-check-label" for="radioSuratAgenda">Surat
+                                                Agenda</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" id="radioSuratBiasa" class="form-check-input"
+                                                name="jenis_agenda_tp" value="JENIS_SURAT_TP_02"
+                                                wire:model="form.jenis_agenda_tp"
+                                                @if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                    @else
+                                                    {{ $readonly ? 'disabled' : '' }} @endif>
+                                            <label class="form-check-label" for="radioSuratBiasa">Surat
+                                                Biasa</label>
+                                        </div>
                                     </div>
                                 </div>
-                                <div id="selalu-muncul"
-                                    @if (request()->routeIs('suratmasuk')) style="display: none;" @else style="" @endif>
+                                {{-- @endif --}}
+
+                                <div id="selalu-muncul" style="display: none;">
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Kode (Lama)</label>
                                         <div class="col-lg-9">
@@ -117,7 +127,7 @@
                                                      @else
                                                      {{ $readonly ? 'disabled' : '' }} @endif
                                                 data-fouc>
-                                                <option value="" selected>Pilih</option>
+                                                {{-- <option value="" selected>Pilih</option> --}}
                                                 @foreach ($opdOptions as $id => $opd)
                                                     <option value="{{ $id }}">{{ $opd }}
                                                     </option>
@@ -144,8 +154,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="agenda"
-                                    @if (request()->routeIs('suratmasuk')) style="display: none;" @else style="" @endif>
+                                <div id="agenda" style="display: none;">
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Subject</label>
                                         <div class="col-lg-9">
@@ -193,8 +202,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="biasa"
-                                    @if (request()->routeIs('suratmasuk')) style="display: none;" @else style="" @endif>
+                                <div id="biasa" style="display: none;">
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Perihal</label>
                                         <div class="col-lg-9">
@@ -207,6 +215,32 @@
                                 </div>
                                 {{-- @endif --}}
                                 @if (request()->routeIs('suratmasuk-disposisi'))
+                                    {{-- @can('add-disposisi') --}}
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label">Perlu Revisi</label>
+                                        <div class="col-lg-9">
+                                            <div class="form-check">
+                                                <input type="radio" id="radioRevisi" class="form-check-input"
+                                                    name="revisi" value="revisi"
+                                                    wire:model="formTindakLanjut.revisi"
+                                                    @if (Gate::allows('kepala_dinas', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                @else
+                                                {{ $readonly ? 'disabled' : '' }} @endif>
+                                                <label class="form-check-label" for="radioRevisi">Ya</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="radio" id="radioTidakRevisi" class="form-check-input"
+                                                    name="revisi" value="tidak_revisi"
+                                                    wire:model="formTindakLanjut.revisi"
+                                                    @if (Gate::allows('kepala_dinas', Auth::user())) {{ $readonly ? 'enabled' : '' }}
+                                                @else
+                                                {{ $readonly ? 'disabled' : '' }} @endif>
+                                                <label class="form-check-label" for="radioTidakRevisi">Tidak</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- @endcan --}}
+
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">komentar</label>
                                         <div class="col-lg-9">
@@ -214,53 +248,57 @@
                                                 <textarea type="text" class="form-control" name="deskripsi" wire:model='formTindakLanjut.deskripsi'
                                                     {{ $readonly ? 'enabled' : '' }}></textarea>
                                             @else
-                                                <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>{{ $tindakLanjut->deskripsi ?? 'no data' }}</textarea>
+                                                <div class="form-group">
+                                                    <span class="form-control"> {{ $tindakLanjut->deskripsi }}</span>
+                                                </div>
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="col-lg-3 col-form-label">Diteruskan kepada</label>
-                                        <div class="col-lg-9">
-                                            @if (Gate::allows('kepala_dinas', Auth::user()))
-                                                <button type="button" class="btn btn-secondary mb-2"
-                                                    onclick="selectAllOptions()">Select All</button>
-                                                <select multiple class="form-control" name="diteruskan_kepada"
-                                                    id="diteruskan_kepada"
-                                                    wire:model='formTindakLanjut.diteruskan_kepada'
-                                                    {{ $readonly ? 'enabled' : '' }}>
-                                                    
-                                                    @foreach ($skpd as $skpdOption)
-                                                        <option value="{{ $skpdOption }}">{{ $skpdOption }}
-                                                        </option>
+                                    <div id="tidakRevisi" style="display: none;">
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Diteruskan kepada</label>
+                                            <div class="col-lg-9">
+                                                @if (Gate::allows('kepala_dinas', Auth::user()))
+                                                    <button type="button" class="btn btn-secondary mb-2"
+                                                        onclick="selectAllOptions()">Select All</button>
+                                                    <select multiple class="form-control" name="diteruskan_kepada"
+                                                        id="diteruskan_kepada"
+                                                        wire:model='formTindakLanjut.diteruskan_kepada'
+                                                        {{ $readonly ? 'enabled' : '' }}>
+                                                        @foreach ($skpd as $skpdOption)
+                                                            <option value="{{ $skpdOption }}">{{ $skpdOption }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                @else
+                                                    @foreach ($suratmasuk->tindakLanjuts as $tindakLanjut)
+                                                        <span
+                                                            class="badge bg-purple">{{ $tindakLanjut->diteruskan_kepada }}</span>
                                                     @endforeach
-                                                </select>
-                                            @else
-                                                <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>
-                                                {{ $tindakLanjut->diteruskan_kepada ?? 'no data' }}
-                                                </textarea>
-                                            @endif
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-lg-3 col-form-label">disposisi</label>
-                                        <div class="col-lg-9">
-                                            @if (Gate::allows('kepala_bidang', Auth::user()))
-                                                <button type="button" class="btn btn-secondary mb-2"
-                                                    onclick="selectAllOptionsDisposisi()">Select All</button>
-                                                <select multiple class="form-control" name="disposisi" id="disposisi"
-                                                    wire:model='formTindakLanjut.disposisi'
-                                                    {{ $readonly ? 'enabled' : '' }}>
-                                                    <option value="" selected>Pilih</option>
-                                                    @foreach ($nama as $nip => $fullName)
-                                                        <option value="{{ $fullName }}">{{ $fullName }}
-                                                        </option>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">disposisi</label>
+                                            <div class="col-lg-9">
+                                                @if (Gate::allows('kepala_bidang', Auth::user()))
+                                                    <button type="button" class="btn btn-secondary mb-2"
+                                                        onclick="selectAllOptionsDisposisi()">Select All</button>
+                                                    <select multiple class="form-control" name="disposisi"
+                                                        id="disposisi" wire:model='formTindakLanjut.disposisi'
+                                                        {{ $readonly ? 'enabled' : '' }}>
+                                                        @foreach ($nama as $nip => $fullName)
+                                                            <option value="{{ $fullName }}">{{ $fullName }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                @else
+                                                    @foreach ($suratmasuk->tindakLanjuts as $tindakLanjut)
+                                                        <span
+                                                            class="badge bg-blue">{{ $tindakLanjut->disposisi }}</span>
                                                     @endforeach
-                                                </select>
-                                            @else
-                                                <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>
-                                                {{ $tindakLanjut->disposisi ?? 'no data' }}
-                                                </textarea>
-                                            @endif
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -269,25 +307,11 @@
                                                 <button type="button" wire:click="distribusikan"
                                                     class="btn btn-primary">Distribusikan</button>
                                             @endcan
-                                            @can('add-disposisi')
-                                                <div class="form-group row">
-                                                    <label class="d-block font-weight-semibold">Perlu revisi</label>
-                                                    <div class="form-check form-check-inline">
-                                                        <label class="form-check-label">
-                                                            <input type="checkbox" class="form-check-input"
-                                                                wire:model="formTindakLanjut.revisi" name="revisi"
-                                                                value="1">
-                                                            Ya
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            @endcan
                                         </div>
                                     </div>
                                 @endif
                                 @can('view-status-surat')
-                                    <div id="selalu-muncul-tombol"
-                                        @if (request()->routeIs('suratmasuk')) style="display: none;" @else style="" @endif>
+                                    <div id="selalu-muncul-tombol" style="display: none;">
                                         <div class="text-right">
                                             <button type="submit" class="btn btn-primary">
                                                 {{ $edit ? 'Simpan Perubahan' : 'Submit' }}
@@ -312,7 +336,7 @@
     </div>
 </div>
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> --}}
-<script>
+{{-- <script>
     $(document).ready(function() {
         // Inisialisasi select2
         $('#dynamicSelect').select2();
@@ -339,7 +363,67 @@
             }
         });
     });
+</script> --}}
+
+<script>
+    $(document).ready(function() {
+        // Fungsi untuk mengatur tampilan berdasarkan radio button yang dipilih
+        function updateVisibility() {
+            var selectedValue = $('input[name="jenis_agenda_tp"]:checked').val();
+
+            if (selectedValue === 'JENIS_SURAT_TP_01') {
+                $('#selalu-muncul').show();
+                $('#selalu-muncul-tombol').show();
+                $('#agenda').show();
+                $('#biasa').hide();
+            } else if (selectedValue === 'JENIS_SURAT_TP_02') {
+                $('#selalu-muncul').show();
+                $('#selalu-muncul-tombol').show();
+                $('#agenda').hide();
+                $('#biasa').show();
+            } else {
+                $('#selalu-muncul').hide();
+                $('#selalu-muncul-tombol').hide();
+                $('#agenda').hide();
+                $('#biasa').hide();
+            }
+        }
+
+        // Inisialisasi tampilan berdasarkan pilihan default saat halaman dimuat
+        updateVisibility();
+
+        // Event handler untuk perubahan radio button
+        $('input[name="jenis_agenda_tp"]').on('change', function() {
+            updateVisibility();
+        });
+    });
 </script>
+
+<script>
+    $(document).ready(function() {
+        // Fungsi untuk mengatur tampilan berdasarkan radio button yang dipilih
+        function updateVisibility() {
+            var selectedValue = $('input[name="revisi"]:checked').val();
+
+            if (selectedValue === 'revisi') {
+                $('#tidakRevisi').hide();
+            } else if (selectedValue === 'tidak_revisi') {
+                $('#tidakRevisi').show();
+            } else {
+                $('#tidakRevisi').show();
+            }
+        }
+
+        // Inisialisasi tampilan berdasarkan pilihan default saat halaman dimuat
+        updateVisibility();
+
+        // Event handler untuk perubahan radio button
+        $('input[name="revisi"]').on('change', function() {
+            updateVisibility();
+        });
+    });
+</script>
+
 <script>
     function selectAllOptions() {
         var select = document.getElementById('diteruskan_kepada');

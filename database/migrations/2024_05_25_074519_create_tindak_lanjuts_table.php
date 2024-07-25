@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('deskripsi')->nullable();
             $table->string('diteruskan_kepada')->nullable();
             $table->string('disposisi')->nullable();
-            $table->boolean('revisi')->default(false)->nullable(); // Kolom untuk checkbox
+            $table->string('revisi')->nullable(); // Kolom untuk checkbox
             // $table->enum('metode_ttd', ['Tanda_Tangan_Offline', 'Tanda_Tangan_Online'])->nullable();
             $table->string('metode_ttd')->nullable();
             $table->timestamps();

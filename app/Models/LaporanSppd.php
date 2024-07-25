@@ -9,7 +9,8 @@ class LaporanSppd extends Model
 {
     use HasFactory;
     protected $table = 'laporan_sppds';
-    protected $fillable = ['sppd_id', 'laporan_sppd'];
+    // protected $fillable = ['sppd_id', 'laporan_sppd'];
+    protected $guarded = [];
 
     public function sppd()
     {

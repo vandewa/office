@@ -17,6 +17,6 @@ class ASkpd extends Model
 
     public function parent()
     {
-        return $this->belongsTo(ASkpd::class, 'idparent')->select('idskpd', 'idparent', 'skpd', 'jab');
+        return $this->belongsTo(ASkpd::class, 'idparent')->select('idskpd', 'idparent', 'skpd', 'jab', 'hp', 'idjabjbt', 'idjenjab', 'idjenkedudupeg');
     }
 }

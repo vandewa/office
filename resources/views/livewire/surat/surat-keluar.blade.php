@@ -37,32 +37,18 @@
                     </div>
                     <div class="col-12">
                         <div class="row">
-                            <div class="col-6">
-                                {{-- @livewire('surat.print-suratkeluar', ['suratKeluar' => $suratKeluar]) --}}
-                                {{-- @if ($document_id)
-                                    <div class="mt-4">
-                                        <h2>Preview Dokumen</h2>
-                                        @php
-                                            $document = \App\Models\Document::find($document_id);
-                                        @endphp
-                                        @if ($document)
-                                            <embed src="{{ $document->dok_surat }}" width="100%" height="600px"
-                                                type="application/pdf" />
-                                        @endif
-                                    </div>
-                                @endif --}}
-                                {{--  @if (request()->routeIs('suratkeluar-disposisi'))
-                                    <h2>Preview Dokumen</h2>
-                                    <embed src="{{ Storage::url('uploads/1720880207_LSP MARSA.pdf') }}" width="100%"
-                                        height="600px" type="application/pdf" />
-                                @endif --}}
-                                @if (request()->routeIs('suratkeluar-verifikasi') && $suratkeluar->document)
+                            @if (request()->routeIs('suratkeluar-verifikasi') && $suratkeluar->document)
+                                <div class="col-6">
                                     <h2>Preview Dokumen</h2>
                                     <embed src="{{ asset($suratkeluar->document->dok_surat) }}" width="100%"
                                         height="600px" type="application/pdf" />
-                                @endif
-                            </div>
-                            <div class="col-6">
+                                </div>
+                                @php $formColClass = 'col-6'; @endphp
+                            @else
+                                @php $formColClass = 'col-12'; @endphp
+                            @endif
+
+                            <div class="{{ $formColClass }}">
                                 <form action="" wire:submit='save'>
                                     @csrf
                                     <div class="form-group row">
@@ -206,38 +192,44 @@
                                     <div class="col-6">
                                         @if (request()->routeIs('suratkeluar-verifikasi'))
                                             <div class="form-group row">
-                                                <label class="col-lg-3 col-form-label">komentar</label>
+                                                <label class="col-lg-3 col-form-label">Perlu Revisi</label>
                                                 <div class="col-lg-9">
-                                                    @can('add-disposisi')
-                                                        <textarea type="text" class="form-control" name="deskripsi" wire:model='formTindakLanjut.deskripsi'
-                                                            {{ $readonly ? 'enabled' : '' }}></textarea>
+                                                    <div class="form-check">
+                                                        <input type="radio" id="radioRevisi"
+                                                            class="form-check-input" name="revisi" value="revisi"
+                                                            wire:model="formTindakLanjut.revisi"
+                                                            @if (Gate::allows('sekre-staff', Auth::user())) {{ $readonly ? 'disabled' : '' }}
                                                     @else
-                                                        <textarea type="text" class="form-control" {{ $readonly ? 'disabled' : '' }}>{{ $tindakLanjut->deskripsi ?? 'no data' }}</textarea>
-                                                    @endcan
+                                                    {{ $readonly ? 'enabled' : '' }} @endif>
+                                                        <label class="form-check-label" for="radioRevisi">Ya</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input type="radio" id="radioTidakRevisi"
+                                                            class="form-check-input" name="revisi"
+                                                            value="tidak_revisi" wire:model="formTindakLanjut.revisi"
+                                                            @if (Gate::allows('sekre-staff', Auth::user())) {{ $readonly ? 'disabled' : '' }}
+                                                    @else
+                                                    {{ $readonly ? 'enabled' : '' }} @endif>
+                                                        <label class="form-check-label"
+                                                            for="radioTidakRevisi">Tidak</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
+                                                <label class="col-lg-3 col-form-label">komentar</label>
                                                 <div class="col-lg-9">
-                                                    @can('sekretariat')
-                                                        <button type="button" wire:click="distribusikan"
-                                                            class="btn btn-primary">Distribusikan</button>
-                                                    @endcan
-                                                    @can('add-disposisi')
+                                                    @if (Gate::allows('add-disposisi', Auth::user()))
+                                                        <textarea type="text" class="form-control" name="deskripsi" wire:model='formTindakLanjut.deskripsi'
+                                                            {{ $readonly ? 'enabled' : '' }}></textarea>
+                                                    @else
                                                         <div class="form-group">
-                                                            <label class="d-block font-weight-semibold">Perlu
-                                                                revisi</label>
-                                                            <div class="col-lg-9">
-                                                                <div class="form-check form-check-inline">
-                                                                    <input type="checkbox" class="form-check-input"
-                                                                        wire:model="formTindakLanjut.revisi"
-                                                                        name="revisi" value="1">
-                                                                </div>
-                                                                Ya
-                                                            </div>
+                                                            <span class="form-control">
+                                                                {{ $tindakLanjut->deskripsi ?? '-'}}</span>
                                                         </div>
-                                                    @endcan
+                                                    @endif
                                                 </div>
                                             </div>
+
                                             @can('kepala_dinas')
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Tanda tangan</label>
@@ -248,6 +240,14 @@
                                                     </select>
                                                 </div>
                                             @endcan
+                                            <div class="form-group row">
+                                                <div class="col-lg-9">
+                                                    @can('sekretariat')
+                                                        <button type="button" wire:click="distribusikan"
+                                                            class="btn btn-primary">Distribusikan</button>
+                                                    @endcan
+                                                </div>
+                                            </div>
                                         @endif
                                     </div>
                                     <div class="text-right">

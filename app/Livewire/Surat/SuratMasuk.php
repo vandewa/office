@@ -120,18 +120,22 @@ class SuratMasuk extends Component
             ->select('tb_01.hp') // Memilih kolom yang relevan
             ->get();
 
+            dd($kepalaDinas);
+
         $kepalaBidang = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
             ->where('a_skpd.kdunit', $kdunit)
             ->where('idjenkedudupeg', 1)
             ->where('idjabjbt', '=', $user->idskpd)
             ->select('tb_01.hp', 'tb_01.kdunit', 'tb_01.idskpd', 'tb_01.idjenjab') // Memilih kolom yang relevan
             ->get();
-
+            dd($kepalaBidang);
 
         $staff = Tb01::where('kdunit', $user->kdunit)
             ->where('idjenkedudupeg', 1)
             ->select('tb_01.hp', 'tb_01.kdunit', 'tb_01.idskpd') // Memilih kolom yang relevan
             ->get();
+
+            dd($staff);
 
         // Query to get sekretariat with proper column selection
         $sekretariat = Tb01::from('tb_01 as tb')
@@ -219,9 +223,9 @@ class SuratMasuk extends Component
             'status_surat' => 'Perlu Verifikasi Kepala Dinas',
         ]);
 
-        // Menyimpan data di KirimWA
-        $this->sendWhatsapp(); // Memanggil metode sendWhatsapp
-        KirimWA::dispatch($this->kepalaDinas, $this->pesan_sekre); // Pastikan variabel di-set sebelumnya
+        // // Menyimpan data di KirimWA
+        // $this->sendWhatsapp(); // Memanggil metode sendWhatsapp
+        // KirimWA::dispatch($this->kepalaDinas, $this->pesan_sekre); // Pastikan variabel di-set sebelumnya
 
         return redirect()->to('/suratmasuk-index');
     }

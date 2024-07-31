@@ -48,7 +48,6 @@ class UnggahDokumenController extends Controller
         // Validasi file
         $request->validate([
             'dok_surat' => 'required|mimes:pdf,doc,docx,txt|max:2048',
-            // 'name' => 'required|string|max:255',
         ]);
 
         // Menyimpan file
@@ -61,18 +60,16 @@ class UnggahDokumenController extends Controller
             $document = Document::create([
                 'name' => $filename,
                 'dok_surat' => '/storage/' . $filePath,
+                'surat_keluar_id' => $surat_keluar_id, // Simpan id surat keluar
             ]);
 
             // Simpan document_id ke dalam sesi
             session(['document_id' => $document->id]);
-            // Hubungkan document_id ke surat_keluar
+
+            // Jika Anda ingin mengupdate kolom document_id pada tabel surat_keluars untuk dokumen terbaru
             $suratkeluar = SuratKeluar::findOrFail($surat_keluar_id);
             $suratkeluar->document_id = $document->id;
             $suratkeluar->save();
-
-            // return redirect()->route('tampilkan-dokumen.show', ['id' => $document->id]);
-            // return redirect()->route('suratkeluar-verifikasi')->with('document_id', $document->id);
-            // return redirect()->back();
         }
 
         return redirect()->back();

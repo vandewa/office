@@ -54,7 +54,7 @@
                             <tr role="row">
                                 <th class="text-left" style="width: 17px;" aria-label="No">Nomor Agenda</th>
                                 <th style="width: 150px;" aria-label="Tanggal">Tanggal</th>
-                                <th style="width: 222px;" aria-label="Jenis">Jenis</th>
+                                <th style="width: 222px;" aria-label="Jenis">Nomor Surat</th>
                                 {{-- <th style="width: 310px;" aria-label="Disposisi">Disposisi</th> --}}
                                 <th style="width: 191px;" aria-label="Subject">Subject</th>
                                 <th style="width: 222px;" aria-label="Keterangan">Keterangan</th>
@@ -68,7 +68,7 @@
                                     <td>{{ $loop->index + $data->firstItem() }}
                                     </td>
                                     <td>{{ $suratkeluar->tanggal_surat }}</td>
-                                    <td>{{$suratkeluar->jenis_surat}}</td>
+                                    <td>{{ $suratkeluar->nomor_surat }}</td>
                                     {{-- <td>
                                         @foreach ($suratkeluar->tindakLanjuts as $tindakLanjut)
                                             <span class="badge bg-purple"> {{ $tindakLanjut->diteruskan_kepada }}
@@ -76,7 +76,7 @@
                                             <span class="badge bg-blue"> {{ $tindakLanjut->disposisi }} </span>
                                         @endforeach
                                     </td> --}}
-                                    <td>{{$suratkeluar->perihal}}</td>
+                                    <td>{{ $suratkeluar->perihal }}</td>
                                     <td>
                                         @foreach ($suratkeluar->tindakLanjuts as $tindakLanjut)
                                             {{ $tindakLanjut->deskripsi }}
@@ -102,10 +102,6 @@
                                             class="btn btn-flat btn-sm">
                                             <i class="icon-eye"></i>
                                         </a>
-                                        <a href="{{ route('print-suratkeluar', ['id' => $suratkeluar->id]) }}" class="btn btn-flat btn-sm">
-                                            <i class="icon-printer"></i>
-                                        </a>
-
                                     </td>
                                 </tr>
                             @endforeach

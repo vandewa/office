@@ -26,7 +26,7 @@ class SuratKeluar extends Component
         'jenis_surat' => null,
         'tanggal_surat' => null,
         'perihal' => null,
-        'tujuan' => null,
+        'opd_id' => null,
         'tempat_tujuan' => null,
         'pembukaan' => null,
         'isi' => null,
@@ -59,10 +59,10 @@ class SuratKeluar extends Component
         $this->suratkeluar = $id;
         $this->readonly = request()->routeIs('suratkeluar-verifikasi');
         $this->tindakLanjut = TindakLanjut::where('surat_keluar_id', $id)->first();
-        $opdList = ASkpd::all();
-        foreach ($opdList as $opd) {
-            $this->opdOptions[$opd->idskpd] = $opd->skpd;
-        }
+        // Ambil data OPD dari database dan susun ke dalam array untuk opsi dropdown
+        $this->opdOptions = ASkpd::pluck('skpd', 'idskpd')->toArray();
+
+        // dd($this->opdOptions);
         $this->suratkeluarId = $id;
         if ($id) {
             $this->getEdit($id);
@@ -115,27 +115,18 @@ class SuratKeluar extends Component
             ->where('idjabjbt', $user->kdunit)
             ->where('idjenjab', 20)
             ->where('idjenkedudupeg', 1)
-            ->select('tb_01.hp') // Memilih kolom yang relevan
-            ->get();
-
-        dd($kepalaDinas);
+            ->pluck('hp'); // Mengambil hanya kolom 'hp'
 
         $kepalaBidang = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
             ->where('a_skpd.kdunit', $kdunit)
             ->where('idjenkedudupeg', 1)
             ->where('idjabjbt', '=', $user->idskpd)
-            ->select('tb_01.hp', 'tb_01.kdunit', 'tb_01.idskpd', 'tb_01.idjenjab') // Memilih kolom yang relevan
-            ->get();
-        dd($kepalaBidang);
+            ->pluck('tb_01.hp'); // Mengambil hanya kolom 'hp'
 
         $staff = Tb01::where('kdunit', $user->kdunit)
             ->where('idjenkedudupeg', 1)
-            ->select('tb_01.hp', 'tb_01.kdunit', 'tb_01.idskpd') // Memilih kolom yang relevan
-            ->get();
+            ->pluck('tb_01.hp'); // Mengambil hanya kolom 'hp'
 
-        dd($staff);
-
-        // Query to get sekretariat with proper column selection
         $sekretariat = Tb01::from('tb_01 as tb')
             ->join('a_skpd as skpd', 'tb.kdunit', '=', 'skpd.kdunit')
             ->where('idjenkedudupeg', 1)
@@ -146,25 +137,62 @@ class SuratKeluar extends Component
                             ->whereRaw('LENGTH(tb.idskpd) = ?', [strlen($user->kdunit . '.01') + 3]); // Exact length match
                     });
             })
-            ->distinct() // Ensure distinct rows
-            ->select('tb.hp', 'tb.kdunit', 'tb.idskpd', 'tb.idjenjab')
-            ->get();
+            ->distinct()
+            ->pluck('tb.hp'); // Mengambil hanya kolom 'hp'
 
-        // Output the results for debugging
-        // dd($sekretariat->map(function ($item) {
-        //     return [
-        //         'hp' => $item->hp,
-        //         'kdunit' => $item->kdunit,
-        //         'idskpd' => $item->idskpd,
-        //         'idjenjab' => $item->idjenjab
-        //     ];
-        // }));
+        $pesan_sekre = 'Surat masuk perlu ditindaklanjuti Kepala Dinas';
+        $pesan_kadin = 'Surat masuk perlu ditindaklanjuti Kepala Bidang';
+        $pesan_kabid = 'Surat masuk sudah ditindaklanjuti Kepala Dinas dan Kepala Bidang';
+        $pesan_revisi = 'Ada revisi surat masuk';
+        $pesan_distribusikan = 'Silakan cek surat masuk terbaru';
+    }
 
-        $pesan_sekre = 'Surat keluar perlu ditindaklanjuti Kepala Dinas';
-        $pesan_kadin = 'Surat keluar perlu ditindaklanjuti Kepala Bidang';
-        $pesan_kabid = 'Surat keluar sudah ditindaklanjuti Kepala Dinas dan Kepala Bidang';
-        $pesan_revisi = 'Ada revisi surat keluar';
-        $pesan_distribusikan = 'Silakan cek surat keluar terbaru';
+    public function generateSuratKeluar($suratkeluarId)
+    {
+        $suratkeluar = ModelsSuratKeluar::findOrFail($suratkeluarId);
+        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template_suratkeluar.docx');
+
+        $user = Auth::user();
+        $nip = $user->nip;
+        $kepalaDinas = Tb01::where('idskpd', $user->kdunit)
+            ->where('idjabjbt', $user->kdunit)
+            ->where('idjenjab', 20)
+            ->where('idjenkedudupeg', 1)
+            ->first();
+
+        $values = [
+            'nomor_surat' => strval($this->form['nomor_surat'] ?? ''),
+            'perihal' => strval($this->form['perihal'] ?? ''),
+            'opd_id' => strval($this->form['opd_id'] ?? ''),
+            'tempat_tujuan' => strval($this->form['tempat_tujuan'] ?? ''),
+            'pembukaan' => strval($this->form['pembukaan'] ?? ''),
+            'isi' => strval($this->form['isi'] ?? ''),
+            'hari' => strval($this->form['hari'] ?? ''),
+            'tanggal' => strval($this->form['tanggal'] ?? ''),
+            'pukul_mulai' => strval($this->form['pukul_mulai'] ?? ''),
+            'pukul_selesai' => strval($this->form['pukul_selesai'] ?? ''),
+            'tempat_acara' => strval($this->form['tempat_acara'] ?? ''),
+            'penutup' => strval($this->form['penutup'] ?? ''),
+            'tanggal' => strval($this->form['tanggal'] ?? ''),
+            'n_kep' => $kepalaDinas->nama ?? '',
+            'n_pangkat' => $kepalaDinas->pangkat ?? '',
+            'n_nip' => $kepalaDinas->nip ?? ''
+        ];
+        $phpWord->setValues($values);
+        $nomorSurat = !empty($values['nomor_surat']) ? $values['nomor_surat'] : 'NomorSuratUndefined';
+        $namaDokumen = 'Surat Keluar - ' . $nomorSurat . '.docx';
+
+        $path = storage_path('app/public/' . $namaDokumen);
+        $phpWord->saveAs($path);
+
+        // Simpan jalur file di tabel documents
+        $document = Document::create([
+            'dok_surat' => $namaDokumen,
+            'surat_keluar_id' => $suratkeluarId,
+        ]);
+
+        // Update kolom document_id di tabel surat_keluars
+        $suratkeluar->update(['document_id' => $document->id]);
     }
 
     public function save()
@@ -186,44 +214,6 @@ class SuratKeluar extends Component
         }
     }
 
-    public function generateSuratKeluar()
-    {
-        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template_suratkeluar.docx');
-
-        $user = Auth::user();
-        $nip = $user->nip;
-        $kepalaDinas = Tb01::where('idskpd', $user->kdunit)
-            ->where('idjabjbt', $user->kdunit)
-            ->where('idjenjab', 20)
-            ->where('idjenkedudupeg', 1)
-            ->first();
-
-        $values = [
-            'nomor_surat' => strval($this->form['nomor_surat'] ?? ''),
-            'perihal' => strval($this->form['perihal'] ?? ''),
-            'tujuan' => strval($this->form['tujuan'] ?? ''),
-            'tempat_tujuan' => strval($this->form['tempat_tujuan'] ?? ''),
-            'pembukaan' => strval($this->form['pembukaan'] ?? ''),
-            'isi' => strval($this->form['isi'] ?? ''),
-            'hari' => strval($this->form['hari'] ?? ''),
-            'tanggal' => strval($this->form['tanggal'] ?? ''),
-            'pukul_mulai' => strval($this->form['pukul_mulai'] ?? ''),
-            'pukul_selesai' => strval($this->form['pukul_selesai'] ?? ''),
-            'tempat_acara' => strval($this->form['tempat_acara'] ?? ''),
-            'penutup' => strval($this->form['penutup'] ?? ''),
-            'tanggal' => strval($this->form['tanggal'] ?? ''),
-            'n_kep' => $kepalaDinas->nama ?? '',
-            'n_pangkat' => $kepalaDinas->pangkat ?? '',
-            'n_nip' => $kepalaDinas->nip ?? ''
-
-        ];
-        $phpWord->setValues($values);
-        $nomorSurat = !empty($values['nomor_surat']) ? $values['nomor_surat'] : 'NomorSuratUndefined';
-        $namaDokumen = 'Surat Keluar - ' . $nomorSurat . '.docx';
-
-        $phpWord->saveAs($namaDokumen);
-    }
-
     public function store()
     {
 
@@ -233,10 +223,7 @@ class SuratKeluar extends Component
             'surat_keluar_id' => $suratkeluar->id,
             'status_surat' => 'Perlu Verifikasi Kepala Bidang',
         ]);
-
-
-
-        // Redirect ke halaman suratkeluar-index setelah data disimpan
+        $this->generateSuratKeluar($suratkeluar->id);
         return redirect()->to('/suratkeluar-index');
     }
 
@@ -307,8 +294,6 @@ class SuratKeluar extends Component
         return redirect()->to('/suratkeluar-index');
     }
 
-
-
     public function distribusikan()
     {
         $statusSurat = StatusSurat::where('surat_keluar_id', $this->suratkeluar->id)->first();
@@ -319,7 +304,6 @@ class SuratKeluar extends Component
                     'status_surat' => 'Sudah Distribusikan',
                 ]);
             }
-            $this->generateSuratKeluar();
         }
         // Redirect ke halaman suratkeluar-index setelah data disimpan
         return redirect()->to('/suratkeluar-index');
@@ -337,10 +321,9 @@ class SuratKeluar extends Component
         // return view('surat.keluar.print-suratkeluar', compact('surat1'));
     }
 
-
     public function render()
     {
-        $surat = ModelsSuratKeluar::with('document')->find($this->suratkeluarId);
+        $surat = ModelsSuratKeluar::with('documents')->find($this->suratkeluarId);
         return view('livewire.surat.surat-keluar', [
             'surat' => $surat,
             'skpd' => $this->skpd,

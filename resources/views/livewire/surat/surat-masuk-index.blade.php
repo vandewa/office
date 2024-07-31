@@ -91,7 +91,7 @@
                                         @can('sekretariat')
                                             <button type="button" wire:click="delete('{{ $suratmasuk->id }}')"
                                                 class="btn btn-flat btn-sm" data-toggle="tooltip" data-placement="left"
-                                                title="Edit">
+                                                title="Hapus">
                                                 <i class="icon-trash"></i>
                                             </button>
                                             <a href="{{ route('suratmasuk', ['id' => $suratmasuk->id]) }}"

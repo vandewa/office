@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('jenis_surat')->nullable();
             $table->string('tanggal_surat')->nullable();
             $table->string('perihal')->nullable();
-            $table->string('tujuan')->nullable();
+            $table->string('opd_id')->nullable();
             $table->string('tempat_tujuan')->nullable();
             $table->string('pembukaan')->nullable();
             $table->string('isi')->nullable();

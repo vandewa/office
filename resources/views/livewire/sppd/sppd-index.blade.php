@@ -96,16 +96,26 @@
                                             @endif
                                         @endforeach
 
+                                        <a href="{{ route('sppd', ['id' => $sppd->id]) }}"
+                                            class="btn btn-flat btn-sm">
+                                            <i class="icon-eye"></i>
+                                        </a>
+
                                         {{-- <a href="{{ route('download.spt') }}" class="btn btn-primary">Unduh SPT</a> --}}
 
+                                        @if (session('spt_document_path'))
+                                            <a href="{{ route('download.spt') }}" class="btn btn-primary">
+                                                SPT</a>
+                                        @endif
                                         <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
                                                 SPD
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                 @foreach (session('dokumen_paths', []) as $nip => $path)
-                                                    <a href="{{ route('download.dokumen', ['nip' => $nip]) }}"
+                                                    <a href="{{ route('download.dokumen', ['nip' => urlencode($nip)]) }}"
                                                         class="dropdown-item">
                                                         <i class="icon-printer"></i> Unduh SPD untuk {{ $nip }}
                                                     </a>

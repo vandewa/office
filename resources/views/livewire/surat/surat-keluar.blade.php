@@ -1,4 +1,46 @@
 <div>
+    <style>
+        .custom-select-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .custom-select-search {
+            width: 100%;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            box-sizing: border-box;
+        }
+
+        .custom-select-options {
+            position: absolute;
+            width: 100%;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            background-color: #fff;
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .custom-select-option {
+            padding: .375rem .75rem;
+            cursor: pointer;
+        }
+
+        .custom-select-option:hover {
+            background-color: #f1f1f1;
+        }
+
+        .custom-select-options.show {
+            display: block;
+        }
+    </style>
     <div class="content">
         <div class="card">
             <div class="card-header">
@@ -37,11 +79,21 @@
                     </div>
                     <div class="col-12">
                         <div class="row">
-                            @if (request()->routeIs('suratkeluar-verifikasi') && $suratkeluar->document)
+                            @if (request()->routeIs('suratkeluar-verifikasi') && $suratkeluar->documents)
                                 <div class="col-6">
                                     <h2>Preview Dokumen</h2>
-                                    <embed src="{{ asset($suratkeluar->document->dok_surat) }}" width="100%"
-                                        height="600px" type="application/pdf" />
+                                    @foreach ($suratkeluar->documents as $document)
+                                        @if (Str::endsWith($document->dok_surat, '.pdf'))
+                                            <embed src="{{ asset($document->dok_surat) }}" width="100%" height="600px"
+                                                type="application/pdf" />
+                                        @elseif (Str::endsWith($document->dok_surat, '.docx'))
+                                            <div>
+                                                <a href="{{ asset('storage/' . $document->dok_surat) }}" download>
+                                                    Download {{ $document->dok_surat }}
+                                                </a>
+                                            </div>
+                                        @endif
+                                    @endforeach
                                 </div>
                                 @php $formColClass = 'col-6'; @endphp
                             @else
@@ -83,21 +135,21 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Tujuan</label>
-                                        <div class="col-lg-9">
-                                            <select class="form-control select-search" name="tujuan"
-                                                wire:model='form.tujuan'
-                                                @if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
-                                         @else
-                                         {{ $readonly ? 'disabled' : '' }} @endif
-                                                data-fouc>
-                                                <option value="" selected>Pilih</option>
+                                        <div class="col-lg-9 custom-select-container">
+                                            <input type="text" class="form-control custom-select-search"
+                                                placeholder="Cari..." id="opd-search">
+                                            <input type="hidden" name="opd_id" wire:model='form.opd_id'>
+                                            <div class="custom-select-options">
                                                 @foreach ($opdOptions as $id => $opd)
-                                                    <option value="{{ $id }}">{{ $opd }}
-                                                    </option>
+                                                    <div class="custom-select-option" data-value="{{ $opd }}"
+                                                        data-label="{{ $opd }}">
+                                                        {{ $opd }}
+                                                    </div>
                                                 @endforeach
-                                            </select>
+                                            </div>
                                         </div>
                                     </div>
+
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Tempat tujuan</label>
                                         <div class="col-lg-9">
@@ -191,30 +243,32 @@
                                     </div>
                                     <div class="col-6">
                                         @if (request()->routeIs('suratkeluar-verifikasi'))
-                                            <div class="form-group row">
-                                                <label class="col-lg-3 col-form-label">Perlu Revisi</label>
-                                                <div class="col-lg-9">
-                                                    <div class="form-check">
-                                                        <input type="radio" id="radioRevisi"
-                                                            class="form-check-input" name="revisi" value="revisi"
-                                                            wire:model="formTindakLanjut.revisi"
-                                                            @if (Gate::allows('sekre-staff', Auth::user())) {{ $readonly ? 'disabled' : '' }}
+                                            @can('view-status-surat')
+                                                <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label">Perlu Revisi</label>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-check">
+                                                            <input type="radio" id="radioRevisi"
+                                                                class="form-check-input" name="revisi" value="revisi"
+                                                                wire:model="formTindakLanjut.revisi"
+                                                                @if (Gate::allows('sekre-staff', Auth::user())) {{ $readonly ? 'disabled' : '' }}
                                                     @else
                                                     {{ $readonly ? 'enabled' : '' }} @endif>
-                                                        <label class="form-check-label" for="radioRevisi">Ya</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input type="radio" id="radioTidakRevisi"
-                                                            class="form-check-input" name="revisi"
-                                                            value="tidak_revisi" wire:model="formTindakLanjut.revisi"
-                                                            @if (Gate::allows('sekre-staff', Auth::user())) {{ $readonly ? 'disabled' : '' }}
+                                                            <label class="form-check-label" for="radioRevisi">Ya</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input type="radio" id="radioTidakRevisi"
+                                                                class="form-check-input" name="revisi"
+                                                                value="tidak_revisi" wire:model="formTindakLanjut.revisi"
+                                                                @if (Gate::allows('sekre-staff', Auth::user())) {{ $readonly ? 'disabled' : '' }}
                                                     @else
                                                     {{ $readonly ? 'enabled' : '' }} @endif>
-                                                        <label class="form-check-label"
-                                                            for="radioTidakRevisi">Tidak</label>
+                                                            <label class="form-check-label"
+                                                                for="radioTidakRevisi">Tidak</label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            @endcan
                                             <div class="form-group row">
                                                 <label class="col-lg-3 col-form-label">komentar</label>
                                                 <div class="col-lg-9">
@@ -224,7 +278,7 @@
                                                     @else
                                                         <div class="form-group">
                                                             <span class="form-control">
-                                                                {{ $tindakLanjut->deskripsi ?? '-'}}</span>
+                                                                {{ $tindakLanjut->deskripsi ?? '-' }}</span>
                                                         </div>
                                                     @endif
                                                 </div>
@@ -250,11 +304,18 @@
                                             </div>
                                         @endif
                                     </div>
-                                    <div class="text-right">
-                                        <button type="submit"
-                                            class="btn btn-primary">{{ $edit ? 'Simpan Perubahan' : 'Buat SUrat keluar Baru' }}<i
-                                                class="icon-paperplane ml-2"></i></button>
-                                    </div>
+                                    @can('view-status-surat')
+                                        <div class="text-right">
+                                            <button type="submit"
+                                                class="btn btn-primary">{{ $edit ? 'Simpan Perubahan' : 'Buat SUrat keluar Baru' }}<i
+                                                    class="icon-paperplane ml-2"></i></button>
+                                        </div>
+                                    @else
+                                        <div class="text-right">
+                                            <button type="submit" class="btn btn-primary">Kembali<i
+                                                    class="icon-paperplane ml-2"></i></button>
+                                        </div>
+                                    @endcan
                                 </form>
                             </div>
                         </div>
@@ -264,3 +325,45 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.querySelector('#opd-search');
+        const optionsContainer = document.querySelector('.custom-select-options');
+        const optionsList = Array.from(document.querySelectorAll('.custom-select-option'));
+
+        // Menampilkan opsi saat input fokus
+        searchInput.addEventListener('focus', function() {
+            optionsContainer.classList.add('show');
+        });
+
+        // Menyaring opsi berdasarkan input pencarian
+        searchInput.addEventListener('input', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            optionsList.forEach(option => {
+                const label = option.dataset.label.toLowerCase();
+                option.style.display = label.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
+
+        // Menangani klik pada opsi
+        optionsList.forEach(option => {
+            option.addEventListener('click', function() {
+                searchInput.value = option.dataset.label; // Menampilkan nama yang dipilih
+                const hiddenInput = document.querySelector('input[name="opd_id"]');
+                hiddenInput.value = option.dataset.value; // Menyimpan ID ke hidden input
+
+                // Memicu pembaruan Livewire
+                hiddenInput.dispatchEvent(new Event('input'));
+
+                optionsContainer.classList.remove('show');
+            });
+        });
+
+        // Menutup dropdown saat klik di luar elemen dropdown
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.custom-select-container')) {
+                optionsContainer.classList.remove('show');
+            }
+        });
+    });
+</script>

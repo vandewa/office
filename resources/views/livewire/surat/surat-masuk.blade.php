@@ -1,4 +1,46 @@
 <div>
+    <style>
+        .custom-select-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .custom-select-search {
+            width: 100%;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            box-sizing: border-box;
+        }
+
+        .custom-select-options {
+            position: absolute;
+            width: 100%;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            background-color: #fff;
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .custom-select-option {
+            padding: .375rem .75rem;
+            cursor: pointer;
+        }
+
+        .custom-select-option:hover {
+            background-color: #f1f1f1;
+        }
+
+        .custom-select-options.show {
+            display: block;
+        }
+    </style>
     <div class="content">
         <div class="card">
             <div class="card-header">
@@ -52,10 +94,19 @@
                                 <embed src="{{ Storage::url('uploads/1720880207_LSP MARSA.pdf') }}" width="100%"
                                     height="600px" type="application/pdf" />
                             @endif --}}
-                            @if (request()->routeIs('suratmasuk-disposisi') && $suratmasuk->document)
+                            @if (request()->routeIs('suratmasuk-disposisi') && $suratmasuk->document && $suratmasuk->document->dok_surat)
                                 <h2>Preview Dokumen</h2>
                                 <embed src="{{ asset($suratmasuk->document->dok_surat) }}" width="100%" height="600px"
                                     type="application/pdf" />
+                            @elseif (request()->routeIs('suratmasuk') &&
+                                    request()->route('id') &&
+                                    $suratmasuk->document &&
+                                    $suratmasuk->document->dok_surat)
+                                <h2>Preview Dokumen</h2>
+                                <embed src="{{ asset($suratmasuk->document->dok_surat) }}" width="100%" height="600px"
+                                    type="application/pdf" />
+                            @else
+                                <p>No document uploaded yet.</p>
                             @endif
                         </div>
                         <div class="col-6">
@@ -118,23 +169,45 @@
                                                      {{ $readonly ? 'disabled' : '' }} @endif>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    {{-- <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Pengirim</label>
                                         <div class="col-lg-9">
                                             <select class="form-control select-search" name="opd_id"
                                                 wire:model='form.opd_id'
                                                 @if (Gate::allows('sekretariat', Auth::user())) {{ $readonly ? 'enabled' : '' }}
-                                                     @else
-                                                     {{ $readonly ? 'disabled' : '' }} @endif
+                                                @else
+                                                {{ $readonly ? 'disabled' : '' }} @endif
                                                 data-fouc>
-                                                {{-- <option value="" selected>Pilih</option> --}}
                                                 @foreach ($opdOptions as $id => $opd)
-                                                    <option value="{{ $id }}">{{ $opd }}
+                                                    <option value="{{ $id }}">
+                                                        {{ $opd }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
+                                    </div> --}}
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label">Pengirim</label>
+                                        <div class="col-lg-9 custom-select-container">
+                                            @if (Gate::allows('sekretariat', Auth::user()))
+                                                <input type="text" class="form-control custom-select-search"
+                                                    placeholder="Cari..." id="opd-search">
+                                                <input type="hidden" name="opd_id" wire:model='form.opd_id'>
+                                                <div class="custom-select-options">
+                                                    @foreach ($opdOptions as $id => $opd)
+                                                        <div class="custom-select-option"
+                                                            data-value="{{ $opd }}"
+                                                            data-label="{{ $opd }}">
+                                                            {{ $opd }}
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <span class="badge bg-blue">{{ $suratmasuk->opd_id }}</span>
+                                            @endif
+                                        </div>
                                     </div>
+
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Tanggal Surat</label>
                                         <div class="col-lg-9">
@@ -447,4 +520,46 @@
             console.error('Element with ID disposisi not found.');
         }
     }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.querySelector('#opd-search');
+        const optionsContainer = document.querySelector('.custom-select-options');
+        const optionsList = Array.from(document.querySelectorAll('.custom-select-option'));
+
+        // Menampilkan opsi saat input fokus
+        searchInput.addEventListener('focus', function() {
+            optionsContainer.classList.add('show');
+        });
+
+        // Menyaring opsi berdasarkan input pencarian
+        searchInput.addEventListener('input', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            optionsList.forEach(option => {
+                const label = option.dataset.label.toLowerCase();
+                option.style.display = label.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
+
+        // Menangani klik pada opsi
+        optionsList.forEach(option => {
+            option.addEventListener('click', function() {
+                searchInput.value = option.dataset.label; // Menampilkan nama yang dipilih
+                const hiddenInput = document.querySelector('input[name="opd_id"]');
+                hiddenInput.value = option.dataset.value; // Menyimpan ID ke hidden input
+
+                // Memicu pembaruan Livewire
+                hiddenInput.dispatchEvent(new Event('input'));
+
+                optionsContainer.classList.remove('show');
+            });
+        });
+
+        // Menutup dropdown saat klik di luar elemen dropdown
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.custom-select-container')) {
+                optionsContainer.classList.remove('show');
+            }
+        });
+    });
 </script>

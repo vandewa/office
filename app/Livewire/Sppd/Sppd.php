@@ -227,9 +227,11 @@ class Sppd extends Component
 
         // Menentukan nama dokumen
         $namaDokumen = 'SPT_' . date('d_F_Y', strtotime($tanggal)) . '.docx';
+        $path = storage_path('app/public/' . $namaDokumen);
 
-        $phpWord->saveAs($namaDokumen);
+        $phpWord->saveAs($path);
 
+        session()->put('spt_document_path', $path);
         // $path = storage_path('app/public/' . $namaDokumen);
 
         // Simpan dokumen di folder storage
@@ -243,14 +245,13 @@ class Sppd extends Component
     {
         $path = session('spt_document_path');
 
-        dd($path, file_exists($path)); // Debugging
-
         if ($path && file_exists($path)) {
             return response()->download($path);
         }
 
         return abort(404, 'Dokumen tidak ditemukan.');
     }
+
 
     public function generateSpd($sppd)
     {
@@ -272,12 +273,15 @@ class Sppd extends Component
             ->where('idjenjab', 20)
             ->where('idjenkedudupeg', 1)
             ->first();
+
         $tanggal = $this->form['ditetapkan_tgl'] ?? now()->format('Y-m-d');
         $hari = $this->form['hari'] ?? 0;
         $hariDalamKata = $numberToWord[$hari] ?? 'tidak diketahui'; // Mengonversi angka menjadi kata
 
         // Ambil daftar NIP pegawai dari form
         $nipList = $this->formNama['nip'] ?? [];
+        $dokumenPaths = []; // Array to store document paths and names
+
         foreach ($nipList as $nip) {
             $pegawai = Tb01::where('nip', $nip)->first();
             if ($pegawai) {
@@ -360,14 +364,12 @@ class Sppd extends Component
                     'jabatan' => $jabatan
                 ];
                 $phpWord->setValues($values);
-                $namaDokumen = 'SPD_' . $nama . '_' . date('d_F_Y', strtotime($tanggal)) . '.docx';
                 // Simpan dokumen
-                // $phpWord->saveAs($namaDokumen);
-                // Simpan dokumen di folder storage
+                $namaDokumen = 'SPD_' . $nama . '_' . date('d_F_Y', strtotime($tanggal)) . '.docx';
                 $path = storage_path('app/public/' . $namaDokumen);
                 $phpWord->saveAs($path);
 
-                // Simpan path dokumen di array
+                // Simpan path dokumen di array dengan nip sebagai kunci
                 $dokumenPaths[$nip] = $path;
             }
         }
@@ -383,6 +385,48 @@ class Sppd extends Component
         }
 
         return abort(404, 'Dokumen tidak ditemukan.');
+    }
+
+    public function sendWhatsapp()
+    {
+        $user = Auth::user();
+        $nip = $user->nip;
+        $kdunit = Tb01::where('nip', $nip)->value('kdunit');
+
+        $kepalaDinas = Tb01::where('idskpd', $user->kdunit)
+            ->where('idjabjbt', $user->kdunit)
+            ->where('idjenjab', 20)
+            ->where('idjenkedudupeg', 1)
+            ->pluck('hp'); // Mengambil hanya kolom 'hp'
+
+        $kepalaBidang = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
+            ->where('a_skpd.kdunit', $kdunit)
+            ->where('idjenkedudupeg', 1)
+            ->where('idjabjbt', '=', $user->idskpd)
+            ->pluck('tb_01.hp'); // Mengambil hanya kolom 'hp'
+
+        $staff = Tb01::where('kdunit', $user->kdunit)
+            ->where('idjenkedudupeg', 1)
+            ->pluck('tb_01.hp'); // Mengambil hanya kolom 'hp'
+
+        $sekretariat = Tb01::from('tb_01 as tb')
+            ->join('a_skpd as skpd', 'tb.kdunit', '=', 'skpd.kdunit')
+            ->where('idjenkedudupeg', 1)
+            ->where(function ($query) use ($user) {
+                $query->where('tb.idskpd', $user->kdunit . '.01')
+                    ->orWhere(function ($query) use ($user) {
+                        $query->where('tb.idskpd', 'like', $user->kdunit . '.01.%')
+                            ->whereRaw('LENGTH(tb.idskpd) = ?', [strlen($user->kdunit . '.01') + 3]); // Exact length match
+                    });
+            })
+            ->distinct()
+            ->pluck('tb.hp'); // Mengambil hanya kolom 'hp'
+
+        $pesan_sekre = 'Surat masuk perlu ditindaklanjuti Kepala Dinas';
+        $pesan_kadin = 'Surat masuk perlu ditindaklanjuti Kepala Bidang';
+        $pesan_kabid = 'Surat masuk sudah ditindaklanjuti Kepala Dinas dan Kepala Bidang';
+        $pesan_revisi = 'Ada revisi surat masuk';
+        $pesan_distribusikan = 'Silakan cek surat masuk terbaru';
     }
 
     public function store()

@@ -13,12 +13,12 @@ class Document extends Model
 
     public function suratMasuk()
     {
-        return $this->hasOne(SuratMasuk::class);
+        return $this->belongsTo(SuratMasuk::class, 'surat_masuk_id');
     }
 
     public function suratKeluar()
     {
-        return $this->hasOne(SuratKeluar::class);
+        return $this->belongsTo(SuratKeluar::class, 'surat_keluar_id');
     }
 }
 

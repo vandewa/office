@@ -1,10 +1,8 @@
+
 <?php
-
 namespace App\Livewire\Surat;
-
 use App\Jobs\KirimWA;
 use Livewire\Component;
-use Twilio\Rest\Client;
 use App\Models\Document;
 use App\Models\Simpeg\Tb01;
 use App\Models\StatusSurat;
@@ -15,15 +13,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Models\SuratMasuk as ModelsSuratMasuk;
-
 class SuratMasuk extends Component
 {
     use WithFileUploads;
-
-    public $nama, $suratmasuk, $opdOptions = [], $suratmasukId = null, $edit = false, $readonly = false, $skpd, $tindakLanjut, $document_id, $document;
-
+    public $nama, $suratmasuk, $opdOptions = [], $suratmasukId = null,
+    $edit = false, $readonly = false, $skpd, $tindakLanjut;
+    public $document_id, $document;
     public $form = [
-        'jenis_agenda_tp' => [],
+        'jenis_agenda_tp' => null,
         'kode_lama' => null,
         'kode_baru' => null,
         'nomor_surat' => null,
@@ -36,32 +33,32 @@ class SuratMasuk extends Component
         'jamMulai' => null,
         'tempat' => null,
         'perihal' => null,
-
     ];
-
     public $formTindakLanjut  = [
         'deskripsi' => null,
         'nama' => null,
         'nip' => null,
         'diteruskan_kepada' => [],
         'disposisi' => [],
-        'revisi' =>  null
+        'revisi' => null
     ];
-
     public $formStatusSurat = [
         'status_surat' => null
     ];
-
     public function mount($id = null)
     {
-        $this->document_id = session('document_id');
+         // Ambil document_id dari session
+         $this->document_id = session('document_id');
         $this->suratmasuk = $id;
         $this->tindakLanjut = TindakLanjut::where('surat_masuk_id', $id)->first();
+        // $this->document = ModelsSuratMasuk::where('document_id', $id)->first();
+        // $this->suratmasuk = ModelsSuratMasuk::with('document')->findOrFail($id);
         $this->readonly = request()->routeIs('suratmasuk-disposisi'); // Tentukan readonly berdasarkan route
         // Ambil data OPD dari database dan susun ke dalam array untuk opsi dropdown
-        $this->opdOptions = ASkpd::pluck('skpd', 'idskpd')->toArray();
-
-        // dd($this->opdOptions);
+        $opdList = ASkpd::all();
+        foreach ($opdList as $opd) {
+            $this->opdOptions[$opd->idskpd] = $opd->skpd;
+        }
         $this->suratmasukId = $id;
         if ($id) {
             $this->getEdit($id);
@@ -78,7 +75,6 @@ class SuratMasuk extends Component
                     ->where('idjenkedudupeg', 1)
                     ->whereColumn('tb_01.idjabjbt', 'tb_01.idskpd')
                     ->distinct()
-                    //  ->first();
                     ->pluck('a_skpd.skpd', 'tb_01.nip')
                     ->map(function ($skpd, $nip) {
                         $pegawai = Tb01::where('nip', $nip)->first();
@@ -99,79 +95,29 @@ class SuratMasuk extends Component
             }
         }
     }
-
     public function getEdit($id)
     {
         $this->edit = true;
         $this->suratmasuk = ModelsSuratMasuk::findOrFail($id);
         $this->form = array_intersect_key($this->suratmasuk->toArray(), $this->form);
     }
-
-    public function sendWhatsapp()
-    {
-        $user = Auth::user();
-        $nip = $user->nip;
-        $kdunit = Tb01::where('nip', $nip)->value('kdunit');
-
-        $kepalaDinas = Tb01::where('idskpd', $user->kdunit)
-            ->where('idjabjbt', $user->kdunit)
-            ->where('idjenjab', 20)
-            ->where('idjenkedudupeg', 1)
-            ->pluck('hp'); // Mengambil hanya kolom 'hp'
-
-        $kepalaBidang = Tb01::join('a_skpd', 'tb_01.kdunit', '=', 'a_skpd.kdunit')
-            ->where('a_skpd.kdunit', $kdunit)
-            ->where('idjenkedudupeg', 1)
-            ->where('idjabjbt', '=', $user->idskpd)
-            ->pluck('tb_01.hp'); // Mengambil hanya kolom 'hp'
-
-        $staff = Tb01::where('kdunit', $user->kdunit)
-            ->where('idjenkedudupeg', 1)
-            ->pluck('tb_01.hp'); // Mengambil hanya kolom 'hp'
-
-        $sekretariat = Tb01::from('tb_01 as tb')
-            ->join('a_skpd as skpd', 'tb.kdunit', '=', 'skpd.kdunit')
-            ->where('idjenkedudupeg', 1)
-            ->where(function ($query) use ($user) {
-                $query->where('tb.idskpd', $user->kdunit . '.01')
-                    ->orWhere(function ($query) use ($user) {
-                        $query->where('tb.idskpd', 'like', $user->kdunit . '.01.%')
-                            ->whereRaw('LENGTH(tb.idskpd) = ?', [strlen($user->kdunit . '.01') + 3]); // Exact length match
-                    });
-            })
-            ->distinct()
-            ->pluck('tb.hp'); // Mengambil hanya kolom 'hp'
-
-        $pesan_sekre = 'Surat masuk perlu ditindaklanjuti Kepala Dinas';
-        $pesan_kadin = 'Surat masuk perlu ditindaklanjuti Kepala Bidang';
-        $pesan_kabid = 'Surat masuk sudah ditindaklanjuti Kepala Dinas dan Kepala Bidang';
-        $pesan_revisi = 'Ada revisi surat masuk';
-        $pesan_distribusikan = 'Silakan cek surat masuk terbaru';
-    }
-
     public function save()
     {
-        if (Gate::allows('sekretariat', Auth::user())) {
-            if ($this->edit === true) {
-                $this->storeUpdate();
-            } else {
-                $this->store();
-            }
+        if ($this->edit === true) {
+            $this->storeUpdate();
+        } else {
+            $this->store();
         }
-
-        if (Gate::allows('kepala_dinas', Auth::user())) {
-            $this->storeKadin();
-        }
-
-        if (Gate::allows('kepala_bidang', Auth::user())) {
-            $this->storeKabid();
-        }
+    }
+    public function sendWhatsApp($phone, $message)
+    {
+        KirimWA::dispatch($phone, $message);
     }
 
     public function store()
     {
         $this->validate([
-            'form.jenis_agenda_tp' => 'nullable|string',
+            // 'form.jenis_agenda_tp' => 'required|in:JENIS_SURAT_TP_01,JENIS_SURAT_TP_02',
             'form.kode_lama' => 'nullable|string',
             'form.kode_baru' => 'nullable|string',
             'form.nomor_surat' => 'nullable|string',
@@ -181,98 +127,30 @@ class SuratMasuk extends Component
             'form.acara' => 'nullable|string',
             'form.tanggalBerangkat' => 'nullable|date',
             'form.tanggalPulang' => 'nullable|date',
-            'form.jamMulai' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    if (!strtotime($value)) {
-                        $fail('The ' . $attribute . ' is not a valid time.');
-                    }
-                },
-            ],
+            'form.jamMulai' => 'nullable|time',
             'form.tempat' => 'nullable|string',
             'form.perihal' => 'nullable|string',
             'document_id' => 'required|exists:documents,id',
         ]);
-
+        // Masukkan document_id ke dalam $form
         $this->form['document_id'] = $this->document_id;
-
-        // Buat entri surat masuk
+        // Buat entri SuratMasuk yang baru
         $suratmasuk = ModelsSuratMasuk::create($this->form);
-
-        // Update kolom surat_masuk_id pada tabel documents
-        $document = Document::find($this->document_id);
-        if ($document) {
-            $document->surat_masuk_id = $suratmasuk->id;
-            $document->save();
-        }
-
-        // Update status surat
-        StatusSurat::updateOrCreate([
+        // Buat entri status surat baru dengan status 'Verifikasi Kepala Dinas'
+        StatusSurat::create([
             'surat_masuk_id' => $suratmasuk->id,
             'status_surat' => 'Perlu Verifikasi Kepala Dinas',
         ]);
-
-        // Kirim pesan WhatsApp jika diperlukan
-        // $this->sendWhatsapp(); // Memanggil metode sendWhatsapp
-        // KirimWA::dispatch($this->kepalaDinas, $this->pesan_sekre); // Pastikan variabel di-set sebelumnya
-
+        // Kirim pesan WhatsApp setelah laporan disimpan
+        $phone = ""; // Nomor telepon kepala dinas
+        $message = "Pesan WhatsApp Kepada Kepala Dinas untuk Memberikan komentar dan disposisi"; // ke kadin
+        // $this->sendWhatsApp($phone, $message);
+        // Redirect ke halaman suratmasuk-index setelah data disimpan
         return redirect()->to('/suratmasuk-index');
     }
-
-    public function storeKadin()
-    {
-        $suratmasuk = ModelsSuratMasuk::findOrFail($this->suratmasukId);
-
-        if (Gate::allows('kepala_dinas', Auth::user())) {
-            foreach ($this->formTindakLanjut['diteruskan_kepada'] as $diteruskan_kepada) {
-                TindakLanjut::updateOrCreate([
-                    'surat_masuk_id' => $suratmasuk->id,
-                    'diteruskan_kepada' => $diteruskan_kepada,
-                ], [
-                    'deskripsi' => $this->formTindakLanjut['deskripsi'],
-                    'revisi' => $this->formTindakLanjut['revisi'] === 'revisi' ? true : false,
-                    'disposisi' => null,
-                    'nama' => Auth::user()->nama,
-                    'nip' => Auth::user()->nip,
-                ]);
-            }
-        }
-
-        $statusSurat = $this->formTindakLanjut['revisi'] === 'revisi' ? 'Revisi' : 'Perlu Verifikasi Kepala Bidang';
-
-        StatusSurat::updateOrCreate(
-            ['surat_masuk_id' => $suratmasuk->id],
-            ['status_surat' => $statusSurat]
-        );
-
-        return redirect()->to('/suratmasuk-index');
-    }
-
-    public function storeKabid()
-    {
-        $suratmasuk = ModelsSuratMasuk::findOrFail($this->suratmasukId);
-
-        foreach ($this->formTindakLanjut['disposisi'] as $disposisi) {
-            TindakLanjut::updateOrCreate([
-                'surat_masuk_id' => $suratmasuk->id,
-                'disposisi' => $disposisi,
-                'diteruskan_kepada' => null,
-                'revisi' => $this->formTindakLanjut['revisi'] === 'revisi' ? true : false,
-                'nama' => Auth::user()->nama,
-                'nip' => Auth::user()->nip
-            ]);
-        }
-
-        StatusSurat::updateOrCreate(
-            ['surat_masuk_id' => $suratmasuk->id],
-            ['status_surat' => 'Sekretariat']
-        );
-
-        return redirect()->to('/suratmasuk-index');
-    }
-
     public function storeUpdate()
     {
+        // dd($this->formTindakLanjut);
         $suratmasuk = ModelsSuratMasuk::findOrFail($this->suratmasukId);
         if (Gate::allows('sekretariat', Auth::user())) {
             // Update kolom lainnya
@@ -289,21 +167,87 @@ class SuratMasuk extends Component
                 'tanggalPulang' => $this->form['tanggalPulang'],
                 'jamMulai' => $this->form['jamMulai'],
                 'tempat' => $this->form['tempat'],
-                'form.perihal' => 'nullable|string',
-                'document_id' => 'required|exists:documents,id',
+                'perihal' => $this->form['perihal'],
+                'dok_surat' => isset($path) ? $path : $suratmasuk->dok_surat
             ]);
-
-            // Masukkan document_id ke dalam $form
-            $this->form['document_id'] = $this->document_id;
-            // Buat entri status surat baru dengan status 'Perlu Verifikasi Kepala Dinas'
+            // Buat entri status surat baru dengan status 'Verifikasi Kepala Dinas'
             StatusSurat::updateOrCreate([
                 'surat_masuk_id' => $suratmasuk->id,
-            ], [
                 'status_surat' => 'Perlu Verifikasi Kepala Dinas',
             ]);
+            // Kirim pesan WhatsApp setelah laporan disimpan
+            $phone = ""; // Nomor telepon untuk status Selesai
+            $message = "Pesan WhatsApp Kepada Kepala Dinas untuk Memberikan komentar dan disposisi"; // ke kadin
+            $this->sendWhatsApp($phone, $message);
+        } elseif (Gate::allows('kepala_dinas', Auth::user())) {
+            // dd($this->formTindakLanjut);
+            // Create or update tindak lanjut records for Kepala Dinas without deleting existing ones
+            foreach ($this->formTindakLanjut['diteruskan_kepada'] as $diteruskan_kepada) {
+                TindakLanjut::updateOrCreate([
+                    'surat_masuk_id' => $suratmasuk->id,
+                    'deskripsi' => $this->formTindakLanjut['deskripsi'],
+                    'diteruskan_kepada' => $diteruskan_kepada,
+                    'revisi' => $this->formTindakLanjut['revisi'],
+                    'nama' => Auth::user()->nama,
+                    'nip' => Auth::user()->nip
+                ]);
+            }
+            // dd('Data disimpan untuk Kepala Dinas');
+            if ($this->formTindakLanjut['revisi']) {
+                $statusSurat = StatusSurat::where('surat_masuk_id', $suratmasuk->id)->first();
+                $statusSurat->update([
+                    'status_surat' => 'Sekretariat',
+                ]);
+                // Kirim pesan WhatsApp setelah laporan disimpan
+                $phone = ""; // Nomor telepon untuk status Selesai
+                $message = "Pesan WhatsApp Kepada Sekretariat untuk Revisi"; // ke kadin
+                // $this->sendWhatsApp($phone, $message);
+            } else {
+                $statusSurat = StatusSurat::where('surat_masuk_id', $suratmasuk->id)->first();
+                $statusSurat->update([
+                    'status_surat' => 'Perlu Verifikasi Kepala Bidang',
+                ]);
+                // Kirim pesan WhatsApp setelah laporan disimpan
+                $phone = ""; // Nomor telepon untuk status Selesai
+                $message = "Pesan WhatsApp Kepada Kepala Bidang untuk Memberikan komentar dan disposisi"; // ke kabid
+                $this->sendWhatsApp($phone, $message);
+            }
+        } elseif (Gate::allows('kepala_bidang', Auth::user())) {
+            // Create or update tindak lanjut records for Kepala Bidang without deleting existing ones
+            foreach ($this->formTindakLanjut['disposisi'] as $disposisi) {
+                TindakLanjut::updateOrCreate([
+                    'surat_masuk_id' => $suratmasuk->id,
+                    'disposisi' => $disposisi,
+                    'revisi' => $this->formTindakLanjut['revisi'],
+                    'nama' => Auth::user()->nama,
+                    'nip' => Auth::user()->nip
+                ]);
+            }
+            if ($this->formTindakLanjut['revisi']) {
+                $statusSurat = StatusSurat::where('surat_masuk_id', $suratmasuk->id)->first();
+                $statusSurat->update([
+                    'status_surat' => 'Sekretariat',
+                ]);
+                // Kirim pesan WhatsApp setelah laporan disimpan
+                $phone = ""; // Nomor telepon untuk status Selesai
+                $message = "Pesan WhatsApp Kepada Sekretariat untuk Revisi"; // ke kadin
+                // $this->sendWhatsApp($phone, $message);
+            } else {
+                $statusSurat = StatusSurat::where('surat_masuk_id', $suratmasuk->id)->first();
+                $statusSurat->update([
+                    'status_surat' => 'Sekretariat',
+                ]);
+                // Kirim pesan WhatsApp setelah laporan disimpan
+                $phone = ""; // Nomor telepon untuk status Selesai
+                $message = "Pesan WhatsApp Kepada Sekretariat untuk Mendeskripsikan Surat"; // ke kabid
+                // $this->sendWhatsApp($phone, $message);
+            }
         }
+        // Reset variabel setelah disimpan
+        $this->reset();
+        // Redirect ke halaman suratmasuk-index setelah data disimpan
+        return redirect()->to('/suratmasuk-index');
     }
-
     public function distribusikan()
     {
         $statusSurat = StatusSurat::where('surat_masuk_id', $this->suratmasuk->id)->first();
@@ -313,25 +257,22 @@ class SuratMasuk extends Component
                 $statusSurat->update([
                     'status_surat' => 'Sudah Distribusikan',
                 ]);
+                // Send WhatsApp message after status is updated
+                $phone = ""; // Phone number for status Selesai
+                $message = "Ada surat masuk"; // Message to all staff
+                // $this->sendWhatsApp($phone, $message);
             }
         }
         // Redirect ke halaman suratmasuk-index setelah data disimpan
         return redirect()->to('/suratmasuk-index');
     }
-
     public function getIsReadonlyProperty()
     {
         return $this->readonly;
     }
-
-    public function back()
-    {
-        return redirect()->route('suratmasuk-index');
-    }
-
     public function render()
     {
-        $surat = ModelsSuratMasuk::with('document')->find($this->suratmasukId);
+        $surat = ModelsSuratMasuk::first(); // Contoh pengambilan data surat, sesuaikan dengan kebutuhan Anda
         return view('livewire.surat.surat-masuk', [
             'surat' => $surat,
             'skpd' => $this->skpd,

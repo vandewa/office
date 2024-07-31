@@ -52,7 +52,7 @@ Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
 Route::get('sppd/{id}/print-spt', [SppdController::class, 'printSpt'])->name('print-spt');
 
 Route::get('/download-spt', [Sppd::class, 'downloadSpt'])->name('download.spt');
-Route::get('/download-dokumen/{nip}', [Sppd::class, 'downloadDokumen'])->name('download.dokumen');
+// Route::get('/download-dokumen/{nip}', [Sppd::class, 'downloadDokumen'])->name('download.dokumen');
 
 // Route::get('sppd/{id}/print-spt-kadin', [SppdController::class, 'printsptkadin'])->name('print-spt-kadin');
 Route::get('sppd/{id}/print-spd', [SppdController::class, 'printspd'])->name('print-spd');
@@ -65,6 +65,12 @@ Route::get('suratmasuk-index', SuratMasukIndex::class)->name('suratmasuk-index')
 Route::get('suratkeluar/{id?}', SuratKeluar::class)->name('suratkeluar')->middleware('can:sekretariat');
 Route::get('suratkeluar/{id?}/verifikasi', SuratKeluar::class)->name('suratkeluar-verifikasi');
 Route::get('suratkeluar-index', SuratKeluarIndex::class)->name('suratkeluar-index');
+Route::get('suratkeluar/{id}/download', [SuratKeluar::class, 'downloadDokumen'])->name('suratkeluar-download');
+
+Route::get('/download-spt', [Sppd::class, 'downloadSpt'])->name('download.spt');
+Route::get('/download-dokumen/{nip}', [Sppd::class, 'downloadDokumen'])->name('download.dokumen');
+
+
 
 Route::get('suratkeluar/{id}/print-suratkeluar', [SuratController::class, 'generateOrRenderSuratKeluar'])->name('print-suratkeluar');
 

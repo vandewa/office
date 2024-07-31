@@ -67,7 +67,7 @@ class SuratKeluarIndex extends Component
             ->with('tindakLanjuts', 'statusSurats')
             ->orderBy('id', 'desc')
             ->where('nomor_surat', 'like', '%' . $this->cari . '%')
-            ->orWhere('tujuan', 'like', '%' . $this->cari . '%')
+            ->orWhere('opd_id', 'like', '%' . $this->cari . '%')
             ->paginate(5);
 
         $tindak_lanjuts = TindakLanjut::all();

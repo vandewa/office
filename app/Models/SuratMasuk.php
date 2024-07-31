@@ -24,7 +24,7 @@ class SuratMasuk extends Model
 
     public function document()
     {
-        return $this->belongsTo(Document::class);
+        return $this->hasOne(Document::class, 'surat_masuk_id');
     }
 
 }

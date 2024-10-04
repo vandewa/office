@@ -33,14 +33,30 @@
           </li>
           <!-- /main -->
           <li class="nav-item">
-            <a href="{{ route('datapegawai') }}" class="nav-link">
-                <i class="icon-users"></i>
-                <span>
-                    Data Pegawai
-                </span>
-            </a>
-        </li>
-        <!-- /main -->
+              <a href="{{ route('informasi-opd') }}" class="nav-link">
+                  <i class="icon-users"></i>
+                  <span>
+                      Informasi Organisasi Perangkat Daerah
+                  </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a href="{{ route('datapegawai') }}" class="nav-link">
+                  <i class="icon-users"></i>
+                  <span>
+                      Data Pegawai
+                  </span>
+              </a>
+          </li>
+          <!-- /main -->
+          <li class="nav-item nav-item-submenu">
+              <a href="#" class="nav-link"><i class="icon-clipboard5"></i> <span>Master</span></a>
+              <ul class="nav nav-group-sub" data-submenu-title="Presensi">
+                  <li class="nav-item"><a href="{{ route('master.ssh') }}" class="nav-link">
+                          <span>SSH </span></a>
+                  </li>
+              </ul>
+          </li>
 
       </ul>
   </div>

@@ -22,16 +22,11 @@
         type="text/css">
     <!-- /global stylesheets -->
 
-    @stack('css')
-    @livewireStyles
-
-    @vite([])
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Core JS files -->
     <script src="{{ asset('limitless/global_assets/js/main/jquery.min.js') }} "></script>
     <script src="{{ asset('limitless/global_assets/js/main/bootstrap.bundle.min.js') }} "></script>
     <script src="{{ asset('limitless/global_assets/js/plugins/loaders/blockui.min.js') }} "></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- /core JS files -->
 
     <!-- Theme JS files -->
@@ -52,6 +47,18 @@
     <!-- /theme JS files -->
     <script src="https://kit.fontawesome.com/bb9305debb.js" crossorigin="anonymous"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- 
+    <script src="{{ asset('limitless/global_assets/js/plugins/notifications/sweet_alert.min.js') }}"></script>
+    <script src="{{ asset('limitless/global_assets/js/demo_pages/extra_sweetalert.js') }}"></script> --}}
+
+
+    @stack('css')
+    @livewireStyles
+
+    @vite([])
+
+
 </head>
 
 <body>
@@ -61,7 +68,6 @@
         <div class="navbar-brand">
             <a href="index.html" class="d-inline-block">
                 <img src="limitless/global_assets/images/logo_light.png" alt="">
-
             </a>
         </div>
 
@@ -95,7 +101,11 @@
                     <a href="#" class="navbar-nav-link dropdown-toggle" data-toggle="dropdown">
                         <img src="limitless/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle"
                             alt="">
-                        <span>{{ auth()->user()->nama }}</span>
+                        <span>
+                            @if (auth()->user()->gdb || auth()->user()->gdp)
+                                {{ auth()->user()->gdb ? auth()->user()->nama . ', ' . auth()->user()->gdb : auth()->user()->gdp . ' ' . auth()->user()->nama }}
+                            @endif
+                        </span>
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right">
@@ -144,7 +154,20 @@ background-size: cover;">
                             </div>
 
                             <div class="media-body">
-                                <div class="media-title font-weight-semibold">{{ auth()->user()->nama }}</div>
+                                <div class="media-title font-weight-semibold">
+
+                                    @if (auth()->user()->gdb || auth()->user()->gdp)
+                                        {{ auth()->user()->gdb ? auth()->user()->nama . ', ' . auth()->user()->gdb : auth()->user()->gdp . ' ' . auth()->user()->nama }}
+                                    @endif
+
+                                </div>
+
+                                @if (auth()->user()->skpd->parent)
+                                    {{ auth()->user()->skpd->parent->skpd }}
+                                @else
+                                    {{ auth()->user()->skpd->skpd }}
+                                @endif
+
                             </div>
 
                             <div class="ml-3 align-self-center">

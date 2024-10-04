@@ -1,17 +1,20 @@
 <?php
 
-use App\Http\Controllers\LoginController;
 use App\Livewire\Coba;
-use App\Livewire\Dashboard;
 use App\Livewire\Login;
-use App\Livewire\Pegawai\DataPegawai;
+use App\Livewire\Dashboard;
 use App\Livewire\Sppd\Sppd;
+use App\Livewire\Master\Ssh;
 use App\Livewire\Sppd\SppdEdit;
 use App\Livewire\Sppd\SppdIndex;
+use App\Livewire\Opd\InformasiOpd;
+use App\Livewire\Sppd\LaporanSppd;
 use App\Livewire\Surat\SuratMasuk;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
-
+use App\Livewire\Pegawai\DataPegawai;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\HelperController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,8 +37,14 @@ Route::get('sppd/{id?}', Sppd::class)->name('sppd');
 Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
 Route::get('suratmasuk', SuratMasuk::class)->name('suratmasuk');
 Route::get('datapegawai', DataPegawai::class)->name('datapegawai');
+Route::get('laporan-sppd/{id?}', LaporanSppd::class)->name('laporan-sppd');
+Route::get('informasi-opd', InformasiOpd::class)->name('informasi-opd');
+Route::get('/cetak-spt/{id?}', [HelperController::class, 'cetakSpt'])->name('cetak-spt');
+Route::get('/cetak-sppd/{parameter1}/{parameter2}', [HelperController::class, 'cetakSPPD'])->name('cetak-sppd');
 
-
+Route::group(['prefix' => 'master', 'as' => 'master.'], function () {
+    Route::get('ssh', Ssh::class)->name('ssh');
+});
 
 // Route::post('/send-whatsapp', [SuratMasuk::class, 'sendWhatsApp'])->name('send.whatsapp');
 

@@ -45,6 +45,9 @@ Route::get('/cetak-spt/{id?}', [HelperController::class, 'cetakSPT'])->name('cet
 Route::get('/cetak-spt-kepala/{id?}', [HelperController::class, 'cetakSPTKepala'])->name('cetak-spt-kepala');
 Route::get('/cetak-sppd/{parameter1}/{parameter2}', [HelperController::class, 'cetakSPPD'])->name('cetak-sppd');
 Route::get('/cetak-sppd-kepala/{parameter1}/{parameter2}', [HelperController::class, 'cetakSPPDKepala'])->name('cetak-sppd-kepala');
+Route::get('/cetak-laporan-sppd/{id?}', [HelperController::class, 'cetakLaporanSPPD'])->name('cetak-laporan-sppd');
+
+
 Route::get('logout', [HelperController::class, 'logout'])->name('logout');
 
 Route::group(['prefix' => 'master', 'as' => 'master.'], function () {

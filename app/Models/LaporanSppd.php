@@ -11,4 +11,9 @@ class LaporanSppd extends Model
 
     protected $guarded = [];
 
+    public function sppdnya()
+    {
+        return $this->belongsTo(Sppd::class, 'sppd_id');
+    }
+
 }

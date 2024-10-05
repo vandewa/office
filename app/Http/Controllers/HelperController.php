@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Ssh;
 use App\Models\Sppd;
 use App\Models\DasarSppd;
+use App\Models\LaporanSppd;
 use App\Models\Simpeg\Tb01;
 use App\Models\SppdPegawai;
 use App\Models\InformasiOpd;
@@ -360,6 +361,100 @@ class HelperController extends Controller
         return response()->download($pathSave)->deleteFileAfterSend(true);
 
     }
+
+    public function cetakLaporanSPPD($id)
+    {
+        $data = LaporanSppd::with(['sppdnya'])->where('sppd_id', $id)->first();
+        $pegawai = SppdPegawai::where('sppd_id', $id)->get();
+        $ssh = Ssh::first();
+        $dasarSppd = DasarSppd::where('sppd_id', $id)->first();
+
+        $kumpulanPegawai = [];
+        foreach ($pegawai as $list) {
+            $kumpulanPegawai[] = $list->nip;
+        }
+
+        //mendapatkan detail data para pegawai
+        $cekPegawai = Tb01::with(['skpd'])->select('tmlhr', 'photo', 'tb_01.tglhr', 'nip', 'tb_01.kdunit', 'email', 'gdp', 'gdb', 'email_dinas', 'nama', 'tb_01.idskpd', "jabatan.skpd", 'a_golruang.idgolru', DB::Raw("case when jabfung is null and jabfungum is null then jabatan.jab
+            when jabfung is null then jabfungum
+            else  jabfung end as jabatan"), DB::Raw("a_jenjurusan.jenjurusan as pendidikan"), DB::Raw("a_golruang.pangkat as pangkat"), DB::Raw("a_golruang.golru as golru"), DB::Raw("induk.skpd as unor"))
+            ->leftJoin('a_skpd as jabatan', "tb_01.idskpd", "jabatan.idskpd")
+            ->leftJoin('a_jenjurusan', "tb_01.idjenjurusan", "a_jenjurusan.idjenjurusan")
+            ->leftJoin('a_skpd as induk', DB::Raw("substring(tb_01.idskpd,1,2)"), '=', "induk.idskpd")
+            ->leftJoin('a_golruang', "tb_01.idgolrupkt", "a_golruang.idgolru")
+            ->leftJoin('a_jabfungum', "tb_01.idjabfungum", "a_jabfungum.idjabfungum")
+            ->leftJoin('a_jabfung', "tb_01.idjabfung", "a_jabfung.idjabfung")
+            ->whereIn('nip', $kumpulanPegawai)
+            ->orderBy('idesljbt', 'ASC')
+            ->orderBy('idgolrupkt', 'DESC')
+            ->get();
+
+        //cek data yang membuat
+        $createdBy = Tb01::with(['skpd'])->select('tmlhr', 'photo', 'tb_01.tglhr', 'nip', 'tb_01.kdunit', 'email', 'gdp', 'gdb', 'email_dinas', 'nama', 'tb_01.idskpd', "jabatan.skpd", 'a_golruang.idgolru', DB::Raw("case when jabfung is null and jabfungum is null then jabatan.jab
+        when jabfung is null then jabfungum
+        else  jabfung end as jabatan"), DB::Raw("a_jenjurusan.jenjurusan as pendidikan"), DB::Raw("a_golruang.pangkat as pangkat"), DB::Raw("a_golruang.golru as golru"), DB::Raw("induk.skpd as unor"))
+            ->leftJoin('a_skpd as jabatan', "tb_01.idskpd", "jabatan.idskpd")
+            ->leftJoin('a_jenjurusan', "tb_01.idjenjurusan", "a_jenjurusan.idjenjurusan")
+            ->leftJoin('a_skpd as induk', DB::Raw("substring(tb_01.idskpd,1,2)"), '=', "induk.idskpd")
+            ->leftJoin('a_golruang', "tb_01.idgolrupkt", "a_golruang.idgolru")
+            ->leftJoin('a_jabfungum', "tb_01.idjabfungum", "a_jabfungum.idjabfungum")
+            ->leftJoin('a_jabfung', "tb_01.idjabfung", "a_jabfung.idjabfung")
+            ->where('nip', $data->nip)
+            ->orderBy('idesljbt', 'ASC')
+            ->orderBy('idgolrupkt', 'DESC')
+            ->first();
+
+        //path master template
+        $path = public_path('/template/laporan_perjalanan_dinas.docx');
+
+        //nama file
+        $pathSave = storage_path('app/public/' . 'Laporan Perjalanan Dinas ' . Carbon::createFromFormat('Y-m-d', $data->sppdnya->tgl_berangkat)->isoFormat('D MMMM Y') . ' ' . $data->sppdnya->tempat_tujuan . '.docx');
+
+        //cek tanggal sama atau tidak
+        if ($data->sppdnya->tgl_berangkat == $data->sppdnya->tgl_kembali) {
+            $tgl_pelaksanaan = Carbon::createFromFormat('Y-m-d', $data->sppdnya->tgl_berangkat)->isoFormat('D MMMM Y');
+        } else {
+            $tgl_pelaksanaan = Carbon::createFromFormat('Y-m-d', $data->sppdnya->tgl_berangkat)->isoFormat('D MMMM Y') . ' - ' . Carbon::createFromFormat('Y-m-d', $data->sppdnya->tgl_kembali)->isoFormat('D MMMM Y');
+
+        }
+
+
+        $templateProcessor = new TemplateProcessor($path);
+        $templateProcessor->setValues([
+            'maksud_atas' => strtoupper($data->sppdnya->maksud),
+            'maksud' => $data->sppdnya->maksud,
+            'tanggal_pelaksanaan' => $tgl_pelaksanaan,
+            'tujuan' => $data->sppdnya->tempat_tujuan,
+            'tanggal' => Carbon::createFromFormat('Y-m-d', $data->tanggal)->isoFormat('D MMMM Y'),
+            'nama' => $createdBy->nama,
+            'nip' => $createdBy->nip,
+            'hasil' => $data->laporan,
+            'dasar' => $dasarSppd->dasar,
+            'ssh' => $ssh->nama,
+        ]);
+
+        $kampret2 = [];
+        foreach ($cekPegawai as $index => $a2) {
+            //cek gelar depan dan belakang
+            $namaDanGelar = ($a2->gdp ? $a2->gdp . ' ' : '') . $a2->nama . ($a2->gdb ? ', ' . $a2->gdb : '');
+
+            array_push($kampret2, [
+                'pegawai' => $namaDanGelar,
+                'jabatan' => $a2->jabatan
+            ]);
+
+        }
+
+
+        // }
+        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
+        $templateProcessor->cloneBlock('block_name', count($kampret2), true, false, $kampret2);
+        $templateProcessor->saveAs($pathSave);
+
+        return response()->download($pathSave)->deleteFileAfterSend(true);
+
+    }
+
     private function angkaKeTeks($angka)
     {
         $teks = "";

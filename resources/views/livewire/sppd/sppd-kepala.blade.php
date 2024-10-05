@@ -246,7 +246,7 @@
                                         </li>
                                         <li>
                                             <textarea class="form-control" rows="3"
-                                                placeholder="Contoh: Surat Keputusan Menteri Keuangan RI Nomor: S-185/MK.03/1996 tanggal 2 April 1996 tentang Uang Harian Perjalanan Dinas Dalam Negeri Pegawai Negeri Sipil;"
+                                                placeholder="Contoh: Surat Undangan Pemerintah Provinsi Jawa Tengah Dinas Komunikasi dan Informatika Nomor : 500.12/439 tgl. 26 September 2024;"
                                                 rows="2" wire:model='formDasar'></textarea>
                                             <div>
                                                 @error('formDasar')

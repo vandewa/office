@@ -99,17 +99,20 @@
 
                 <li class="nav-item dropdown dropdown-user">
                     <a href="#" class="navbar-nav-link dropdown-toggle" data-toggle="dropdown">
-                        <img src="limitless/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle"
-                            alt="">
+                        @if (auth()->user()->idjenkel == '1')
+                            <img src="{{ asset('image/laki.png') }}" class="rounded-circle" alt="">
+                        @else
+                            <img src="{{ asset('image/perempuan.png') }}" class="rounded-circle" alt="">
+                        @endif
                         <span>
-                            @if (auth()->user()->gdb || auth()->user()->gdp)
-                                {{ auth()->user()->gdb ? auth()->user()->nama . ', ' . auth()->user()->gdb : auth()->user()->gdp . ' ' . auth()->user()->nama }}
-                            @endif
+                            {{ auth()->user()->gdp ? auth()->user()->gdp . ' ' : '' }}
+                            {{ auth()->user()->nama }}
+                            {{ auth()->user()->gdb ? ', ' . auth()->user()->gdb : '' }}
                         </span>
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#" class="dropdown-item"><i class="icon-switch2"></i> Logout</a>
+                        <a href="{{ route('logout') }}" class="dropdown-item"><i class="icon-switch2"></i> Logout</a>
                     </div>
                 </li>
             </ul>
@@ -149,16 +152,23 @@ background-size: cover;">
                     <div class="card-body">
                         <div class="media">
                             <div class="mr-3">
-                                <a href="#"><img src="limitless/global_assets/images/placeholders/placeholder.jpg"
-                                        width="38" height="38" class="rounded-circle" alt=""></a>
+                                <a href="#">
+                                    @if (auth()->user()->idjenkel == '1')
+                                        <img src="{{ asset('image/laki.png') }}" width="38" height="38"
+                                            class="rounded-circle" alt="">
+                                    @else
+                                        <img src="{{ asset('image/perempuan.png') }}" width="38" height="38"
+                                            class="rounded-circle" alt="">
+                                    @endif
+                                </a>
                             </div>
 
                             <div class="media-body">
                                 <div class="media-title font-weight-semibold">
 
-                                    @if (auth()->user()->gdb || auth()->user()->gdp)
-                                        {{ auth()->user()->gdb ? auth()->user()->nama . ', ' . auth()->user()->gdb : auth()->user()->gdp . ' ' . auth()->user()->nama }}
-                                    @endif
+                                    {{ auth()->user()->gdp ? auth()->user()->gdp . ' ' : '' }}
+                                    {{ auth()->user()->nama }}
+                                    {{ auth()->user()->gdb ? ', ' . auth()->user()->gdb : '' }}
 
                                 </div>
 

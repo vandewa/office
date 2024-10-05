@@ -9,6 +9,7 @@ use App\Livewire\Sppd\SppdEdit;
 use App\Livewire\Sppd\SppdIndex;
 use App\Livewire\Opd\InformasiOpd;
 use App\Livewire\Sppd\LaporanSppd;
+use App\Livewire\Sppd\SppdKepala;
 use App\Livewire\Surat\SuratMasuk;
 use Illuminate\Support\Facades\File;
 use App\Livewire\Pegawai\DataPegawai;
@@ -34,13 +35,17 @@ Route::get('/', function () {
 Route::post('/logins', [LoginController::class, 'login'])->name('logins');
 Route::get('dashboard', Dashboard::class)->name('dashboard');
 Route::get('sppd/{id?}', Sppd::class)->name('sppd');
+Route::get('sppd-kepala/{id?}', SppdKepala::class)->name('sppd-kepala');
 Route::get('sppd-index', SppdIndex::class)->name('sppd-index');
 Route::get('suratmasuk', SuratMasuk::class)->name('suratmasuk');
 Route::get('datapegawai', DataPegawai::class)->name('datapegawai');
 Route::get('laporan-sppd/{id?}', LaporanSppd::class)->name('laporan-sppd');
 Route::get('informasi-opd', InformasiOpd::class)->name('informasi-opd');
-Route::get('/cetak-spt/{id?}', [HelperController::class, 'cetakSpt'])->name('cetak-spt');
+Route::get('/cetak-spt/{id?}', [HelperController::class, 'cetakSPT'])->name('cetak-spt');
+Route::get('/cetak-spt-kepala/{id?}', [HelperController::class, 'cetakSPTKepala'])->name('cetak-spt-kepala');
 Route::get('/cetak-sppd/{parameter1}/{parameter2}', [HelperController::class, 'cetakSPPD'])->name('cetak-sppd');
+Route::get('/cetak-sppd-kepala/{parameter1}/{parameter2}', [HelperController::class, 'cetakSPPDKepala'])->name('cetak-sppd-kepala');
+Route::get('logout', [HelperController::class, 'logout'])->name('logout');
 
 Route::group(['prefix' => 'master', 'as' => 'master.'], function () {
     Route::get('ssh', Ssh::class)->name('ssh');

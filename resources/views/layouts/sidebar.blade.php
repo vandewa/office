@@ -16,7 +16,7 @@
           </li>
           <li class="nav-item">
               <a href="{{ route('sppd-index') }}" class="nav-link">
-                  <i class="icon-briefcase3"></i>
+                  <i class="icon-bus"></i>
                   <span>
                       Perjalanan Dinas
                   </span>
@@ -34,7 +34,7 @@
           <!-- /main -->
           <li class="nav-item">
               <a href="{{ route('informasi-opd') }}" class="nav-link">
-                  <i class="icon-users"></i>
+                  <i class="icon-office"></i>
                   <span>
                       Informasi Organisasi Perangkat Daerah
                   </span>
@@ -42,7 +42,7 @@
           </li>
           <li class="nav-item">
               <a href="{{ route('datapegawai') }}" class="nav-link">
-                  <i class="icon-users"></i>
+                  <i class="icon-users2"></i>
                   <span>
                       Data Pegawai
                   </span>
@@ -50,7 +50,7 @@
           </li>
           <!-- /main -->
           <li class="nav-item nav-item-submenu">
-              <a href="#" class="nav-link"><i class="icon-clipboard5"></i> <span>Master</span></a>
+              <a href="#" class="nav-link"><i class="icon-database-menu"></i> <span>Master</span></a>
               <ul class="nav nav-group-sub" data-submenu-title="Presensi">
                   <li class="nav-item"><a href="{{ route('master.ssh') }}" class="nav-link">
                           <span>SSH </span></a>

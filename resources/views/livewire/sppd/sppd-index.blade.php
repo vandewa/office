@@ -25,7 +25,7 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a href="{{ route('sppd') }}" class="dropdown-item">Non Kepala Dinas</a>
-                            <a href="#" class="dropdown-item">Kepala Dinas</a>
+                            <a href="{{ route('sppd-kepala') }}" class="dropdown-item">Kepala Dinas</a>
                         </div>
                     </div>
                 </div>
@@ -101,11 +101,9 @@
                                     <td>{{ $list->tempat_tujuan }}</td>
                                     <td>{{ $list->status }}
                                         @if ($list->laporannya)
-                                            {{-- <span class="badge badge-success">Selesai</span> --}}
                                             <i class="icon-checkmark-circle" style="color: green;"></i>
                                         @else
                                             <i class="icon-cancel-circle2" style="color: red;"></i>
-                                            {{-- <span class="badge bg-danger-300">Belum Selesai</span> --}}
                                         @endif
                                     </td>
                                     <td>
@@ -136,22 +134,39 @@
 
                                                 <div class="dropdown-divider"></div>
 
+                                                {{-- cek jika sudah isi laporan --}}
                                                 @if ($list->laporannya)
                                                     <a href="{{ route('laporan-sppd') }}" class="dropdown-item">
                                                         <i class="icon-printer2"></i>Laporan Perjalanan Dinas
                                                     </a>
                                                 @endif
 
-                                                <a href="{{ route('cetak-spt', $list->id) }}" class="dropdown-item">
-                                                    <i class="icon-printer2"></i>Surat Perintah Tugas
-                                                </a>
+                                                {{-- cek kepala atau bukan sptnya --}}
+                                                @if ($list->pegawai->contains('user.nip', $kepala))
+                                                    <a href="{{ route('cetak-spt-kepala', $list->id) }}"
+                                                        class="dropdown-item">
+                                                        <i class="icon-printer2"></i>Surat Perintah Tugas
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('cetak-spt', $list->id) }}"
+                                                        class="dropdown-item">
+                                                        <i class="icon-printer2"></i>Surat Perintah Tugas
+                                                    </a>
+                                                @endif
 
                                                 {{-- sppd perorangan --}}
                                                 @foreach ($list->pegawai as $item)
-                                                    <a href="{{ route('cetak-sppd', ['parameter1' => $list->id, 'parameter2' => $item->user->nip]) }}"
-                                                        class="dropdown-item">
-                                                        <i class="icon-printer2"></i>SPPD {{ $item->user->nama }}
-                                                    </a>
+                                                    @if ($item->user->nip == $kepala)
+                                                        <a href="{{ route('cetak-sppd-kepala', ['parameter1' => $list->id, 'parameter2' => $item->user->nip]) }}"
+                                                            class="dropdown-item">
+                                                            <i class="icon-printer2"></i>SPPD {{ $item->user->nama }}
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('cetak-sppd', ['parameter1' => $list->id, 'parameter2' => $item->user->nip]) }}"
+                                                            class="dropdown-item">
+                                                            <i class="icon-printer2"></i>SPPD {{ $item->user->nama }}
+                                                        </a>
+                                                    @endif
                                                 @endforeach
 
                                             </div>

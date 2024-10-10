@@ -48,6 +48,14 @@
                   </span>
               </a>
           </li>
+          <li class="nav-item">
+              <a href="{{ route('data-tamu') }}" class="nav-link" wire:navigate>
+                  <i class="icon-vcard"></i>
+                  <span>
+                      Tamu
+                  </span>
+              </a>
+          </li>
           <!-- /main -->
           <li class="nav-item nav-item-submenu">
               <a href="#" class="nav-link"><i class="icon-database-menu"></i> <span>Master</span></a>

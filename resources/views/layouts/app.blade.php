@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Limitless - Responsive Web Application Kit by Eugene Kopyov</title>
+    <title>E - Office Kab. Wonosobo</title>
 
     <!-- Global stylesheets -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
@@ -42,7 +42,7 @@
     <script src="{{ asset('limitless/global_assets/js/plugins/extensions/jquery_ui/interactions.min.js') }}"></script>
     <script src="{{ asset('limitless/global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
 
-    <script src="assets/js/app.js"></script>
+    <script src="{{ asset('limitless/layout_1/LTR/default/full/assets/js/app.js') }}"></script>
     <script src="{{ asset('limitless/global_assets/js/demo_pages/form_select2.js') }}"></script>
     <!-- /theme JS files -->
     <script src="https://kit.fontawesome.com/bb9305debb.js" crossorigin="anonymous"></script>
@@ -216,9 +216,46 @@ background-size: cover;">
     </div>
     <!-- /page content -->
 
-
-    @livewireScripts
+    <script>
+        document.addEventListener('livewire:init', function() {
+            Livewire.on('NotifSuccess', (event) => {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: "success",
+                    title: "Data Tersimpan !"
+                });
+            });
+            Livewire.on('UpdateSuccess', (event) => {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: "success",
+                    title: "Update Data Success !"
+                });
+            });
+        });
+    </script>
     @stack('js')
+    @livewireScripts
 
 </body>
 

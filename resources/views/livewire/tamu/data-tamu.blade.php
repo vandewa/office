@@ -1,7 +1,14 @@
 <div>
     <x-slot name="header">
         <livewire:component.page-header judul="Data Tamu" subjudul="Manage Data Tamu" :breadcrumb="['Data Tamu']"
-            button='<div class="d-lg-flex mb-2 mb-lg-0">
+            button='
+            <div class="d-lg-flex mb-2 mb-lg-0">
+                         <button type="button" class="btn btn-info ms-3" wire:click="mandiri">
+                            Mandiri <i class="ph-plus ms-2"></i>
+                        </button>
+                    </div>
+                    &nbsp;
+            <div class="d-lg-flex mb-2 mb-lg-0">
                          <button type="button" class="btn btn-primary ms-3" wire:click="add">
                             Tambah Data <i class="ph-plus ms-2"></i>
                         </button>
@@ -103,9 +110,7 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <a href="{{ route('tamu-mandiri') }}" class="btn btn-info ms-3" wire:navigate>
-                Mandiri <i class="ph-plus ms-2"></i>
-            </a>
+
             <div class="card-header">
                 <div class="col-12 row">
                     <x-search />

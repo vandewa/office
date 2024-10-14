@@ -17,7 +17,6 @@ class DataTamu extends Component
     public $name, $tanggal, $instansi, $kontak, $keperluan, $jumlah_tamu;
     protected $listeners = ['add'];
 
-
     public function add($id = '')
     {
         $this->form = null;

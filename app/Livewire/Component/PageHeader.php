@@ -15,6 +15,11 @@ class PageHeader extends Component
     {
         $this->dispatch('add');
     }
+
+    public function mandiri()
+    {
+        return $this->redirect('tamu-mandiri', navigate: true);
+    }
     public function render()
     {
         return view('livewire.component.page-header');

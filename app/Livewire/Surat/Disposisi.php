@@ -56,7 +56,6 @@ class Disposisi extends Component
         }
 
         $this->showSuccessMessage('Berhasil disposisi surat!');
-
     }
 
     public function delete($id)
@@ -85,7 +84,6 @@ class Disposisi extends Component
         DisposisiSuratMasuk::destroy($this->idHapus);
 
         $this->showDeleteMessage('Data has been deleted successfully!');
-
     }
 
     private function showDeleteMessage($message)
@@ -120,7 +118,7 @@ class Disposisi extends Component
 
         $cc = DisposisiSuratMasuk::where('surat_masuks_id', $this->idnya)->where('disposisi_tp', 'DISPOSISI_TP_02')->get();
 
-        $keterangan = DisposisiSuratMasuk::where('surat_masuks_id', $this->idnya)->first()->keterangan;
+        $keterangan = DisposisiSuratMasuk::where('surat_masuks_id', $this->idnya)->first()->keterangan ?? null;
 
         $kumpulanPegawaiDisposisi = [];
         foreach ($disposisi as $list) {

@@ -333,6 +333,7 @@
                 </div>
 
                 <form action="{{ route('logins') }}" method="post">
+                    <input type="hidden" name="g-recaptcha-response" id="recaptcha_token">
                     @csrf
 
                     <x-validation-errors class="mb-4" />
@@ -368,7 +369,18 @@
                 </div>
             </div>
         </div>
-
+        <script async src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.key') }}"></script>
+        <script>
+            grecaptcha.ready(function() {
+                grecaptcha.execute('{{ config('services.recaptcha.key') }}', {
+                    action: 'login'
+                }).then(function(token) {
+                    if (token) {
+                        document.getElementById('recaptcha_token').value = token;
+                    }
+                });
+            });
+        </script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript">
             function sweetAlert() {

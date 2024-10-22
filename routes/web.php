@@ -18,6 +18,8 @@ use App\Livewire\Pegawai\DataPegawai;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HelperController;
+use App\Livewire\Tamu\DataTamu;
+use App\Livewire\Tamu\MandiriTamu;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +58,8 @@ Route::get('/cetak-laporan-sppd/{id?}', [HelperController::class, 'cetakLaporanS
 //helper
 Route::get('show-picture', [HelperController::class, 'showPicture'])->name('helper.show-picture');
 
+Route::get('/data-tamu', DataTamu::class)->name('data-tamu');
+Route::get('/tamu-mandiri', MandiriTamu::class)->name('tamu-mandiri');
 
 Route::get('logout', [HelperController::class, 'logout'])->name('logout');
 

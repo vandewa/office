@@ -117,35 +117,39 @@
                 </div>
             </div>
         @endif
-        <div class="datatable-scroll">
-            <table class="table datatable-basic">
-                <thead>
-                    <tr role="row">
-                        <th>No.</th>
-                        <th>Tanggal</th>
-                        <th>Nama Tamu</th>
-                        <th>Nomor WhatsApp</th>
-                        <th>Instansi</th>
-                        <th>Keperluan</th>
-                        <th>Jumlah Tamu</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($data as $index => $row)
-                        <tr role="row" class="odd {{ $idNya == $row->id ? 'table-active' : '' }}">
-                            <td>{{ ($data->currentPage() - 1) * $data->perPage() + $index + 1 }}</td>
-                            <td>{{ $row->tanggal }}</td>
-                            <td>{{ $row->name }}</td>
-                            <td>{{ $row->kontak }}</td>
-                            <td>{{ $row->instansi }}</td>
-                            <td>{{ $row->keperluan }}</td>
-                            <td>{{ $row->jumlah_tamu }}</td>
-                            <td class="text-center"> <x-table-action :row="$row" /></td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class ="card">
+            <div class ="card-body">
+                <div class="datatable-scroll">
+                    <table class="table datatable-basic">
+                        <thead>
+                            <tr role="row">
+                                <th>No.</th>
+                                <th>Tanggal</th>
+                                <th>Nama Tamu</th>
+                                <th>Nomor WhatsApp</th>
+                                <th>Instansi</th>
+                                <th>Keperluan</th>
+                                <th>Jumlah Tamu</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($data as $index => $row)
+                                <tr role="row" class="odd {{ $idNya == $row->id ? 'table-active' : '' }}">
+                                    <td>{{ ($data->currentPage() - 1) * $data->perPage() + $index + 1 }}</td>
+                                    <td>{{ $row->tanggal }}</td>
+                                    <td>{{ $row->name }}</td>
+                                    <td>{{ $row->kontak }}</td>
+                                    <td>{{ $row->instansi }}</td>
+                                    <td>{{ $row->keperluan }}</td>
+                                    <td>{{ $row->jumlah_tamu }}</td>
+                                    <td class="text-center"> <x-table-action :row="$row" /></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

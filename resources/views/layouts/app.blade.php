@@ -124,78 +124,79 @@
     <!-- Page content -->
     <div class="page-content">
 
-        <!-- Main sidebar -->
-        <div class="sidebar sidebar-light sidebar-main sidebar-expand-md">
+        @if (!Route::is('tamu-mandiri'))
+            <!-- Main sidebar -->
+            <div class="sidebar sidebar-light sidebar-main sidebar-expand-md">
 
-            <!-- Sidebar mobile toggler -->
-            <div class="sidebar-mobile-toggler text-center">
-                <a href="#" class="sidebar-mobile-main-toggle">
-                    <i class="icon-arrow-left8"></i>
-                </a>
-                Navigation
-                <a href="#" class="sidebar-mobile-expand">
-                    <i class="icon-screen-full"></i>
-                    <i class="icon-screen-normal"></i>
-                </a>
-            </div>
-            <!-- /sidebar mobile toggler -->
+                <!-- Sidebar mobile toggler -->
+                <div class="sidebar-mobile-toggler text-center">
+                    <a href="#" class="sidebar-mobile-main-toggle">
+                        <i class="icon-arrow-left8"></i>
+                    </a>
+                    Navigation
+                    <a href="#" class="sidebar-mobile-expand">
+                        <i class="icon-screen-full"></i>
+                        <i class="icon-screen-normal"></i>
+                    </a>
+                </div>
+                <!-- /sidebar mobile toggler -->
 
 
-            <!-- Sidebar content -->
-            <div class="sidebar-content">
+                <!-- Sidebar content -->
+                <div class="sidebar-content">
 
-                <!-- User menu -->
-                <div class="sidebar-user">
-                    <div class="card-body">
-                        <div class="media">
-                            <div class="mr-3">
-                                <a href="#">
-                                    @if (auth()->user()->idjenkel == '1')
-                                        <img src="{{ asset('image/laki.png') }}" width="38" height="38"
-                                            class="rounded-circle" alt="">
+                    <!-- User menu -->
+                    <div class="sidebar-user">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="mr-3">
+                                    <a href="#">
+                                        @if (auth()->user()->idjenkel == '1')
+                                            <img src="{{ asset('image/laki.png') }}" width="38" height="38"
+                                                class="rounded-circle" alt="">
+                                        @else
+                                            <img src="{{ asset('image/perempuan.png') }}" width="38" height="38"
+                                                class="rounded-circle" alt="">
+                                        @endif
+                                    </a>
+                                </div>
+
+                                <div class="media-body">
+                                    <div class="media-title font-weight-semibold">
+
+                                        @if (auth()->user()->gdb)
+                                            {{ auth()->user()->gdp . ' ' . auth()->user()->nama . ', ' . auth()->user()->gdb }}
+                                        @else
+                                            {{ auth()->user()->gdp . ' ' . auth()->user()->nama }}
+                                        @endif
+
+                                    </div>
+
+                                    @if (auth()->user()->skpd->parent)
+                                        {{ auth()->user()->skpd->parent->skpd }}
                                     @else
-                                        <img src="{{ asset('image/perempuan.png') }}" width="38" height="38"
-                                            class="rounded-circle" alt="">
-                                    @endif
-                                </a>
-                            </div>
-
-                            <div class="media-body">
-                                <div class="media-title font-weight-semibold">
-
-                                    @if (auth()->user()->gdb)
-                                        {{ auth()->user()->gdp . ' ' . auth()->user()->nama . ', ' . auth()->user()->gdb }}
-                                    @else
-                                        {{ auth()->user()->gdp . ' ' . auth()->user()->nama }}
+                                        {{ auth()->user()->skpd->skpd }}
                                     @endif
 
                                 </div>
 
-                                @if (auth()->user()->skpd->parent)
-                                    {{ auth()->user()->skpd->parent->skpd }}
-                                @else
-                                    {{ auth()->user()->skpd->skpd }}
-                                @endif
-
-                            </div>
-
-                            <div class="ml-3 align-self-center">
-                                <a href="#" class="text-white"><i class="icon-cog3"></i></a>
+                                <div class="ml-3 align-self-center">
+                                    <a href="#" class="text-white"><i class="icon-cog3"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <!-- /user menu -->
+
+
+                    @include('layouts.sidebar')
+
                 </div>
-                <!-- /user menu -->
-
-
-                @include('layouts.sidebar')
+                <!-- /sidebar content -->
 
             </div>
-            <!-- /sidebar content -->
-
-        </div>
-        <!-- /main sidebar -->
-
+            <!-- /main sidebar -->
+        @endif
         <!-- Main content -->
         <div class="content-wrapper">
 

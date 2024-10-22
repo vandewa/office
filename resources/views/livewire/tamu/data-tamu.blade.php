@@ -114,8 +114,8 @@
             <div class="card-header">
                 <div class="col-12 row">
                     <x-search />
-                    {{-- <x-sort :order="$order" />
-                    <x-show :limit="$limit" /> --}}
+                    <x-sort :order="$order" />
+                    <x-show :limit="$limit" />
                 </div>
             </div>
             <div class="datatable-scroll">

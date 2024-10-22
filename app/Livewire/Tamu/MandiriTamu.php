@@ -9,6 +9,25 @@ use Livewire\Component;
 class MandiriTamu extends Component
 {
     public $name, $tanggal, $instansi, $kontak, $keperluan, $jumlah_tamu;
+    public $search, $form, $order = "DESC", $limit = 10, $idNya;
+    public function tambah()
+    {
+        $this->form = true;
+    }
+    public function batal()
+    {
+        $this->form = false;
+        $this->clear();
+    }
+    public function clear()
+    {
+        $this->name = null;
+        $this->tanggal = null;
+        $this->instansi = null;
+        $this->kontak = null;
+        $this->keperluan = null;
+        $this->jumlah_tamu = null;
+    }
     public function save()
     {
         $rules = [
@@ -58,6 +77,11 @@ class MandiriTamu extends Component
     }
     public function render()
     {
-        return view('livewire.tamu.mandiri-tamu');
+        $data = Tamu::query();
+        if ($this->order) {
+            $data->orderBy('id', $this->order);
+        }
+        $data = $data->paginate($this->limit);
+        return view('livewire.tamu.mandiri-tamu', ['data' => $data]);
     }
 }

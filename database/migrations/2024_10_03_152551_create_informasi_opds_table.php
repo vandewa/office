@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->string('kdunit')->nullable();
             $table->text('alamat')->nullable();
             $table->string('website')->nullable();
-            $table->string('website')->nullable();
             $table->string('telepon')->nullable();
             $table->string('fax')->nullable();
             $table->timestamps();

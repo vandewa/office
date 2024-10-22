@@ -14,10 +14,20 @@ use App\Models\Simpeg\ASkpd;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 class HelperController extends Controller
 {
+
+    public function showPicture(Request $request)
+    {
+        if (Storage::exists($request->path)) {
+            return Storage::response($request->path);
+        }
+
+        return "File tidak ditemukan";
+    }
 
     public function logout(Request $request)
     {
@@ -76,9 +86,8 @@ class HelperController extends Controller
             ->orderBy('idgolrupkt', 'DESC')
             ->get();
 
-        //cek gelar depan dan belakang
-        $nama_kepala = ($kepalaDinas->gdp ? $kepalaDinas->gdp . ' ' : '') . $kepalaDinas->nama . ($kepalaDinas->gdb ? ', ' . $kepalaDinas->gdb : '');
-
+        // Format nama kepala
+        $nama_kepala = $this->formatNamaGelar($kepalaDinas);
 
         $path = public_path('template/spt.docx');
 
@@ -127,17 +136,19 @@ class HelperController extends Controller
             'untuk' => ucfirst($sppd->untuk),
             'tanggal' => Carbon::createFromFormat('Y-m-d', $sppd->ditetapkan_tgl)->isoFormat('D MMMM Y'),
             'opd' => strtoupper($opd->skpd ?? ''),
-            'kepala' => $nama_kepala,
-            'kepala_nip' => $kepalaDinas->nip,
+            'kepala' => $nama_kepala ?? '',
+            'kepala_nip' => $kepalaDinas->nip ?? "",
             'kepala_pangkat' => $kepalaDinas->pangkat,
-            'alamat' => $informasiOpd->alamat,
-            'fax' => $informasiOpd->fax,
-            'website' => $informasiOpd->website,
-            'email' => $informasiOpd->email,
-            'telepon' => $informasiOpd->telepon,
-            'dasar' => $dasarSppd->dasar,
-            'ssh' => $ssh->nama,
+            'alamat' => $informasiOpd->alamat ?? '',
+            'fax' => $informasiOpd->fax ?? '',
+            'website' => $informasiOpd->website ?? '',
+            'email' => $informasiOpd->email ?? '',
+            'telepon' => $informasiOpd->telepon ?? '',
+            'dasar' => $dasarSppd->dasar ?? '',
+            'ssh' => $ssh->nama ?? "",
         ]);
+
+        // dd($kampret2);
 
         \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
         $templateProcessor->cloneBlock('block_name', count($kampret2), true, false, $kampret2);
@@ -173,9 +184,8 @@ class HelperController extends Controller
             ->orderBy('idgolrupkt', 'DESC')
             ->first();
 
-
-        //cek gelar depan dan belakang
-        $nama_kepala = ($kepalaDinas->gdp ? $kepalaDinas->gdp . ' ' : '') . $kepalaDinas->nama . ($kepalaDinas->gdb ? ', ' . $kepalaDinas->gdb : '');
+        // Format nama kepala
+        $nama_kepala = $this->formatNamaGelar($kepalaDinas);
 
         $path = public_path('template/spt_kepala.docx');
 
@@ -194,6 +204,9 @@ class HelperController extends Controller
             'golongan' => $kepalaDinas->golru,
             'jabatan' => $kepalaDinas->jabatan,
             'tanggal' => Carbon::createFromFormat('Y-m-d', $sppd->ditetapkan_tgl)->isoFormat('D MMMM Y'),
+
+            'sekda' => $this->sekda()
+
         ]);
 
         \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
@@ -239,11 +252,11 @@ class HelperController extends Controller
             ->where('nip', $userId)
             ->first();
 
-        //cek gelar depan dan belakang kepala opd
-        $namaKepala = ($kepala->gdp ? $kepala->gdp . ' ' : '') . $kepala->nama . ($kepala->gdb ? ', ' . $kepala->gdb : '');
+        // Format nama kepala
+        $namaKepala = $this->formatNamaGelar($kepala);
 
-        //cek gelar depan dan belakang  pegawai
-        $namaDanGelar = ($pegawai->gdp ? $pegawai->gdp . ' ' : '') . $pegawai->nama . ($pegawai->gdb ? ', ' . $pegawai->gdb : '');
+        // Format nama kepala
+        $namaDanGelar = $this->formatNamaGelar($pegawai);
 
         $path = public_path('template/spd.docx');
 
@@ -298,6 +311,7 @@ class HelperController extends Controller
         $informasiOpd = InformasiOpd::where('kdunit', auth()->user()->kdunit)->first();
         $opd = ASkpd::find(auth()->user()->kdunit);
 
+
         //cek kepala opd
         $kepala = Tb01::with(['skpd'])->select('tmlhr', 'photo', 'tb_01.tglhr', 'nip', 'tb_01.kdunit', 'email', 'gdp', 'gdb', 'email_dinas', 'nama', 'tb_01.idskpd', "jabatan.skpd", 'a_golruang.idgolru', DB::Raw("case when jabfung is null and jabfungum is null then jabatan.jab
            when jabfung is null then jabfungum
@@ -315,8 +329,8 @@ class HelperController extends Controller
             ->orderBy('idgolrupkt', 'DESC')
             ->first();
 
-        //cek gelar depan dan belakang kepala opd
-        $namaKepala = ($kepala->gdp ? $kepala->gdp . ' ' : '') . $kepala->nama . ($kepala->gdb ? ', ' . $kepala->gdb : '');
+        // Format nama kepala
+        $namaKepala = $this->formatNamaGelar($kepala);
 
         $path = public_path('template/spd_kepala.docx');
 
@@ -352,12 +366,12 @@ class HelperController extends Controller
             'keterangan' => $sppd->keterangan,
             'tanggal' => Carbon::createFromFormat('Y-m-d', $sppd->ditetapkan_tgl)->isoFormat('D MMMM Y'),
 
+            'sekda' => $this->sekda()
+
         ]);
 
         \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
-
         $templateProcessor->saveAs($pathSave);
-
         return response()->download($pathSave)->deleteFileAfterSend(true);
 
     }
@@ -463,5 +477,33 @@ class HelperController extends Controller
         $teks = $satuan[$angka];
 
         return $teks;
+    }
+
+    private function sekda()
+    {
+        //cek sekretaris daerah
+        $sekda = Tb01::with(['skpd'])->select('tmlhr', 'photo', 'tb_01.tglhr', 'nip', 'tb_01.kdunit', 'email', 'gdp', 'gdb', 'email_dinas', 'nama', 'tb_01.idskpd', "jabatan.skpd", 'a_golruang.idgolru', DB::Raw("case when jabfung is null and jabfungum is null then jabatan.jab
+           when jabfung is null then jabfungum
+           else  jabfung end as jabatan"), DB::Raw("a_jenjurusan.jenjurusan as pendidikan"), DB::Raw("a_golruang.pangkat as pangkat"), DB::Raw("a_golruang.golru as golru"), DB::Raw("induk.skpd as unor"))
+            ->leftJoin('a_skpd as jabatan', "tb_01.idskpd", "jabatan.idskpd")
+            ->leftJoin('a_jenjurusan', "tb_01.idjenjurusan", "a_jenjurusan.idjenjurusan")
+            ->leftJoin('a_skpd as induk', DB::Raw("substring(tb_01.idskpd,1,2)"), '=', "induk.idskpd")
+            ->leftJoin('a_golruang', "tb_01.idgolrupkt", "a_golruang.idgolru")
+            ->leftJoin('a_jabfungum', "tb_01.idjabfungum", "a_jabfungum.idjabfungum")
+            ->leftJoin('a_jabfung', "tb_01.idjabfung", "a_jabfung.idjabfung")
+            ->where('tb_01.idskpd', '02')
+            ->where('idjenkedudupeg', 1) //aktif / tidak
+            ->where('idjenjab', '20')
+            ->orderBy('idesljbt', 'ASC')
+            ->orderBy('idgolrupkt', 'DESC')
+            ->first();
+
+        return strtoupper($sekda->nama);
+
+    }
+
+    private function formatNamaGelar($person)
+    {
+        return ($person->gdp ? $person->gdp . ' ' : '') . $person->nama . ($person->gdb ? ', ' . $person->gdb : '');
     }
 }

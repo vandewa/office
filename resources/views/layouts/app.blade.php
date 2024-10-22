@@ -94,9 +94,6 @@
             </span>
 
             <ul class="navbar-nav">
-
-
-
                 <li class="nav-item dropdown dropdown-user">
                     <a href="#" class="navbar-nav-link dropdown-toggle" data-toggle="dropdown">
                         @if (auth()->user()->idjenkel == '1')
@@ -105,9 +102,12 @@
                             <img src="{{ asset('image/perempuan.png') }}" class="rounded-circle" alt="">
                         @endif
                         <span>
-                            {{ auth()->user()->gdp ? auth()->user()->gdp . ' ' : '' }}
-                            {{ auth()->user()->nama }}
-                            {{ auth()->user()->gdb ? ', ' . auth()->user()->gdb : '' }}
+                            @if (auth()->user()->gdb)
+                                {{ auth()->user()->gdp . ' ' . auth()->user()->nama . ', ' . auth()->user()->gdb }}
+                            @else
+                                {{ auth()->user()->gdp . ' ' . auth()->user()->nama }}
+                            @endif
+
                         </span>
                     </a>
 
@@ -125,10 +125,7 @@
     <div class="page-content">
 
         <!-- Main sidebar -->
-        <div class="sidebar sidebar-light sidebar-main sidebar-expand-md"
-            style="background-color: #e3e4f1;
-background-image: linear-gradient(180deg,#ffffff 10%,#5d65da 100%);
-background-size: cover;">
+        <div class="sidebar sidebar-light sidebar-main sidebar-expand-md">
 
             <!-- Sidebar mobile toggler -->
             <div class="sidebar-mobile-toggler text-center">
@@ -166,9 +163,11 @@ background-size: cover;">
                             <div class="media-body">
                                 <div class="media-title font-weight-semibold">
 
-                                    {{ auth()->user()->gdp ? auth()->user()->gdp . ' ' : '' }}
-                                    {{ auth()->user()->nama }}
-                                    {{ auth()->user()->gdb ? ', ' . auth()->user()->gdb : '' }}
+                                    @if (auth()->user()->gdb)
+                                        {{ auth()->user()->gdp . ' ' . auth()->user()->nama . ', ' . auth()->user()->gdb }}
+                                    @else
+                                        {{ auth()->user()->gdp . ' ' . auth()->user()->nama }}
+                                    @endif
 
                                 </div>
 
@@ -218,6 +217,7 @@ background-size: cover;">
 
 
     @livewireScripts
+    @livewireChartsScripts
     @stack('js')
 
 </body>

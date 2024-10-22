@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call(MasterDasarSeeder::class);
+        $this->call(OpdSeeder::class);
+        $this->call(ComCodeSeeder::class);
 
     }
 }

@@ -22,7 +22,7 @@
     <div class="content">
         <div class="card">
             <div class="card-header header-elements-inline">
-                <h5 class="card-title">Data Pegawai</h5>
+                <h5 class="card-title">List Pegawai <b>{{ $skpd->skpd }}</b> Kabupaten Wonosobo</h5>
             </div>
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -31,24 +31,26 @@
                             <th>No</th>
                             <th>Nama</th>
                             <th>NIP</th>
+                            <th>Pangkat, Gol.Ruang</th>
                             <th>Jabatan</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($tb01 as $rowTb01)
+                        @foreach ($tb01 as $list)
                             <tr>
                                 <td>{{ $loop->iteration + 0 }}</td>
-                                <td> 
-                                    @if($rowTb01->gdb)
-                                    {{ $rowTb01->gdp.' '.$rowTb01->nama. ', '. $rowTb01->gdb }}
+                                <td>
+                                    @if ($list->gdb)
+                                        {{ $list->gdp . ' ' . $list->nama . ', ' . $list->gdb }}
                                     @else
-                                    {{ $rowTb01->gdp.' '.$rowTb01->nama }}
+                                        {{ $list->gdp . ' ' . $list->nama }}
                                     @endif
                                 </td>
-                                <td>{{ $rowTb01->nip??'' }}</td>
-                                <td>{{ $rowTb01->jabatan??'' }}</td>
+                                <td>{{ $list->nip ?? '' }}</td>
+                                <td>{{ $list->pangkat . ', ' . $list->golru }}</td>
+                                <td>{{ $list->jabatan ?? '' }}</td>
+                            </tr>
                         @endforeach
-                        </tr>
                     </tbody>
                 </table>
             </div>

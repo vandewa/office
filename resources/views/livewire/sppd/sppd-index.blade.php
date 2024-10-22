@@ -24,8 +24,8 @@
                                 class="icon-plus22 mr-1"></i>Add Data
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a href="{{ route('sppd') }}" class="dropdown-item">Non Kepala OPD</a>
-                            <a href="{{ route('sppd-kepala') }}" class="dropdown-item">Kepala OPD</a>
+                            <a href="{{ route('sppd') }}" class="dropdown-item">Non Kepala</a>
+                            <a href="{{ route('sppd-kepala') }}" class="dropdown-item">Kepala</a>
                         </div>
                     </div>
                 </div>
@@ -97,8 +97,8 @@
                                             </label>
                                         @endforeach --}}
                                     </td>
-                                    <td>{{ $list->maksud }}</td>
-                                    <td>{{ $list->tempat_tujuan }}</td>
+                                    <td>{{ $list->maksud ?? '' }}</td>
+                                    <td>{{ $list->tempat_tujuan ?? '' }}</td>
                                     <td>{{ $list->status }}
                                         @if ($list->laporannya)
                                             <i class="icon-checkmark-circle" style="color: green;"></i>

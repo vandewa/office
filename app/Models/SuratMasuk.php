@@ -8,6 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class SuratMasuk extends Model
 {
     use HasFactory;
-    protected $fillable = ['phone', 'message'];
+    protected $guarded = [];
+
+    public function tipe()
+    {
+        return $this->belongsTo(ComCode::class, 'surat_tp');
+    }
+
+    public function disposisi()
+    {
+        return $this->hasMany(DisposisiSuratMasuk::class, 'surat_masuks_id')->orderBy('created_at', 'desc');
+    }
+
 
 }

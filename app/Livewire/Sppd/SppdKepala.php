@@ -41,16 +41,15 @@ class SppdKepala extends Component
 
     public function mount($id = null)
     {
-        $this->sppdId = $id;
-
-        $this->masterDasar = Ssh::first()->nama;
-
         if ($id) {
             $this->getEdit($id);
         } else {
             $this->edit = false;
         }
 
+        $this->sppdId = $id;
+        $this->masterDasar = Ssh::first()->nama;
+      
         //menampilkan nama di form select nama pegawai
         $nip = Auth::user()->nip;
 
@@ -105,8 +104,6 @@ class SppdKepala extends Component
         $this->form = array_intersect_key($this->sppd->toArray(), $this->form);
         $this->formDasar = DasarSppd::where('sppd_id', $id)->first()->dasar;
         $this->formNama = SppdPegawai::where('sppd_id', $id)->pluck('nip')->toArray();
-
-        // dd($this->formNama);
     }
 
 

@@ -7,12 +7,17 @@
 
                         <!-- Left aligned -->
                         <div class="card card-body border-top-teal">
-                            <h5 class="text-center">Disposisi</h5>
-                            <hr>
-
                             <form wire:submit='save'>
                                 <div class="row">
                                     <div class="col-md-12">
+                                        <div class="form-group margin">
+                                            {{-- <label for="nama" class="col-form-label col-lg-12">Surat<span
+                                                    class="text-danger">*</span></label> --}}
+                                            <div class="col-lg-12">
+                                                <iframe src="{{ asset('1.pdf') }}" frameborder="0" width="100%"
+                                                    height="550"></iframe>
+                                            </div>
+                                        </div>
                                         <!-- Nama Pegawai -->
                                         <div class="form-group margin">
                                             <label for="nama" class="col-form-label col-lg-12">Disposisi<span
@@ -100,10 +105,9 @@
                                     {{-- jika ada disposisi --}}
                                     @if (count($cekPegawaiDisposisi))
                                         <table class="table table-striped mb-4">
-                                            <h5><u>Disposisi</u></h5>
                                             <thead>
                                                 <tr role="row">
-                                                    <th>Nama</th>
+                                                    <th>Disposisi</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -133,10 +137,9 @@
 
                                     @if (count($cekPegawaiCc))
                                         <table class="table table-striped">
-                                            <h5><u>Carbon Copy (CC)</u></h5>
                                             <thead>
                                                 <tr role="row">
-                                                    <th>Nama</th>
+                                                    <th>Carbon Copy (CC)</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -166,10 +169,17 @@
 
                                 </div>
 
-                                @if ($keterangan)
+                                @if ($keterangan->keterangan)
                                     <div class="card-footer">
                                         <span class="badge bg-teal-400 mr-2">Keterangan</span>
-                                        {{ $keterangan }}
+                                        <span class="badge bg-dark mr-2">
+                                            @if ($keterangan->dari->gdb)
+                                                {{ $keterangan->dari->gdp . ' ' . $keterangan->dari->nama . ', ' . $keterangan->dari->gdb }}
+                                            @else
+                                                {{ $keterangan->dari->gdp . ' ' . $keterangan->dari->nama }}
+                                            @endif
+                                        </span>
+                                        {{ $keterangan->keterangan }}
                                     </div>
                                 @endif
                             </div>
@@ -182,37 +192,58 @@
 
                     <div class="col-sm-6">
                         <!-- Bottom aligned -->
-                        <div class="card card-body border-top-teal">
-                            <h5>Log Surat Masuk</h5>
-                            <div class="list-feed">
-                                @foreach ($logSurat->disposisi as $list)
-                                    <div class="list-feed-item">
-                                        <a href="#">
-                                            @if ($list->dari->gdb)
-                                                {{ $list->dari->gdp . ' ' . $list->dari->nama . ', ' . $list->dari->gdb }}
-                                            @else
-                                                {{ $list->dari->gdp . ' ' . $list->dari->nama }}
-                                            @endif
-                                        </a>
-                                        <br>
-                                        <a href="#">
-                                            @if ($list->untuk->gdb)
-                                                {{ $list->untuk->gdp . ' ' . $list->untuk->nama . ', ' . $list->untuk->gdb }}
-                                            @else
-                                                {{ $list->untuk->gdp . ' ' . $list->untuk->nama }}
-                                            @endif
-                                        </a>
+                        <div>
+                            <div class="card card-body border-top-teal">
+                                <div class="table-responsive mb-2">
+                                    {{-- jika ada disposisi --}}
+                                    @if (count($cekPegawaiDisposisi))
+                                        <h5>Disposisi</h5>
 
-                                        <span class="badge badge-dark">
-                                            Disposisi
-                                        </span>
+                                        <ul>
+                                            @foreach ($cekPegawaiDisposisi as $list)
+                                                <li>
+                                                    {{ $list->gdp ? $list->gdp . ' ' : '' }}
+                                                    {{ $list->nama }}
+                                                    {{ $list->gdb ? ', ' . $list->gdb : '' }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
 
+                                    @endif
+                                </div>
+                            </div>
 
-                                        <div class="text-muted">
-                                            {{ Carbon\Carbon::parse($list->created_at)->isoFormat('LLLL') }} WIB
+                            <div class="card card-body border-top-teal">
+                                <h5>Log Surat Masuk</h5>
+                                <div class="list-feed">
+                                    @foreach ($logSurat->disposisi as $list)
+                                        <div class="list-feed-item">
+                                            <a href="#">
+                                                @if ($list->dari->gdb)
+                                                    {{ $list->dari->gdp . ' ' . $list->dari->nama . ', ' . $list->dari->gdb }}
+                                                @else
+                                                    {{ $list->dari->gdp . ' ' . $list->dari->nama }}
+                                                @endif
+                                            </a>
+                                            <br>
+                                            <a href="#">
+                                                @if ($list->untuk->gdb)
+                                                    {{ $list->untuk->gdp . ' ' . $list->untuk->nama . ', ' . $list->untuk->gdb }}
+                                                @else
+                                                    {{ $list->untuk->gdp . ' ' . $list->untuk->nama }}
+                                                @endif
+                                            </a>
+
+                                            <span class="badge badge-dark">
+                                                {{ $list->tipe->code_value }}
+                                            </span>
+
+                                            <div class="text-muted">
+                                                {{ Carbon\Carbon::parse($list->created_at)->isoFormat('LLLL') }} WIB
+                                            </div>
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                         <!-- /bottom aligned -->

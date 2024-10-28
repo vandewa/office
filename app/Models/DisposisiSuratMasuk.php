@@ -21,4 +21,10 @@ class DisposisiSuratMasuk extends Model
     {
         return $this->belongsTo(Tb01::class, 'tujuan_user_id');
     }
+
+    public function tipe()
+    {
+        return $this->belongsTo(ComCode::class, 'disposisi_tp');
+    }
+
 }

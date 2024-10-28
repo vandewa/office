@@ -864,23 +864,23 @@ class Tb01 extends Authenticatable
      * @param $value
      * @return string
      */
-    public function getTglskpensAttribute($value)
-    {
+    // public function getTglskpensAttribute($value)
+    // {
 
-        if ($value != '0000-00-00') {
-            $tempDate = explode('-', $value);
-            /**
-             * checkdate menggunakan format gregorian, month, day, year
-             */
-            if (checkdate($tempDate[1], $tempDate[2], $tempDate[0])) {
-                return $value;
-            }
-            return $tempDate[0] . "-01-01";
-        }
+    //     if ($value != '0000-00-00') {
+    //         $tempDate = explode('-', $value);
+    //         /**
+    //          * checkdate menggunakan format gregorian, month, day, year
+    //          */
+    //         if (checkdate($tempDate[1], $tempDate[2], $tempDate[0])) {
+    //             return $value;
+    //         }
+    //         return $tempDate[0] . "-01-01";
+    //     }
 
-        return '1970-01-02';
+    //     return '1970-01-02';
 
-    }
+    // }
 
     public function getTmtpnsAttribute($value)
     {

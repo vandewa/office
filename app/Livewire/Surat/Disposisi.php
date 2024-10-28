@@ -118,7 +118,7 @@ class Disposisi extends Component
 
         $cc = DisposisiSuratMasuk::where('surat_masuks_id', $this->idnya)->where('disposisi_tp', 'DISPOSISI_TP_02')->get();
 
-        $keterangan = DisposisiSuratMasuk::where('surat_masuks_id', $this->idnya)->first()->keterangan ?? null;
+        $keterangan = DisposisiSuratMasuk::where('surat_masuks_id', $this->idnya)->first();
 
         $kumpulanPegawaiDisposisi = [];
         foreach ($disposisi as $list) {
@@ -173,6 +173,8 @@ class Disposisi extends Component
         });
 
         $logSurat = SuratMasuk::with(['disposisi', 'disposisi.dari', 'disposisi.untuk'])->find($this->idnya);
+
+        // dd($keterangan);
 
         return view('livewire.surat.disposisi', [
             'cekPegawaiDisposisi' => $mergedDataDisposisi,

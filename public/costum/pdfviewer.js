@@ -9,6 +9,9 @@ function pdfViewerFunction(path) {
     var loadingIndicator = document.getElementById("loadingIndicator");
     loadingIndicator.style.display = "block";
 
+    // Clear the container before rendering to prevent duplicate pages
+    pdfContainer.innerHTML = "";
+
     // Function to render PDF
     function renderPDF(url, container) {
         // Fetch the PDF file

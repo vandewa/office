@@ -1,0 +1,37 @@
+/* Add this CSS to style the loading indicator */
+#loadingIndicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    display: none;
+}
+
+#loadingIndicator p {
+    margin: 0;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Optional: Add some animation to the loading indicator */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-indicator p::after {
+    content: "\2026";
+    /* Unicode ellipsis character */
+    display: inline-block;
+    animation: rotate 1s linear infinite;
+}

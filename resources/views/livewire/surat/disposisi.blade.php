@@ -11,11 +11,12 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group margin">
-                                            {{-- <label for="nama" class="col-form-label col-lg-12">Surat<span
-                                                    class="text-danger">*</span></label> --}}
+
                                             <div class="col-lg-12">
-                                                <iframe src="{{ asset('1.pdf') }}" frameborder="0" width="100%"
-                                                    height="550"></iframe>
+                                                <div id="pdf-container" wire:ignore>
+                                                    <div id="loadingIndicator">Loading...</div>
+                                                </div>
+
                                             </div>
                                         </div>
                                         <!-- Nama Pegawai -->
@@ -287,9 +288,46 @@
 
 
 @push('css')
+    <link href="{{ asset('costum/loading.css') }}" rel="stylesheet" type="text/css">
     <style>
         .margin {
             margin-bottom: 0.1rem
         }
+
+        #pdf-container {
+            overflow-y: auto;
+            max-height: 600px;
+            width: 100%;
+            position: relative;
+            /* Required for absolute positioning of the loading indicator */
+            border: 1px solid #ddd;
+            /* Optional: To visualize the scrollable area */
+        }
+
+        #loadingIndicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: #333;
+            display: none;
+            /* Hidden by default, shown only when loading */
+            z-index: 10;
+            /* Ensure it overlays on top of PDF content */
+        }
     </style>
+@endpush
+
+@push('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <script src="{{ asset('costum/pdfviewer.js') }}"></script>
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('surat', (event) => {
+                var path = event[0].path;
+                pdfViewerFunction(path);
+            });
+        });
+    </script>
 @endpush

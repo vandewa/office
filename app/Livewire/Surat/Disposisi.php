@@ -173,14 +173,17 @@ class Disposisi extends Component
         });
 
         $logSurat = SuratMasuk::with(['disposisi', 'disposisi.dari', 'disposisi.untuk'])->find($this->idnya);
-
+        // $b = route('helper.show-picture', ['path' => $logSurat->path_surat]);
+        $b = asset('aa.pdf');
+        // dd($b);
+        $this->dispatch('surat', ['path' => $b]);
         // dd($keterangan);
 
         return view('livewire.surat.disposisi', [
             'cekPegawaiDisposisi' => $mergedDataDisposisi,
             'cekPegawaiCc' => $mergedDataCC,
             'keterangan' => $keterangan,
-            'logSurat' => $logSurat,
+            'logSurat' => $logSurat
         ]);
     }
 }

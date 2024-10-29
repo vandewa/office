@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class Disposisi extends Component
 {
-    public $idnya, $pegawai, $disposisi, $cc, $idHapus;
+    public $idnya, $pegawai, $disposisi, $cc, $idHapus, $statusDisposisi;
 
     public $form = [
         'surat_masuks_id' => null,
@@ -34,6 +34,7 @@ class Disposisi extends Component
                 tb_01.nama,
                 IF(tb_01.gdb IS NOT NULL AND tb_01.gdb != '', CONCAT(', ', tb_01.gdb), '')
             ) as nama_gdb"), 'tb_01.nip');
+
     }
 
     public function save()
@@ -110,6 +111,18 @@ class Disposisi extends Component
                 }
             });
         JS);
+    }
+
+    public function updated($property)
+    {
+        // if ($property == 'statusYa' || $property == 'statusTidak') {
+        //     if ($this->statusYa == 'on') {
+        //         $this->statusTidak = null;
+        //     }
+        //     if ($this->statusTidak == 'on') {
+        //         $this->statusYa = null;
+        //     }
+        // }
     }
 
     public function render()

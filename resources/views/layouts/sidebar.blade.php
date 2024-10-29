@@ -36,6 +36,18 @@
                  </span>
              </a>
          </li>
+         <li class="nav-item">
+             <a href="{{ route('agenda') }}"
+                 class="nav-link
+                {{ Request::segment(1) == 'agenda' ? 'active' : '' }}
+             ">
+                 <i class="
+                 icon-megaphone"></i>
+                 <span>
+                     Agenda
+                 </span>
+             </a>
+         </li>
          <!-- /main -->
          <li class="nav-item">
              <a href="{{ route('informasi-opd') }}"

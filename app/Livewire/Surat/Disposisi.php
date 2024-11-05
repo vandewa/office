@@ -19,7 +19,13 @@ class Disposisi extends Component
         'created_by' => null,
         'tujuan_user_id' => null,
     ];
-
+    public function updatedStatusDisposisi()
+    {
+        $this->js(<<<'JS'
+           $('.select-search').select2();
+           $('.select-search').select2();           
+        JS);
+    }
     public function mount($id)
     {
         $this->idnya = $id;
@@ -34,7 +40,6 @@ class Disposisi extends Component
                 tb_01.nama,
                 IF(tb_01.gdb IS NOT NULL AND tb_01.gdb != '', CONCAT(', ', tb_01.gdb), '')
             ) as nama_gdb"), 'tb_01.nip');
-
     }
 
     public function save()

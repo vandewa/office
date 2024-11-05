@@ -39,97 +39,95 @@
                             </div>
 
 
-                            @if ($statusDisposisi)
-                                <div>
-                                    <form wire:submit='save'>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <!-- Nama Pegawai -->
-                                                <div class="form-group margin">
-                                                    <label for="nama"
-                                                        class="col-form-label col-lg-12">Disposisi<span
-                                                            class="text-danger">*</span></label>
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group">
-                                                            <div wire:ignore>
-                                                                <select class="form-control select-search-kusus"
-                                                                    wire:model='disposisi' multiple>
-                                                                    @foreach ($pegawai as $nip => $namaOption)
-                                                                        <option value="{{ $nip }}">
-                                                                            {{ $namaOption }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
+                            {{-- @if ($statusDisposisi) --}}
+                            <div>
+                                <form wire:submit='save'>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <!-- Nama Pegawai -->
+                                            <div class="form-group margin">
+                                                <label for="nama" class="col-form-label col-lg-12">Disposisi<span
+                                                        class="text-danger">*</span></label>
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <div wire:ignore>
+                                                            <select class="form-control select-search"
+                                                                wire:model='disposisi' multiple>
+                                                                @foreach ($pegawai as $nip => $namaOption)
+                                                                    <option value="{{ $nip }}">
+                                                                        {{ $namaOption }}</option>
+                                                                @endforeach
+                                                            </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-12">
-                                                        @error('disposisi')
-                                                            <div class="text-danger">
-                                                                <i class="icon-cancel-circle2"></i>
-                                                                <span><b>{{ $message }}</b></span>
-                                                            </div>
-                                                        @enderror
-                                                    </div>
                                                 </div>
-
-                                                <div class="form-group margin">
-                                                    <label for="nama" class="col-form-label col-lg-12">CC</label>
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group">
-                                                            <div wire:ignore>
-                                                                <select class="form-control select-search-kusus2"
-                                                                    wire:model='cc' multiple>
-                                                                    @foreach ($pegawai as $nip => $namaOption)
-                                                                        <option value="{{ $nip }}">
-                                                                            {{ $namaOption }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
+                                                <div class="col-lg-12">
+                                                    @error('disposisi')
+                                                        <div class="text-danger">
+                                                            <i class="icon-cancel-circle2"></i>
+                                                            <span><b>{{ $message }}</b></span>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        @error('cc')
-                                                            <div class="text-danger">
-                                                                <i class="icon-cancel-circle2"></i>
-                                                                <span><b>{{ $message }}</b></span>
-                                                            </div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <!-- Nama Pegawai -->
-                                                <div class="form-group margin">
-                                                    <label for="nama"
-                                                        class="col-form-label col-lg-12">Keterangan<span
-                                                            class="text-danger">*</span></label>
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group">
-                                                            <textarea rows="2" class="form-control" wire:model='form.keterangan'></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        @error('form.keterangan')
-                                                            <div class="text-danger">
-                                                                <i class="icon-cancel-circle2"></i>
-                                                                <span><b>{{ $message }}</b></span>
-                                                            </div>
-                                                        @enderror
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="container mt-2">
-                                                    <button class="btn btn-block btn-info" type="submit">
-                                                        <i class="mr-1 icon-paperplane"></i>
-                                                        Submit
-                                                    </button>
+                                                    @enderror
                                                 </div>
                                             </div>
-                                        </div>
-                                    </form>
-                                </div>
 
-                            @endif
+                                            <div class="form-group margin">
+                                                <label for="nama" class="col-form-label col-lg-12">CC</label>
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <div wire:ignore>
+                                                            <select class="form-control select-search" wire:model='cc'
+                                                                multiple>
+                                                                @foreach ($pegawai as $nip => $namaOption)
+                                                                    <option value="{{ $nip }}">
+                                                                        {{ $namaOption }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    @error('cc')
+                                                        <div class="text-danger">
+                                                            <i class="icon-cancel-circle2"></i>
+                                                            <span><b>{{ $message }}</b></span>
+                                                        </div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <!-- Nama Pegawai -->
+                                            <div class="form-group margin">
+                                                <label for="nama" class="col-form-label col-lg-12">Keterangan<span
+                                                        class="text-danger">*</span></label>
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <textarea rows="2" class="form-control" wire:model='form.keterangan'></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    @error('form.keterangan')
+                                                        <div class="text-danger">
+                                                            <i class="icon-cancel-circle2"></i>
+                                                            <span><b>{{ $message }}</b></span>
+                                                        </div>
+                                                    @enderror
+                                                </div>
+
+                                            </div>
+
+                                            <div class="container mt-2">
+                                                <button class="btn btn-block btn-info" type="submit">
+                                                    <i class="mr-1 icon-paperplane"></i>
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            {{-- @endif --}}
 
                             <div class="card-body">
                                 <div class="table-responsive mb-2">

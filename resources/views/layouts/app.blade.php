@@ -191,7 +191,8 @@
     </div>
     <!-- /page content -->
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+    <script src="{{ asset('limitless/') }}/global_assets/js/main/jquery.min.js"></script>
     <!-- Core JS files -->
     {{-- <script src="{{ asset('limitless/global_assets/js/main/jquery.min.js') }} "></script> --}}
     <script src="{{ asset('limitless/global_assets/js/main/bootstrap.bundle.min.js') }} "></script>
@@ -209,10 +210,11 @@
 
     {{-- <script src="{{ asset('limitless/layout_1/LTR/default/full/assets/js/app.js') }} "></script> --}}
     <script src="{{ asset('limitless/global_assets/js/demo_pages/dashboard.js') }}"></script>
-    <script src="{{ asset('limitless/global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
     <script src="{{ asset('limitless/global_assets/js/plugins/extensions/jquery_ui/interactions.min.js') }}"></script>
+    <script src="{{ asset('limitless/global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+    {{-- <script src="{{ asset('limitless/') }}/global_assets/js/plugins/forms/selects/select2.min.js"></script> --}}
     <script src="{{ asset('limitless/layout_1/LTR/default/full/assets/js/app.js') }}"></script>
-    <script src="{{ asset('limitless/global_assets/js/demo_pages/form_select2.js') }}"></script>
+    {{-- <script src="{{ asset('limitless/global_assets/js/demo_pages/form_select2.js') }}"></script> --}}
     <!-- /theme JS files -->
     <script src="https://kit.fontawesome.com/bb9305debb.js" crossorigin="anonymous"></script>
 

@@ -20,6 +20,9 @@
             <div class="header-elements d-none">
                 <div class="breadcrumb justify-content-center">
                     <div class="btn-group">
+                        <a class="btn btn-info mr-2" href="{{ route('front.agenda') }}" target="_blank">
+                            <i class="icon-eye4 mr-1"></i>Agenda
+                        </a>
                         <a class="btn btn-primary" href="{{ route('suratmasuk') }}">
                             <i class="icon-plus22 mr-1"></i>Add Data
                         </a>
@@ -81,10 +84,17 @@
                                                     Hapus
                                                 </button>
 
+                                                <div class="dropdown-divider"></div>
+
                                                 <a href="{{ route('disposisi', ['id' => $list->id]) }}"
                                                     class="dropdown-item">
                                                     <i class="icon-user mr-3"></i>
                                                     Disposisi
+                                                </a>
+
+                                                <a href="{{ route('laporan-sppd', $list->id) }}" class="dropdown-item">
+                                                    <i class="icon-menu6 mr-3"></i>
+                                                    Isi Laporan
                                                 </a>
 
                                             </div>

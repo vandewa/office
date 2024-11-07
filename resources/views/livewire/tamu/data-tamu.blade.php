@@ -3,7 +3,7 @@
         <livewire:component.page-header judul="Data Tamu" subjudul="Manage Data Tamu" :breadcrumb="['Data Tamu']"
             button='
             <div class="d-lg-flex mb-2 mb-lg-0">
-                         <button type="button" class="btn btn-info ms-3" wire:click="mandiri">
+                         <button type="button" class="btn btn-info ms-3" wire:click="mandiri" target="_blank">
                             Mandiri <i class="ph-plus ms-2"></i>
                         </button>
                     </div>

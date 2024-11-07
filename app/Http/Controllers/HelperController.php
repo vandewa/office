@@ -194,9 +194,9 @@ class HelperController extends Controller
         $templateProcessor = new TemplateProcessor($path);
 
         $templateProcessor->setValues([
-            'dasar' => $dasarSppd->dasar,
-            'ssh' => $ssh->nama,
-            'untuk' => ucfirst($sppd->untuk),
+            'dasar' => $dasarSppd->dasar ?? null,
+            'ssh' => $ssh->nama ?? null,
+            'untuk' => ucfirst($sppd->untuk) ?? null,
 
             'nama' => $nama_kepala,
             'nip' => $kepalaDinas->nip,
@@ -265,32 +265,32 @@ class HelperController extends Controller
         $templateProcessor = new TemplateProcessor($path);
 
         $templateProcessor->setValues([
-            'opd' => strtoupper($opd->skpd),
-            'alamat' => $informasiOpd->alamat,
-            'fax' => $informasiOpd->fax,
-            'website' => $informasiOpd->website,
-            'email' => $informasiOpd->email,
-            'telepon' => $informasiOpd->telepon,
+            'opd' => strtoupper($opd->skpd) ?? null,
+            'alamat' => $informasiOpd->alamat ?? null,
+            'fax' => $informasiOpd->fax ?? null,
+            'website' => $informasiOpd->website ?? null,
+            'email' => $informasiOpd->email ?? null,
+            'telepon' => $informasiOpd->telepon ?? null,
 
-            'kepala' => $namaKepala,
-            'kepala_nip' => $kepala->nip,
+            'kepala' => $namaKepala ?? null,
+            'kepala_nip' => $kepala->nip ?? null,
 
-            'nama' => $namaDanGelar,
-            'nip' => $pegawai->nip,
-            'pangkat' => $pegawai->pangkat,
-            'golongan' => $pegawai->golru,
-            'jabatan' => $pegawai->jabatan,
+            'nama' => $namaDanGelar ?? null,
+            'nip' => $pegawai->nip ?? null,
+            'pangkat' => $pegawai->pangkat ?? null,
+            'golongan' => $pegawai->golru ?? null,
+            'jabatan' => $pegawai->jabatan ?? null,
 
-            'tingkat' => $sppd->tingkat_id,
-            'maksud' => $sppd->maksud,
-            'alat_angkut' => $sppd->kendaraan->code_nm,
-            'tmpt_berangkat' => $sppd->tempat_berangkat,
-            'tmpt_tujuan' => $sppd->tempat_tujuan,
+            'tingkat' => $sppd->tingkat_id ?? null,
+            'maksud' => $sppd->maksud ?? null,
+            'alat_angkut' => $sppd->kendaraan->code_nm ?? null,
+            'tmpt_berangkat' => $sppd->tempat_berangkat ?? null,
+            'tmpt_tujuan' => $sppd->tempat_tujuan ?? null,
             'hari' => $this->angkaKeTeks($sppd->hari),
             'hari2' => $sppd->hari,
             'berangkat' => Carbon::createFromFormat('Y-m-d', $sppd->tgl_berangkat)->isoFormat('D MMMM Y'),
             'pulang' => Carbon::createFromFormat('Y-m-d', $sppd->tgl_kembali)->isoFormat('D MMMM Y'),
-            'instansi' => $opd->skpd,
+            'instansi' => $opd->skpd ?? null,
             'akun' => $informasiOpd->akun ?? null,
             'keterangan' => $sppd->keterangan,
             'tanggal' => Carbon::createFromFormat('Y-m-d', $sppd->ditetapkan_tgl)->isoFormat('D MMMM Y'),
@@ -310,7 +310,6 @@ class HelperController extends Controller
         $sppd = Sppd::with(['kendaraan'])->find($id);
         $informasiOpd = InformasiOpd::where('kdunit', auth()->user()->kdunit)->first();
         $opd = ASkpd::find(auth()->user()->kdunit);
-
 
         //cek kepala opd
         $kepala = Tb01::with(['skpd'])->select('tmlhr', 'photo', 'tb_01.tglhr', 'nip', 'tb_01.kdunit', 'email', 'gdp', 'gdb', 'email_dinas', 'nama', 'tb_01.idskpd', "jabatan.skpd", 'a_golruang.idgolru', DB::Raw("case when jabfung is null and jabfungum is null then jabatan.jab
@@ -339,29 +338,29 @@ class HelperController extends Controller
         $templateProcessor = new TemplateProcessor($path);
 
         $templateProcessor->setValues([
-            'opd' => strtoupper($opd->skpd),
-            'alamat' => $informasiOpd->alamat,
-            'fax' => $informasiOpd->fax,
-            'website' => $informasiOpd->website,
-            'email' => $informasiOpd->email,
-            'telepon' => $informasiOpd->telepon,
+            'opd' => strtoupper($opd->skpd) ?? null,
+            'alamat' => $informasiOpd->alamat ?? null,
+            'fax' => $informasiOpd->fax ?? null,
+            'website' => $informasiOpd->website ?? null,
+            'email' => $informasiOpd->email ?? null,
+            'telepon' => $informasiOpd->telepon ?? null,
 
-            'nama' => $namaKepala,
-            'nip' => $kepala->nip,
-            'pangkat' => $kepala->pangkat,
-            'golongan' => $kepala->golru,
-            'jabatan' => $kepala->jabatan,
+            'nama' => $namaKepala ?? null,
+            'nip' => $kepala->nip ?? null,
+            'pangkat' => $kepala->pangkat ?? null,
+            'golongan' => $kepala->golru ?? null,
+            'jabatan' => $kepala->jabatan ?? null,
 
-            'tingkat' => $sppd->tingkat_id,
-            'maksud' => $sppd->maksud,
-            'alat_angkut' => $sppd->kendaraan->code_nm,
-            'tmpt_berangkat' => $sppd->tempat_berangkat,
-            'tmpt_tujuan' => $sppd->tempat_tujuan,
+            'tingkat' => $sppd->tingkat_id ?? null,
+            'maksud' => $sppd->maksud ?? null,
+            'alat_angkut' => $sppd->kendaraan->code_nm ?? null,
+            'tmpt_berangkat' => $sppd->tempat_berangkat ?? null,
+            'tmpt_tujuan' => $sppd->tempat_tujuan ?? null,
             'hari' => $this->angkaKeTeks($sppd->hari),
-            'hari2' => $sppd->hari,
+            'hari2' => $sppd->hari ?? null,
             'berangkat' => Carbon::createFromFormat('Y-m-d', $sppd->tgl_berangkat)->isoFormat('D MMMM Y'),
             'pulang' => Carbon::createFromFormat('Y-m-d', $sppd->tgl_kembali)->isoFormat('D MMMM Y'),
-            'instansi' => $opd->skpd,
+            'instansi' => $opd->skpd ?? null,
             'akun' => $informasiOpd->akun ?? null,
             'keterangan' => $sppd->keterangan,
             'tanggal' => Carbon::createFromFormat('Y-m-d', $sppd->ditetapkan_tgl)->isoFormat('D MMMM Y'),

@@ -36,7 +36,7 @@
                  </span>
              </a>
          </li>
-         <li class="nav-item">
+         {{-- <li class="nav-item">
              <a href="{{ route('agenda') }}"
                  class="nav-link
                 {{ Request::segment(1) == 'agenda' ? 'active' : '' }}
@@ -47,7 +47,15 @@
                      Agenda
                  </span>
              </a>
+         </li> --}}
+         <!-- Tamu -->
+         <li class="nav-item">
+             <a href="{{ route('data-tamu') }}" class="nav-link" wire:navigate>
+                 <i class="icon-vcard"></i>
+                 <span>Tamu</span>
+             </a>
          </li>
+         <!-- /main -->
          <!-- /main -->
          <li class="nav-item">
              <a href="{{ route('informasi-opd') }}"
@@ -71,14 +79,7 @@
                  </span>
              </a>
          </li>
-         <!-- Tamu -->
-         <li class="nav-item">
-             <a href="{{ route('data-tamu') }}" class="nav-link" wire:navigate>
-                 <i class="icon-vcard"></i>
-                 <span>Tamu</span>
-             </a>
-         </li>
-         <!-- /main -->
+
 
          <!-- Master Section -->
          <li class="nav-item nav-item-submenu">

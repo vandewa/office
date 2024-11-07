@@ -38,6 +38,8 @@ Route::get('/', function () {
     return view('livewire.welcome');
 })->name('index');
 
+Route::get('front-agenda', FrontAgenda::class)->name('front.agenda');
+
 Route::post('/logins', [LoginController::class, 'login'])->name('logins');
 Route::middleware([
     'auth:web'
@@ -53,7 +55,6 @@ Route::middleware([
     Route::get('informasi-opd', InformasiOpd::class)->name('informasi-opd');
     Route::get('disposisi/{id?}', Disposisi::class)->name('disposisi');
     Route::get('agenda', Agenda::class)->name('agenda');
-    Route::get('front-agenda', FrontAgenda::class)->name('front.agenda');
     //cetak
     Route::get('/cetak-spt/{id?}', [HelperController::class, 'cetakSPT'])->name('cetak-spt');
     Route::get('/cetak-spt-kepala/{id?}', [HelperController::class, 'cetakSPTKepala'])->name('cetak-spt-kepala');

@@ -10,63 +10,107 @@
                     </div>
                 </center>
                 <br>
-                <div class="list-group scrolling-div" style="max-height: 500px; overflow: hidden; position: relative;">
+                <div class="scrolling-div" style="max-height: 500px; overflow: hidden; position: relative;">
                     <div id="devan">
-                        <div class="list-group-item shadow-sm p-3 mb-3">
-                            <div class="d-flex justify-content-between">
-                                <span>07:15 - selesai</span>
-                                <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan
-                                        Hari
-                                        Sumpah Pemuda</strong></span>
+                        <!-- Replace each list-group-item with a card -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <span>07:15 - selesai</span>
+                                    <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan Hari Sumpah Pemuda</strong></span>
+                                </div>
+                                <div class="mt-2"><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
                             </div>
-                            <div><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
                         </div>
-                        <div class="list-group-item shadow-sm p-3 mb-3">
-                            <div class="d-flex justify-content-between">
-                                <span>07:15 - selesai</span>
-                                <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan
-                                        Hari
-                                        Sumpah Pemuda</strong></span>
-                            </div>
-                            <div><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
-                        </div>
-                        <div class="list-group-item shadow-sm p-3 mb-3">
-                            <div class="d-flex justify-content-between">
-                                <span>07:15 - selesai</span>
-                                <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan
-                                        Hari
-                                        Sumpah Pemuda</strong></span>
-                            </div>
-                            <div><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
-                        </div>
-                        <div class="list-group-item shadow-sm p-3 mb-3">
-                            <div class="d-flex justify-content-between">
-                                <span>07:15 - selesai</span>
-                                <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan
-                                        Hari
-                                        Sumpah Pemuda</strong></span>
-                            </div>
-                            <div><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
-                        </div>
-                        <div class="list-group-item shadow-sm p-3 mb-3">
-                            <div class="d-flex justify-content-between">
-                                <span>07:15 - selesai</span>
-                                <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan
-                                        Hari
-                                        Sumpah Pemuda</strong></span>
-                            </div>
-                            <div><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
-                        </div>
-                        <div class="list-group-item shadow-sm p-3 mb-3">
-                            <div class="d-flex justify-content-between">
-                                <span>07:15 - selesai</span>
-                                <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan
-                                        Hari
-                                        Sumpah Pemuda</strong></span>
-                            </div>
-                            <div><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
-                        </div>
+
                         <!-- Repeat similar structure for other items -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <span>07:15 - selesai</span>
+                                    <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan Hari Sumpah Pemuda</strong></span>
+                                </div>
+                                <div class="mt-2"><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
+                            </div>
+                        </div>
+
+                        <!-- Repeat similar structure for other items -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <span>07:15 - selesai</span>
+                                    <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan Hari Sumpah Pemuda</strong></span>
+                                </div>
+                                <div class="mt-2"><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
+                            </div>
+                        </div>
+
+                        <!-- Repeat similar structure for other items -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <span>07:15 - selesai</span>
+                                    <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan Hari Sumpah Pemuda</strong></span>
+                                </div>
+                                <div class="mt-2"><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
+                            </div>
+                        </div>
+
+                        <!-- Repeat similar structure for other items -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <span>07:15 - selesai</span>
+                                    <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan Hari Sumpah Pemuda</strong></span>
+                                </div>
+                                <div class="mt-2"><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
+                            </div>
+                        </div>
+
+                        <!-- Repeat similar structure for other items -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <span>07:15 - selesai</span>
+                                    <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan Hari Sumpah Pemuda</strong></span>
+                                </div>
+                                <div class="mt-2"><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
+                            </div>
+                        </div>
+
+                        <!-- Repeat similar structure for other items -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <span>07:15 - selesai</span>
+                                    <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan Hari Sumpah Pemuda</strong></span>
+                                </div>
+                                <div class="mt-2"><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
+                            </div>
+                        </div>
+
+                        <!-- Repeat similar structure for other items -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <span>07:15 - selesai</span>
+                                    <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan Hari Sumpah Pemuda</strong></span>
+                                </div>
+                                <div class="mt-2"><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
+                            </div>
+                        </div>
+
+                        <!-- Repeat similar structure for other items -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <span>07:15 - selesai</span>
+                                    <span><strong>SETDA (Kesra), Permohonan Peliputan dan Dokumentasi Upacara Peringatan Hari Sumpah Pemuda</strong></span>
+                                </div>
+                                <div class="mt-2"><i class="bi bi-geo-alt-fill"></i> Alun-alun Wonosobo</div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -85,7 +129,7 @@
                     <div class="card-body" style="height: 250px; overflow-y: auto;">
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between">
-                                <span>PKK KEC.WADASLINTANG...</span>
+                                <span>SETDA , Visitasi dan Verifikasi Monev Keterbukaan Informasi Publik Kabupaten Wonosobo</span>
                                 <span>29 Okt</span>
                             </li>
                             <!-- Repeat similar structure for other items -->
@@ -100,39 +144,41 @@
         </div>
     </div>
     @push('script')
-        <script>
-            function updateClock() {
-                const now = new Date();
-                const hours = String(now.getHours()).padStart(2, '0');
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                const seconds = String(now.getSeconds()).padStart(2, '0');
-                const currentTime = `${hours}:${minutes}:${seconds}`;
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const currentTime = `${hours}:${minutes}:${seconds}`;
 
-                document.getElementById('clock').textContent = currentTime;
+            document.getElementById('clock').textContent = currentTime;
+        }
+
+        // Update the clock every second
+        setInterval(updateClock, 1000);
+
+        // Initial call to display the time immediately
+        updateClock();
+
+        let scrollPosition = 0;
+        const scrollingDiv = document.querySelector('.scrolling-div');
+        const scrollingContent = document.querySelector('#devan');
+        const scrollSpeed = 1; // Adjust the speed here
+        const scrollDelay = 100; // Adjust the delay for smoothness
+
+        function scrollContent() {
+            scrollPosition += scrollSpeed;
+
+            if (scrollPosition > scrollingContent.scrollHeight - scrollingDiv.clientHeight) {
+                scrollPosition = 0; // Reset when it reaches the end
             }
+            scrollingDiv.scrollTop = scrollPosition;
+        }
 
-            // Update the clock every second
-            setInterval(updateClock, 1000);
+        // Start scrolling content every `scrollDelay` milliseconds
+        setInterval(scrollContent, scrollDelay);
 
-            // Initial call to display the time immediately
-            updateClock();
-            let scrollPosition = 0;
-            const scrollingDiv = document.querySelector('.scrolling-div');
-            const scrollingContent = document.querySelector('#devan');
-            const scrollSpeed = 1; // Adjust the speed here
-            const scrollDelay = 100; // Adjust the delay for smoothness
-
-            function scrollContent() {
-                scrollPosition += scrollSpeed;
-
-                if (scrollPosition > scrollingContent.scrollHeight - scrollingDiv.clientHeight) {
-                    scrollPosition = 0; // Reset when it reaches the end
-                }
-                scrollingDiv.scrollTop = scrollPosition;
-            }
-
-            // Start scrolling content every `scrollDelay` milliseconds
-            setInterval(scrollContent, scrollDelay);
-        </script>
+    </script>
     @endpush
 </div>

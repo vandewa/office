@@ -127,12 +127,12 @@
                                                     Hapus
                                                 </button>
 
+                                                <div class="dropdown-divider"></div>
+
                                                 <a href="{{ route('laporan-sppd', $list->id) }}" class="dropdown-item">
                                                     <i class="icon-menu6 mr-3"></i>
                                                     Isi Laporan
                                                 </a>
-
-                                                <div class="dropdown-divider"></div>
 
                                                 {{-- cek jika sudah isi laporan --}}
                                                 @if ($list->laporannya)

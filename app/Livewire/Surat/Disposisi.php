@@ -47,19 +47,25 @@ class Disposisi extends Component
         $this->form['surat_masuks_id'] = $this->idnya;
         $this->form['created_by'] = auth()->user()->nip;
 
-        foreach ($this->disposisi as $list) {
-            //jika pegawai sebagai disposisi
-            $this->form['disposisi_tp'] = 'DISPOSISI_TP_01';
-            $this->form['tujuan_user_id'] = $list;
-            DisposisiSuratMasuk::create($this->form);
+        if ($this->disposisi) {
+            foreach ($this->disposisi as $list) {
+                //jika pegawai sebagai disposisi
+                $this->form['disposisi_tp'] = 'DISPOSISI_TP_01';
+                $this->form['tujuan_user_id'] = $list;
+                DisposisiSuratMasuk::create($this->form);
+            }
         }
 
-        foreach ($this->cc as $list) {
-            //jika pegawai sebagai disposisi
-            $this->form['disposisi_tp'] = 'DISPOSISI_TP_02';
-            $this->form['tujuan_user_id'] = $list;
-            DisposisiSuratMasuk::create($this->form);
+
+        if ($this->cc) {
+            foreach ($this->cc as $list) {
+                //jika pegawai sebagai disposisi
+                $this->form['disposisi_tp'] = 'DISPOSISI_TP_02';
+                $this->form['tujuan_user_id'] = $list;
+                DisposisiSuratMasuk::create($this->form);
+            }
         }
+
 
         $this->showSuccessMessage('Berhasil disposisi surat!');
     }

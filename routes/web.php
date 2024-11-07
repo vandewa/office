@@ -69,6 +69,7 @@ Route::middleware([
 
     Route::get('logout', [HelperController::class, 'logout'])->name('logout');
 });
+
 Route::group(['prefix' => 'master', 'as' => 'master.'], function () {
     Route::get('ssh', Ssh::class)->name('ssh');
 });

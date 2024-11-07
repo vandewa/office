@@ -55,6 +55,8 @@ class LaporanSppd extends Component
             'sppd_id' => $this->idnya
         ];
 
+        $this->form['sppd_id'] = $this->idnya;
+
         // Update the record if 'kdunit' exists, otherwise create a new one
         ModelsLaporanSppd::updateOrCreate($attributes, $this->form);
 

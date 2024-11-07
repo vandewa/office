@@ -19,13 +19,50 @@ class Disposisi extends Component
         'created_by' => null,
         'tujuan_user_id' => null,
     ];
+
     public function updatedStatusDisposisi()
     {
-        $this->js(<<<'JS'
-           $('.select-search').select2();
-           $('.select-search').select2();           
+        $existingRecord = DisposisiSuratMasuk::where('surat_masuks_id', $this->idnya)->first();
+
+        $this->form['keterangan'] = $existingRecord ? $existingRecord->keterangan : null;
+
+        $disposisiJson = json_encode(DisposisiSuratMasuk::where('surat_masuks_id', $this->idnya)
+            ->where('disposisi_tp', 'DISPOSISI_TP_01')
+            ->pluck('tujuan_user_id')
+            ->toArray());
+
+        $ccJson = json_encode(DisposisiSuratMasuk::where('surat_masuks_id', $this->idnya)
+            ->where('disposisi_tp', 'DISPOSISI_TP_02')
+            ->pluck('tujuan_user_id')
+            ->toArray());
+
+        $this->js(<<<JS
+            let selectedDisposisi = {$disposisiJson};
+            let selectedCc = {$ccJson};
+
+            setTimeout(function() {
+                $('.select-search').select2();
+
+                // Set nilai awal dari disposisi
+                $('#disposisi').val(selectedDisposisi).trigger('change');
+
+                // Set nilai awal dari cc
+                $('#cc').val(selectedCc).trigger('change');
+
+                // Sinkronkan perubahan Select2 dengan Livewire
+                $('#disposisi').on('change', function(e) {
+                    var disposisi = $('#disposisi').val();
+                    \$wire.set('disposisi', disposisi);
+                });
+
+                $('#cc').on('change', function(e) {
+                    var cc = $('#cc').val();
+                    \$wire.set('cc', cc);
+                });
+            }, 500);
         JS);
     }
+
     public function mount($id)
     {
         $this->idnya = $id;
@@ -49,26 +86,51 @@ class Disposisi extends Component
 
         if ($this->disposisi) {
             foreach ($this->disposisi as $list) {
-                //jika pegawai sebagai disposisi
+                // Jika pegawai sebagai disposisi
                 $this->form['disposisi_tp'] = 'DISPOSISI_TP_01';
                 $this->form['tujuan_user_id'] = $list;
-                DisposisiSuratMasuk::create($this->form);
+
+                // Cek apakah record sudah ada
+                $existingRecord = DisposisiSuratMasuk::where('surat_masuks_id', $this->idnya)
+                    ->where('tujuan_user_id', $list)
+                    ->where('disposisi_tp', 'DISPOSISI_TP_01')
+                    ->first();
+
+                if ($existingRecord) {
+                    // Update jika data sudah ada
+                    $existingRecord->update($this->form);
+                } else {
+                    // Buat data baru jika belum ada
+                    DisposisiSuratMasuk::create($this->form);
+                }
             }
         }
-
 
         if ($this->cc) {
             foreach ($this->cc as $list) {
-                //jika pegawai sebagai disposisi
+                // Jika pegawai sebagai CC
                 $this->form['disposisi_tp'] = 'DISPOSISI_TP_02';
                 $this->form['tujuan_user_id'] = $list;
-                DisposisiSuratMasuk::create($this->form);
+
+                // Cek apakah record sudah ada
+                $existingRecord = DisposisiSuratMasuk::where('surat_masuks_id', $this->idnya)
+                    ->where('tujuan_user_id', $list)
+                    ->where('disposisi_tp', 'DISPOSISI_TP_02')
+                    ->first();
+
+                if ($existingRecord) {
+                    // Update jika data sudah ada
+                    $existingRecord->update($this->form);
+                } else {
+                    // Buat data baru jika belum ada
+                    DisposisiSuratMasuk::create($this->form);
+                }
             }
         }
 
-
         $this->showSuccessMessage('Berhasil disposisi surat!');
     }
+
 
     public function delete($id)
     {

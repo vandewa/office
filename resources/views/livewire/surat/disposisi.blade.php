@@ -52,7 +52,7 @@
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
                                                             <div wire:ignore>
-                                                                <select class="form-control select-search"
+                                                                <select id="disposisi" class="form-control select-search"
                                                                     wire:model='disposisi' multiple>
                                                                     @foreach ($pegawai as $nip => $namaOption)
                                                                         <option value="{{ $nip }}">
@@ -77,7 +77,7 @@
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
                                                             <div wire:ignore>
-                                                                <select class="form-control select-search"
+                                                                <select id="cc" class="form-control select-search"
                                                                     wire:model='cc' multiple>
                                                                     @foreach ($pegawai as $nip => $namaOption)
                                                                         <option value="{{ $nip }}">
